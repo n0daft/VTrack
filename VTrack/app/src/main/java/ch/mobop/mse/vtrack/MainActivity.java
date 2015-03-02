@@ -33,6 +33,8 @@ import android.util.TypedValue;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.PopupMenu;
+import android.widget.Toast;
 
 import com.astuetz.PagerSlidingTabStrip;
 
@@ -76,11 +78,42 @@ public class MainActivity extends FragmentActivity {
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
 
+        View menuItemView = findViewById(R.id.action_contact);
+
 		switch (item.getItemId()) {
 
-		case R.id.action_contact:
-			QuickContactFragment dialog = new QuickContactFragment();
-			dialog.show(getSupportFragmentManager(), "QuickContactFragment");
+
+            case R.id.action_contact:
+            PopupMenu popup = new PopupMenu(getBaseContext(),menuItemView);
+
+            /** Adding menu items to the popumenu */
+            popup.getMenuInflater().inflate(R.menu.main_popup, popup.getMenu());
+
+            /** Defining menu item click listener for the popup menu */
+            popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+
+                @Override
+                public boolean onMenuItemClick(MenuItem item) {
+                    switch (item.getItemId()){
+                        case R.id.action_newvoucher:
+                            // call new vocuher activity
+                        case R.id.action_settings:
+                            // call settings activity
+                        case R.id.action_logout:
+                            // logout the user
+                    }
+                    Toast.makeText(getBaseContext(), "You selected the action : " + item.getTitle(), Toast.LENGTH_SHORT).show();
+                    return true;
+                }
+            });
+
+            /** Showing the popup menu */
+            popup.show();
+
+
+
+			//QuickContactFragment dialog = new QuickContactFragment();
+			//dialog.show(getSupportFragmentManager(), "QuickContactFragment");
 			return true;
 
 		}
@@ -193,7 +226,15 @@ public class MainActivity extends FragmentActivity {
 
 		@Override
 		public Fragment getItem(int position) {
-			return SuperAwesomeCardFragment.newInstance(position);
+
+            switch(position) {
+                case 0:
+                    return ReceivedVouchersFragment.newInstance(position);
+                case 1:
+                    return SuperAwesomeCardFragment.newInstance(position);
+                default:
+                    return SuperAwesomeCardFragment.newInstance(position);
+            }
 		}
 
 	}
