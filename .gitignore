@@ -32,3 +32,4 @@ proguard/
 # Android Studio
 /VTrack/.idea/workspace.xml
 /VTrack/.idea/libraries
+gradle.xml
