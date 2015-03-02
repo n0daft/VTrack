@@ -13,8 +13,8 @@ bin/
 gen/
 
 # Gradle files
-.gradle/
-.gradle
+#.gradle/
+#.gradle
 build/
 
 # Local configuration file (sdk path, etc)
