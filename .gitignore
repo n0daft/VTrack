@@ -30,5 +30,5 @@ proguard/
 .DS_Store
 
 # Android Studio
-/.idea/workspace.xml
-/.idea/libraries
+/VTrack/.idea/workspace.xml
+/VTrack/.idea/libraries
