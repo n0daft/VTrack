@@ -20,11 +20,10 @@ android {
 }
 
 dependencies {
-    compile fileTree(include: ['*.jar'], dir: 'libs')
+    compile fileTree(dir: 'libs', include: ['*.jar'])
     compile 'com.android.support:appcompat-v7:21.0.3'
-    compile 'com.astuetz:pagerslidingtabstrip:1.0.1'
-    // Material Design Sliding Tabs
-    compile 'joda-time:joda-time:2.3'
-    // Third party date time library
+    compile 'com.astuetz:pagerslidingtabstrip:1.0.1' // Material Design Sliding Tabs
+    compile 'joda-time:joda-time:2.3' // Third party date time library
     compile 'com.android.support:recyclerview-v7:+'
+
 }
