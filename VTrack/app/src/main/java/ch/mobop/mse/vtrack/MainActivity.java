@@ -16,6 +16,7 @@
 
 package ch.mobop.mse.vtrack;
 
+import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
@@ -37,10 +38,13 @@ import android.widget.PopupMenu;
 import android.widget.Toast;
 
 import com.astuetz.PagerSlidingTabStrip;
+import com.baasbox.android.BaasBox;
+import com.baasbox.android.BaasUser;
 
 public class MainActivity extends FragmentActivity {
 
 	private final Handler handler = new Handler();
+    private BaasBox client;
 
 	private PagerSlidingTabStrip tabs;
 	private ViewPager pager;
@@ -52,6 +56,17 @@ public class MainActivity extends FragmentActivity {
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+
+        // Initialize the BaasBox client library
+        BaasBox.Builder b = new BaasBox.Builder(this);
+        client = b.setApiDomain("vmbackend.bfh.ch").setAppCode("2501").init();
+
+        // Check if the current user is logged in
+        if (BaasUser.current() == null){
+            startLoginScreen();
+            return;
+        }
+
 		setContentView(R.layout.activity_main);
 
 		tabs = (PagerSlidingTabStrip) findViewById(R.id.tabs);
@@ -120,6 +135,14 @@ public class MainActivity extends FragmentActivity {
 
 		return super.onOptionsItemSelected(item);
 	}
+
+    private void startLoginScreen(){
+        //mDoRefresh = false;
+        Intent intent = new Intent(this,LoginActivity.class);
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        startActivity(intent);
+        finish();
+    }
 
 	private void changeColor(int newColor) {
 

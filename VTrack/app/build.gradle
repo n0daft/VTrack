@@ -25,5 +25,6 @@ dependencies {
     compile 'com.astuetz:pagerslidingtabstrip:1.0.1' // Material Design Sliding Tabs
     compile 'joda-time:joda-time:2.3' // Third party date time library
     compile 'com.android.support:recyclerview-v7:+'
+    compile 'com.baasbox:baasbox-android:0.8.+'
 
 }
