@@ -19,12 +19,34 @@ android:layout_height="wrap_content">
             android:text="Name"/>
 
         <EditText
+            android:id="@+id/txtVoucherName"
             android:layout_width="0dp"
             android:layout_weight="3"
-            android:hint="'Cinema'"
             android:layout_height="wrap_content"
-            android:id="@+id/frutaTxt"
-            android:imeOptions="flagNoExtractUi"/>
+            android:singleLine="true"
+            android:hint="'Cinema'" />
+    </TableRow>
+
+    <TableRow
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content">
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="2"
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:text="Received at"/>
+
+        <TextView
+            android:id="@+id/txtReceivedAt"
+            android:layout_width="0dp"
+            android:textSize="20dp"
+            android:layout_weight="3"
+            android:layout_height="wrap_content"
+            android:singleLine="true"
+            android:hint="'18.02.2015'"
+            android:onClick="handleReceivedAt" />
     </TableRow>
 
     <TableRow
@@ -36,15 +58,17 @@ android:layout_height="wrap_content">
             android:layout_weight="2"
             android:layout_height="wrap_content"
             android:textAppearance="?android:attr/textAppearanceMedium"
-            android:text="Received at"/>
+            android:text="Valid until"/>
 
-        <EditText
+        <TextView
+            android:id="@+id/txtValidUntil"
             android:layout_width="0dp"
             android:layout_weight="3"
+            android:textSize="20dp"
             android:layout_height="wrap_content"
-            android:id="@+id/colorSpinner"
-            android:hint="'18.02.2015'"
-            android:onClick="showDatePicker"/>
+            android:singleLine="true"
+            android:hint="'18.02.2016'"
+            android:onClick="handleValidUntil" />
     </TableRow>
 
     <TableRow
@@ -59,36 +83,32 @@ android:layout_height="wrap_content">
             android:text="Received from"/>
 
         <EditText
+            android:id="@+id/txtReceivedFrom"
             android:layout_width="0dp"
             android:layout_weight="3"
-            android:hint="'Marco'"
             android:layout_height="wrap_content"
-            android:id="@+id/telefonoTxt"
-            android:imeOptions="flagNoExtractUi"
-            android:inputType="phone"/>
+            android:singleLine="true"
+            android:hint="'Marco'"
+            android:inputType="text"/>
     </TableRow>
 
-    <TableRow
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content">
 
+    <TableRow>
         <TextView
             android:layout_width="0dp"
             android:layout_weight="2"
+            android:layout_gravity="top"
             android:layout_height="wrap_content"
             android:textAppearance="?android:attr/textAppearanceMedium"
-            android:text="Valid until"/>
+            android:text="Notes"/>
 
         <EditText
+            android:id="@+id/txtNotes"
             android:layout_width="0dp"
+            android:layout_height="100dp"
             android:layout_weight="3"
-            android:hint="'18.02.2016'"
-            android:layout_height="wrap_content"
-            android:id="@+id/emailTxt"
-            android:inputType="textEmailAddress"
-            android:singleLine="true"
-            android:maxLength="20"
-            android:imeOptions="actionSend|flagNoExtractUi"/>
+            android:inputType="textMultiLine"
+            android:layout_column="12" />
     </TableRow>
 
 </TableLayout>

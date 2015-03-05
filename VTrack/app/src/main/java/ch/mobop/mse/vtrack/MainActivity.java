@@ -90,34 +90,45 @@ public class MainActivity extends FragmentActivity {
 		return true;
 	}
 
+    /**
+     * Option Item Handler.
+     * @param item
+     * @return
+     */
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
 
+        // Get reference to option menu.
         View menuItemView = findViewById(R.id.action_contact);
 
 		switch (item.getItemId()) {
 
-
             case R.id.action_contact:
             PopupMenu popup = new PopupMenu(getBaseContext(),menuItemView);
 
-            /** Adding menu items to the popumenu */
+            // Adding menu items to the popup menu.
             popup.getMenuInflater().inflate(R.menu.main_popup, popup.getMenu());
-
-            /** Defining menu item click listener for the popup menu */
+            //Intent intent = new Intent(this,NewVoucherActivity.class);
+            // Defining menu item click listener for the popup menu.
             popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
 
                 @Override
                 public boolean onMenuItemClick(MenuItem item) {
                     switch (item.getItemId()){
                         case R.id.action_newvoucher:
-                            // call new vocuher activity
+
+                            Intent intent = new Intent(MainActivity.this, NewVoucherActivity.class);
+                            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                            startActivity(intent);
+                            finish();
+
+                            Toast.makeText(getBaseContext(), "You selected the action: New Voucher directly", Toast.LENGTH_SHORT).show();
                         case R.id.action_settings:
                             // call settings activity
                         case R.id.action_logout:
                             // logout the user
                     }
-                    Toast.makeText(getBaseContext(), "You selected the action : " + item.getTitle(), Toast.LENGTH_SHORT).show();
+                    //Toast.makeText(getBaseContext(), "You selected the action : " + item.getTitle(), Toast.LENGTH_SHORT).show();
                     return true;
                 }
             });

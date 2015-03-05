@@ -23,6 +23,10 @@
             android:label="Log in"
             android:windowSoftInputMode="adjustResize|stateVisible" >
         </activity>
+        <activity android:name=".NewVoucherActivity"
+            android:label="New Voucher"
+            android:windowSoftInputMode="adjustResize|stateVisible" >
+            </activity>
     </application>
 
 </manifest>
