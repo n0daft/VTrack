@@ -7,7 +7,7 @@ import android.support.v7.widget.RecyclerView;
 /**
  * Created by n0daft on 05.03.2015.
  */
-public class VerticalFragment extends ReceivedVouchersFragment {
+public class VerticalFragment extends AbstractRecyclerviewFragment {
 
     public static VerticalFragment newInstance() {
         VerticalFragment fragment = new VerticalFragment();
