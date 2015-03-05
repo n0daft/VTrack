@@ -263,7 +263,7 @@ public class MainActivity extends FragmentActivity {
 
             switch(position) {
                 case 0:
-                    return ReceivedVouchersFragment.newInstance(position);
+                    return VerticalFragment.newInstance();
                 case 1:
                     return SuperAwesomeCardFragment.newInstance(position);
                 default:

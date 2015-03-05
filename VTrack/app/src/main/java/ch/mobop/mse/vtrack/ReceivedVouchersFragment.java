@@ -2,23 +2,31 @@ package ch.mobop.mse.vtrack;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.util.TypedValue;
-import android.view.Gravity;
+import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.FrameLayout;
-import android.widget.TextView;
+import android.widget.AdapterView;
+
+import ch.mobop.mse.vtrack.adapters.RecyclerViewDemoAdapter;
 
 /**
  * Created by n0daft on 01.03.2015.
  */
-public class ReceivedVouchersFragment extends Fragment {
+public abstract class ReceivedVouchersFragment extends Fragment implements AdapterView.OnItemClickListener{
 
     private static final String ARG_POSITION = "position";
 
+    private RecyclerView mList;
+    private RecyclerViewDemoAdapter mAdapter;
+
+    protected abstract RecyclerView.LayoutManager getLayoutManager();
+    protected abstract RecyclerView.ItemDecoration getItemDecoration();
+    protected abstract int getDefaultItemCount();
+
     private int position;
 
+    /*
     public static ReceivedVouchersFragment newInstance(int position) {
         ReceivedVouchersFragment f = new ReceivedVouchersFragment();
         Bundle b = new Bundle();
@@ -26,6 +34,7 @@ public class ReceivedVouchersFragment extends Fragment {
         f.setArguments(b);
         return f;
     }
+    */
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -38,25 +47,28 @@ public class ReceivedVouchersFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
+        View rootView = inflater.inflate(R.layout.fragment_received, container, false);
 
-        FrameLayout.LayoutParams params = new FrameLayout.LayoutParams(FrameLayout.LayoutParams.MATCH_PARENT, FrameLayout.LayoutParams.MATCH_PARENT);
+        mList = (RecyclerView) rootView.findViewById(R.id.section_list);
+        mList.setLayoutManager(getLayoutManager());
+        mList.addItemDecoration(getItemDecoration());
 
-        FrameLayout fl = new FrameLayout(getActivity());
-        fl.setLayoutParams(params);
+        mList.getItemAnimator().setAddDuration(1000);
+        mList.getItemAnimator().setChangeDuration(1000);
+        mList.getItemAnimator().setMoveDuration(1000);
+        mList.getItemAnimator().setRemoveDuration(1000);
 
-        final int margin = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 8, getResources()
-                .getDisplayMetrics());
+        mAdapter = new RecyclerViewDemoAdapter();
+        mAdapter.setItemCount(getDefaultItemCount());
+        mAdapter.setOnItemClickListener(this);
+        mList.setAdapter(mAdapter);
 
-        TextView v = new TextView(getActivity());
-        params.setMargins(margin, margin, margin, margin);
-        v.setLayoutParams(params);
-        v.setLayoutParams(params);
-        v.setGravity(Gravity.CENTER);
-        v.setBackgroundResource(R.drawable.background_card);
-        v.setText("CARD " + (position + 1));
-
-        fl.addView(v);
-        return inflater.inflate(R.layout.fragment_received, container, false);
+        return rootView;
        // return fl;
+    }
+
+    @Override
+    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+
     }
 }
