@@ -39,7 +39,7 @@ android:layout_height="wrap_content">
             android:text="Received at"/>
 
         <TextView
-            android:id="@+id/txtReceivedAt"
+            android:id="@+id/lblReceivedAt"
             android:layout_width="0dp"
             android:textSize="20dp"
             android:layout_weight="3"
@@ -61,7 +61,7 @@ android:layout_height="wrap_content">
             android:text="Valid until"/>
 
         <TextView
-            android:id="@+id/txtValidUntil"
+            android:id="@+id/lblValidUntil"
             android:layout_width="0dp"
             android:layout_weight="3"
             android:textSize="20dp"
@@ -113,10 +113,4 @@ android:layout_height="wrap_content">
 
 </TableLayout>
 
-<Button
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
-    android:layout_gravity="right"
-    android:text="save"
-    android:id="@+id/guardarBtn"/>
 </LinearLayout>
