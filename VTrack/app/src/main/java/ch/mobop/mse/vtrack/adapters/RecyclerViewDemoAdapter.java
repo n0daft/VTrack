@@ -7,23 +7,28 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.TextView;
 
+import org.joda.time.DateTime;
+import org.joda.time.format.DateTimeFormat;
+import org.joda.time.format.DateTimeFormatter;
+
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Random;
+import java.util.Locale;
 
 import ch.mobop.mse.vtrack.R;
+import ch.mobop.mse.vtrack.model.VoucherForMe;
 
 /**
  * Created by n0daft on 05.03.2015.
  */
 public class RecyclerViewDemoAdapter extends RecyclerView.Adapter<RecyclerViewDemoAdapter.VerticalItemHolder>{
 
-    private ArrayList<GameItem> mItems;
+    private ArrayList<VoucherForMe> mItems;
 
     private AdapterView.OnItemClickListener mOnItemClickListener;
 
     public RecyclerViewDemoAdapter() {
-        mItems = new ArrayList<GameItem>();
+        mItems = new ArrayList<VoucherForMe>();
     }
 
     /*
@@ -73,13 +78,12 @@ public class RecyclerViewDemoAdapter extends RecyclerView.Adapter<RecyclerViewDe
 
     @Override
     public void onBindViewHolder(VerticalItemHolder itemHolder, int position) {
-        GameItem item = mItems.get(position);
+        VoucherForMe item = mItems.get(position);
 
-        itemHolder.setAwayScore(String.valueOf(item.awayScore));
-        itemHolder.setHomeScore(String.valueOf(item.homeScore));
-
-        itemHolder.setAwayName(item.awayTeam);
-        itemHolder.setHomeName(item.homeTeam);
+        itemHolder.setVoucherName(item.getRedeemAt());
+        itemHolder.setReceivedBy(item.getReceivedBy());
+        DateTimeFormatter format = DateTimeFormat.forPattern("dd.MM.yy").withLocale(Locale.GERMAN);
+        itemHolder.setDateOfExpiration(format.print(item.getDateOfexpiration()));
     }
 
     @Override
@@ -98,23 +102,9 @@ public class RecyclerViewDemoAdapter extends RecyclerView.Adapter<RecyclerViewDe
         }
     }
 
-    public static class GameItem {
-        public String homeTeam;
-        public String awayTeam;
-        public int homeScore;
-        public int awayScore;
-
-        public GameItem(String homeTeam, String awayTeam, int homeScore, int awayScore) {
-            this.homeTeam = homeTeam;
-            this.awayTeam = awayTeam;
-            this.homeScore = homeScore;
-            this.awayScore = awayScore;
-        }
-    }
-
     public static class VerticalItemHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
-        private TextView mHomeScore, mAwayScore;
-        private TextView mHomeName, mAwayName;
+        private TextView txtVoucherName;
+        private TextView txtReceivedBy, txtDateOfExpiration;
 
         private RecyclerViewDemoAdapter mAdapter;
 
@@ -124,10 +114,9 @@ public class RecyclerViewDemoAdapter extends RecyclerView.Adapter<RecyclerViewDe
 
             mAdapter = adapter;
 
-            mHomeScore = (TextView) itemView.findViewById(R.id.text_score_home);
-            mAwayScore = (TextView) itemView.findViewById(R.id.text_score_away);
-            mHomeName = (TextView) itemView.findViewById(R.id.text_team_home);
-            mAwayName = (TextView) itemView.findViewById(R.id.text_team_away);
+            txtVoucherName = (TextView) itemView.findViewById(R.id.txtVoucherName);
+            txtReceivedBy = (TextView) itemView.findViewById(R.id.txtReceivedFrom);
+            txtDateOfExpiration = (TextView) itemView.findViewById(R.id.txtDateOfExpiration);
         }
 
         @Override
@@ -135,35 +124,29 @@ public class RecyclerViewDemoAdapter extends RecyclerView.Adapter<RecyclerViewDe
             mAdapter.onItemHolderClick(this);
         }
 
-        public void setHomeScore(CharSequence homeScore) {
-            mHomeScore.setText(homeScore);
+        public void setVoucherName(CharSequence voucherName) {
+            txtVoucherName.setText(voucherName);
         }
 
-        public void setAwayScore(CharSequence awayScore) {
-            mAwayScore.setText(awayScore);
+        public void setReceivedBy(CharSequence receivedBy) {
+            txtReceivedBy.setText(receivedBy);
         }
 
-        public void setHomeName(CharSequence homeName) {
-            mHomeName.setText(homeName);
-        }
-
-        public void setAwayName(CharSequence awayName) {
-            mAwayName.setText(awayName);
+        public void setDateOfExpiration(CharSequence dateOfExpiration) {
+            txtDateOfExpiration.setText(dateOfExpiration);
         }
     }
 
-    public static GameItem generateDummyItem() {
-        Random random = new Random();
-        return new GameItem("Upset Home", "Upset Away",
-                random.nextInt(100),
-                random.nextInt(100) );
+    public static VoucherForMe generateDummyItem() {
+        VoucherForMe v1 = new VoucherForMe(new DateTime(), new DateTime(), "Marco", "Thermalbad");
+        return v1;
     }
 
-    public static List<GameItem> generateDummyData(int count) {
-        ArrayList<RecyclerViewDemoAdapter.GameItem> items = new ArrayList<RecyclerViewDemoAdapter.GameItem>();
+    public static List<VoucherForMe> generateDummyData(int count) {
+        ArrayList<VoucherForMe> items = new ArrayList<>();
 
         for (int i=0; i < count; i++) {
-            items.add(new RecyclerViewDemoAdapter.GameItem("Losers", "Winners", i, i+5));
+            items.add(new VoucherForMe(new DateTime(), new DateTime(), "Marco", "Thermalbad"));
         }
 
         return items;

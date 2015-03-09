@@ -5,14 +5,14 @@ import org.joda.time.DateTime;
 /**
  * Created by n0daft on 01.03.2015.
  */
-public class Voucher {
+public class VoucherForMe {
 
     private DateTime dateOfReceipt;
     private DateTime dateOfexpiration;
     private String receivedBy;
     private String redeemAt;
 
-    public Voucher(DateTime dateOfReceipt, DateTime dateOfexpiration, String receivedBy, String redeemAt) {
+    public VoucherForMe(DateTime dateOfReceipt, DateTime dateOfexpiration, String receivedBy, String redeemAt) {
         this.dateOfReceipt = dateOfReceipt;
         this.dateOfexpiration = dateOfexpiration;
         this.receivedBy = receivedBy;

@@ -1,66 +1,57 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ch.mobop.mse.vtrack.adapters.GameItemView
-    xmlns:android="http://schemas.android.com/apk/res/android"
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:minWidth="240dp"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
     android:padding="8dp">
 
     <TextView
-        android:id="@+id/text_score_away"
-        android:layout_width="48dp"
+        android:id="@+id/txtVoucherName"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_gravity="center_vertical"
-        android:layout_column="0"
+        android:layout_gravity="fill"
+        android:layout_column="1"
         android:layout_row="0"
-        android:textAppearance="?android:attr/textAppearanceLarge"
-        tools:text="100"/>
-
-    <TextView
-        android:id="@+id/text_score_home"
-        android:layout_width="48dp"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center_vertical"
-        android:layout_column="0"
-        android:layout_row="1"
-        tools:text="200"
+        android:gravity="center_vertical"
+        tools:text="VoucherName"
         android:textAppearance="?android:attr/textAppearanceLarge"/>
 
-    <TextView
-        android:id="@+id/text_team_away"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="fill"
-        android:layout_column="1"
-        android:layout_row="0"
-        android:gravity="center_vertical"
-        tools:text="Away Team"
-        android:textAppearance="?android:attr/textAppearanceMedium"/>
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="horizontal"
+        android:padding="8dp">
 
-    <TextView
-        android:id="@+id/text_team_home"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="fill"
-        android:layout_column="1"
-        android:layout_row="1"
-        android:gravity="center_vertical"
-        tools:text="Away Team"
-        android:textAppearance="?android:attr/textAppearanceMedium"/>
+        <TextView
+            android:id="@+id/txtReceivedFrom"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="3"
+            android:gravity="center_vertical"
+            tools:text="Received from"
+            android:textAppearance="?android:attr/textAppearanceMedium"/>
 
-    <ImageView
-        android:id="@+id/logo_team_away"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_column="2"
-        android:layout_row="0"
-        android:src="@drawable/ic_launcher"/>
-    <ImageView
-        android:id="@+id/logo_team_home"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_column="2"
-        android:layout_row="1"
-        android:src="@drawable/ic_launcher"/>
-</ch.mobop.mse.vtrack.adapters.GameItemView>
+        <TextView
+            android:id="@+id/txtDateOfExpiration"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="center_vertical|right"
+            tools:text="Received from"
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:paddingRight="15dp" />
+
+        <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/circle"
+            android:foregroundGravity="center_vertical|center_horizontal" />
+
+    </LinearLayout>
+
+
+
+</LinearLayout>

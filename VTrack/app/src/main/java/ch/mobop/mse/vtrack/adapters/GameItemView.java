@@ -5,8 +5,6 @@ import android.util.AttributeSet;
 import android.widget.GridLayout;
 import android.widget.TextView;
 
-import ch.mobop.mse.vtrack.R;
-
 
 public class GameItemView extends GridLayout {
 
@@ -28,8 +26,8 @@ public class GameItemView extends GridLayout {
     protected void onFinishInflate() {
         super.onFinishInflate();
 
-        mHomeScore = (TextView) findViewById(R.id.text_score_home);
-        mAwayScore = (TextView) findViewById(R.id.text_score_away);
+       // mHomeScore = (TextView) findViewById(R.id.text_score_home);
+        //mAwayScore = (TextView) findViewById(R.id.text_score_away);
     }
 
     @Override
