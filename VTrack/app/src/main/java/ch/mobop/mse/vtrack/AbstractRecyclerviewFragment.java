@@ -3,11 +3,22 @@ package ch.mobop.mse.vtrack;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.Toast;
+
+import com.baasbox.android.BaasDocument;
+import com.baasbox.android.BaasException;
+import com.baasbox.android.BaasHandler;
+import com.baasbox.android.BaasInvalidSessionException;
+import com.baasbox.android.BaasResult;
+import com.baasbox.android.RequestToken;
+
+import java.util.Iterator;
+import java.util.List;
 
 import ch.mobop.mse.vtrack.adapters.RecyclerViewDemoAdapter;
 
@@ -24,6 +35,8 @@ public abstract class AbstractRecyclerviewFragment extends Fragment implements A
     protected abstract RecyclerView.LayoutManager getLayoutManager();
     protected abstract RecyclerView.ItemDecoration getItemDecoration();
     protected abstract int getDefaultItemCount();
+
+    private RequestToken mRefresh;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -54,8 +67,37 @@ public abstract class AbstractRecyclerviewFragment extends Fragment implements A
 
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+        refreshDocuments();
         Toast.makeText(getActivity(),
                 "Clicked: " + position + ", index " + recyclerView.indexOfChild(view),
                 Toast.LENGTH_SHORT).show();
     }
+
+    private void refreshDocuments(){
+        mRefresh = BaasDocument.fetchAll("vtrack", onRefresh);
+    }
+
+    private final BaasHandler<List<BaasDocument>>
+            onRefresh = new BaasHandler<List<BaasDocument>>() {
+        @Override
+        public void handle(BaasResult<List<BaasDocument>> result) {
+            //mDialog.dismiss();
+            mRefresh=null;
+            try {
+                Iterator it = result.get().iterator();
+                while(it.hasNext()){
+                    BaasDocument doc = (BaasDocument) it.next();
+                    String name = doc.getString("name");
+                    System.out.println(name);
+                }
+
+                //mListFragment.refresh(result.get());
+            }catch (BaasInvalidSessionException e){
+                //startLoginScreen();
+            }catch (BaasException e){
+                Log.e("LOGERR", "Error " + e.getMessage(), e);
+                //Toast.makeText(NoteListActivity.this,"Error while talking with the box",Toast.LENGTH_LONG).show();
+            }
+        }
+    };
 }

@@ -39,7 +39,10 @@ import android.widget.Toast;
 
 import com.astuetz.PagerSlidingTabStrip;
 import com.baasbox.android.BaasBox;
+import com.baasbox.android.BaasHandler;
+import com.baasbox.android.BaasResult;
 import com.baasbox.android.BaasUser;
+import com.baasbox.android.RequestToken;
 
 public class MainActivity extends FragmentActivity {
 
@@ -126,7 +129,7 @@ public class MainActivity extends FragmentActivity {
                         case R.id.action_settings:
                             // call settings activity
                         case R.id.action_logout:
-                            // logout the user
+                            BaasUser.current().logout(logoutHandler);
                     }
                     //Toast.makeText(getBaseContext(), "You selected the action : " + item.getTitle(), Toast.LENGTH_SHORT).show();
                     return true;
@@ -141,8 +144,9 @@ public class MainActivity extends FragmentActivity {
 			//QuickContactFragment dialog = new QuickContactFragment();
 			//dialog.show(getSupportFragmentManager(), "QuickContactFragment");
 			return true;
-
 		}
+
+
 
 		return super.onOptionsItemSelected(item);
 	}
@@ -209,6 +213,20 @@ public class MainActivity extends FragmentActivity {
 		changeColor(color);
 
 	}
+
+    private void onLogout(){
+        startLoginScreen();
+    }
+
+    private RequestToken logoutToken;
+    private final BaasHandler<Void> logoutHandler =
+            new BaasHandler<Void>() {
+                @Override
+                public void handle(BaasResult<Void> voidBaasResult) {
+                    logoutToken=null;
+                    onLogout();
+                }
+            };
 
 	@Override
 	protected void onSaveInstanceState(Bundle outState) {
