@@ -11,12 +11,14 @@ public class VoucherForMe {
     private DateTime dateOfexpiration;
     private String receivedBy;
     private String redeemAt;
+    private String name;
 
-    public VoucherForMe(DateTime dateOfReceipt, DateTime dateOfexpiration, String receivedBy, String redeemAt) {
+    public VoucherForMe(DateTime dateOfReceipt, DateTime dateOfexpiration, String receivedBy, String redeemAt, String name) {
         this.dateOfReceipt = dateOfReceipt;
         this.dateOfexpiration = dateOfexpiration;
         this.receivedBy = receivedBy;
         this.redeemAt = redeemAt;
+        this.name = name;
     }
 
     public DateTime getDateOfReceipt() {
@@ -43,6 +45,8 @@ public class VoucherForMe {
         this.receivedBy = receivedBy;
     }
 
+
+
     public String getRedeemAt() {
         return redeemAt;
     }
@@ -50,4 +54,13 @@ public class VoucherForMe {
     public void setRedeemAt(String redeemAt) {
         this.redeemAt = redeemAt;
     }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
 }
