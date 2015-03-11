@@ -1,10 +1,13 @@
 package ch.mobop.mse.vtrack.adapters;
 
+import android.graphics.Color;
+import android.graphics.drawable.GradientDrawable;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
+import android.widget.FrameLayout;
 import android.widget.TextView;
 
 import org.joda.time.DateTime;
@@ -71,7 +74,7 @@ public class RecyclerViewDemoAdapter extends RecyclerView.Adapter<RecyclerViewDe
     @Override
     public VerticalItemHolder onCreateViewHolder(ViewGroup container, int viewType) {
         LayoutInflater inflater = LayoutInflater.from(container.getContext());
-        View root = inflater.inflate(R.layout.view_match_item, container, false);
+        View root = inflater.inflate(R.layout.recyclerview_item, container, false);
 
         return new VerticalItemHolder(root, this);
     }
@@ -84,6 +87,18 @@ public class RecyclerViewDemoAdapter extends RecyclerView.Adapter<RecyclerViewDe
         itemHolder.setReceivedBy(item.getReceivedBy());
         DateTimeFormatter format = DateTimeFormat.forPattern("dd.MM.yy").withLocale(Locale.GERMAN);
         itemHolder.setDateOfExpiration(format.print(item.getDateOfexpiration()));
+
+        int color = Color.GRAY;
+        switch (item.getValidityStatus()){
+            case valid:
+                color = Color.GREEN;
+            case soonToExpire:
+                color = Color.YELLOW;
+            case expired:
+                color = Color.RED;
+        }
+
+        itemHolder.setFlValidityStatusColor(color);
     }
 
     @Override
@@ -103,8 +118,8 @@ public class RecyclerViewDemoAdapter extends RecyclerView.Adapter<RecyclerViewDe
     }
 
     public static class VerticalItemHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
-        private TextView txtVoucherName;
-        private TextView txtReceivedBy, txtDateOfExpiration;
+        private TextView txtVoucherName, txtReceivedBy, txtDateOfExpiration;
+        private FrameLayout flValidityStatus;
 
         private RecyclerViewDemoAdapter mAdapter;
 
@@ -117,6 +132,7 @@ public class RecyclerViewDemoAdapter extends RecyclerView.Adapter<RecyclerViewDe
             txtVoucherName = (TextView) itemView.findViewById(R.id.txtVoucherName);
             txtReceivedBy = (TextView) itemView.findViewById(R.id.txtReceivedFrom);
             txtDateOfExpiration = (TextView) itemView.findViewById(R.id.txtDateOfExpiration);
+            flValidityStatus = (FrameLayout) itemView.findViewById(R.id.flValidityStatus);
         }
 
         @Override
@@ -135,6 +151,15 @@ public class RecyclerViewDemoAdapter extends RecyclerView.Adapter<RecyclerViewDe
         public void setDateOfExpiration(CharSequence dateOfExpiration) {
             txtDateOfExpiration.setText(dateOfExpiration);
         }
+
+        public void setFlValidityStatusColor(int color){
+
+            GradientDrawable d = (GradientDrawable) flValidityStatus.getBackground().mutate();
+            d.setColor(color);
+            d.invalidateSelf();
+            //Drawable mDrawable = Drawable(R.drawable.circle);
+            //mDrawable.setColorFilter(new PorterDuffColorFilter(0xffff00, PorterDuff.Mode.MULTIPLY));
+        }
     }
 
     public static VoucherForMe generateDummyItem() {
@@ -145,9 +170,15 @@ public class RecyclerViewDemoAdapter extends RecyclerView.Adapter<RecyclerViewDe
     public static List<VoucherForMe> generateDummyData(int count) {
         ArrayList<VoucherForMe> items = new ArrayList<>();
 
+        /*
         for (int i=0; i < count; i++) {
             items.add(new VoucherForMe(new DateTime(), new DateTime(), "Marco", "Thermalbad"));
         }
+        */
+
+        items.add(new VoucherForMe(new DateTime().minusMonths(8), new DateTime().plusDays(12), "Marco", "Thermalbad"));
+        items.add(new VoucherForMe(new DateTime().minusMonths(10).minusDays(20), new DateTime().plusYears(1), "Marco", "Thermalbad"));
+        items.add(new VoucherForMe(new DateTime().minusMonths(14), new DateTime().minusDays(23), "Marco", "Thermalbad"));
 
         return items;
     }

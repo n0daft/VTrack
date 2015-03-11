@@ -5,7 +5,7 @@ import org.joda.time.DateTime;
 /**
  * Created by n0daft on 01.03.2015.
  */
-public class VoucherForMe {
+public class VoucherForMe extends Voucher {
 
     private DateTime dateOfReceipt;
     private DateTime dateOfexpiration;
@@ -49,5 +49,16 @@ public class VoucherForMe {
 
     public void setRedeemAt(String redeemAt) {
         this.redeemAt = redeemAt;
+    }
+
+    @Override
+    public VoucherValidityStatusEnum getValidityStatus() {
+        if(dateOfexpiration.isBefore(DateTime.now().minusMonths(1))){
+            return VoucherValidityStatusEnum.valid;
+        }else if(dateOfexpiration.isBefore(DateTime.now())){
+            return VoucherValidityStatusEnum.soonToExpire;
+        }else {
+            return VoucherValidityStatusEnum.expired;
+        }
     }
 }
