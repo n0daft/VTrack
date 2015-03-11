@@ -9,15 +9,17 @@ public class VoucherForMe extends Voucher {
 
     private DateTime dateOfReceipt;
     private DateTime dateOfexpiration;
+    private DateTime redeemedAt;
     private String receivedBy;
-    private String redeemAt;
+    private String redeemWhere;
     private String name;
 
-    public VoucherForMe(DateTime dateOfReceipt, DateTime dateOfexpiration, String receivedBy, String redeemAt, String name) {
+    public VoucherForMe(DateTime dateOfReceipt, DateTime dateOfexpiration, String receivedBy, DateTime redeemedAt, String redeemWhere, String name) {
         this.dateOfReceipt = dateOfReceipt;
         this.dateOfexpiration = dateOfexpiration;
         this.receivedBy = receivedBy;
-        this.redeemAt = redeemAt;
+        this.redeemedAt = redeemedAt;
+        this.redeemWhere = redeemWhere;
         this.name = name;
     }
 
@@ -45,15 +47,31 @@ public class VoucherForMe extends Voucher {
         this.receivedBy = receivedBy;
     }
 
-
-
-    public String getRedeemAt() {
-        return redeemAt;
+    public DateTime getRedeemedAt() {
+        return redeemedAt;
     }
 
-    public void setRedeemAt(String redeemAt) {
-        this.redeemAt = redeemAt;
+    public void setRedeemedAt(DateTime redeemedAt) {
+        this.redeemedAt = redeemedAt;
     }
+
+    public String getRedeemWhere() {
+        return redeemWhere;
+    }
+
+    public void setRedeemWhere(String redeemWhere) {
+        this.redeemWhere = redeemWhere;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+
 
     @Override
     public VoucherValidityStatusEnum getValidityStatus() {
@@ -65,12 +83,6 @@ public class VoucherForMe extends Voucher {
             return VoucherValidityStatusEnum.expired;
         }
     }
-    public String getName() {
-        return name;
-    }
 
-    public void setName(String name) {
-        this.name = name;
-    }
 
 }

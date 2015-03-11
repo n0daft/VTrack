@@ -175,7 +175,7 @@ public class RecyclerViewDemoAdapter extends RecyclerView.Adapter<RecyclerViewDe
     }
 
     public static VoucherForMe generateDummyItem() {
-        VoucherForMe v1 = new VoucherForMe(new DateTime(), new DateTime(), "Marco", "Test","Thermalbad");
+        VoucherForMe v1 = new VoucherForMe(new DateTime(), new DateTime(), "Marco", null, "Bad Zurzach", "Thermalbab");
         return v1;
     }
 
@@ -188,9 +188,9 @@ public class RecyclerViewDemoAdapter extends RecyclerView.Adapter<RecyclerViewDe
         }
         */
 
-        items.add(new VoucherForMe(new DateTime().minusMonths(8), new DateTime().plusDays(12), "Marco", "Thermalbad"));
-        items.add(new VoucherForMe(new DateTime().minusMonths(10).minusDays(20), new DateTime().plusYears(1), "Marco", "Thermalbad"));
-        items.add(new VoucherForMe(new DateTime().minusMonths(14), new DateTime().minusDays(23), "Marco", "Thermalbad"));
+        items.add(new VoucherForMe(new DateTime().minusMonths(8), new DateTime().plusDays(12), "Marco", null, "Bad Zurzach", "Thermalbab"));
+        items.add(new VoucherForMe(new DateTime().minusMonths(10).minusDays(20), new DateTime().plusYears(1), "Marco", null, "Bad Zurzach", "Thermalbab"));
+        items.add(new VoucherForMe(new DateTime().minusMonths(14), new DateTime().minusDays(23), "Marco", null, "Bad Zurzach", "Thermalbab"));
 
         return items;
     }
