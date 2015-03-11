@@ -95,7 +95,7 @@ public class RecyclerViewDemoAdapter extends RecyclerView.Adapter<RecyclerViewDe
     public void onBindViewHolder(VerticalItemHolder itemHolder, int position) {
         VoucherForMe item = mItems.get(position);
 
-        itemHolder.setVoucherName(item.getRedeemAt());
+        itemHolder.setVoucherName(item.getName());
         itemHolder.setReceivedBy(item.getReceivedBy());
         DateTimeFormatter format = DateTimeFormat.forPattern("dd.MM.yy").withLocale(Locale.GERMAN);
         itemHolder.setDateOfExpiration(format.print(item.getDateOfexpiration()));
