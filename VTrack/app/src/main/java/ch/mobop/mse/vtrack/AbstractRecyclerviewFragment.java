@@ -19,8 +19,14 @@ import com.baasbox.android.RequestToken;
 
 import java.util.Iterator;
 import java.util.List;
+import java.util.ArrayList;
+import org.joda.time.DateTime;
+import org.joda.time.format.DateTimeFormat;
+import org.joda.time.format.DateTimeFormatter;
 
 import ch.mobop.mse.vtrack.adapters.RecyclerViewDemoAdapter;
+import ch.mobop.mse.vtrack.model.VoucherForMe;
+import ch.mobop.mse.vtrack.model.VoucherFromMe;
 
 /**
  * Abstract implementation of a recyclerview fragment. This class can be extended
@@ -31,6 +37,9 @@ public abstract class AbstractRecyclerviewFragment extends Fragment implements A
 
     private RecyclerView recyclerView;
     private RecyclerViewDemoAdapter adapter;
+    private ArrayList<VoucherForMe> voucherForMeList;
+    private ArrayList<VoucherForMe> voucherFromMeList;
+
 
     protected abstract RecyclerView.LayoutManager getLayoutManager();
     protected abstract RecyclerView.ItemDecoration getItemDecoration();
@@ -48,6 +57,9 @@ public abstract class AbstractRecyclerviewFragment extends Fragment implements A
 
         View rootView = inflater.inflate(R.layout.fragment_received, container, false);
 
+        voucherForMeList = new ArrayList<>();
+        voucherFromMeList = new ArrayList<VoucherForMe>();
+
         recyclerView = (RecyclerView) rootView.findViewById(R.id.section_list);
         recyclerView.setLayoutManager(getLayoutManager());
         recyclerView.addItemDecoration(getItemDecoration());
@@ -58,7 +70,14 @@ public abstract class AbstractRecyclerviewFragment extends Fragment implements A
         recyclerView.getItemAnimator().setRemoveDuration(1000);
 
         adapter = new RecyclerViewDemoAdapter();
-        adapter.setItemCount(getDefaultItemCount());
+        //adapter.setItemCount(getDefaultItemCount());
+
+        //Load all Items from Server
+        refreshDocuments();
+        //Doesn't really do something as refresh is not done yet....
+        adapter.setItemList(voucherForMeList);
+
+
         adapter.setOnItemClickListener(this);
         recyclerView.setAdapter(adapter);
 
@@ -85,11 +104,40 @@ public abstract class AbstractRecyclerviewFragment extends Fragment implements A
             mRefresh=null;
             try {
                 Iterator it = result.get().iterator();
+                DateTimeFormatter formatter = DateTimeFormat.forPattern("dd.MM.yyyy");
+
+                //Clear Lists
+                voucherForMeList.clear();
+                voucherFromMeList.clear();
+
                 while(it.hasNext()){
                     BaasDocument doc = (BaasDocument) it.next();
                     String name = doc.getString("name");
-                    System.out.println(name);
+                    DateTime  created_on = formatter.parseDateTime(doc.getString("created_on"));
+                    DateTime  valid_till = formatter.parseDateTime(doc.getString("valid_till"));
+                    String person = doc.getString("person");
+                    String redeemed = doc.getString("redeemed");
+                    if(Boolean.valueOf(doc.getString("archive"))){
+                        //Add to archive list
+                    }else{
+                        if("for_me".equals(doc.getString("type"))){
+                            //Voucher for me
+                            voucherForMeList.add(new VoucherForMe(created_on,valid_till,person,redeemed,name));
+                        }else{
+                            //Voucher from me
+                            voucherFromMeList.add(new VoucherForMe(created_on,valid_till,person,redeemed,name));
+                        }
+                    }
+
                 }
+
+                //Test-Output
+                for(VoucherForMe v:voucherForMeList) {
+                    System.out.println(v.getName() + " " + v.getReceivedBy());
+                }
+
+                //onRefresh is asynchron and has to activate the display change somehow. like this?
+                adapter.setItemList(voucherForMeList);
 
                 //mListFragment.refresh(result.get());
             }catch (BaasInvalidSessionException e){

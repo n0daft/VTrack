@@ -43,9 +43,21 @@ public class RecyclerViewDemoAdapter extends RecyclerView.Adapter<RecyclerViewDe
     public void setItemCount(int count) {
         mItems.clear();
         mItems.addAll(generateDummyData(count));
+        System.out.println("setItemCOUNT aufgerufen");
 
         notifyDataSetChanged();
     }
+
+    public void setItemList(List<VoucherForMe> items) {
+        mItems.clear();
+        mItems.addAll(items);
+        System.out.println("setItemList aufgerufen");
+
+        notifyDataSetChanged();
+    }
+
+
+
 
     /*
      * Inserting a new item at the head of the list. This uses a specialized
@@ -163,7 +175,7 @@ public class RecyclerViewDemoAdapter extends RecyclerView.Adapter<RecyclerViewDe
     }
 
     public static VoucherForMe generateDummyItem() {
-        VoucherForMe v1 = new VoucherForMe(new DateTime(), new DateTime(), "Marco", "Thermalbad");
+        VoucherForMe v1 = new VoucherForMe(new DateTime(), new DateTime(), "Marco", "Test","Thermalbad");
         return v1;
     }
 
@@ -172,7 +184,7 @@ public class RecyclerViewDemoAdapter extends RecyclerView.Adapter<RecyclerViewDe
 
         /*
         for (int i=0; i < count; i++) {
-            items.add(new VoucherForMe(new DateTime(), new DateTime(), "Marco", "Thermalbad"));
+            items.add(new VoucherForMe(new DateTime(), new DateTime(), "Marco", "Test", "Thermalbad"));
         }
         */
 
