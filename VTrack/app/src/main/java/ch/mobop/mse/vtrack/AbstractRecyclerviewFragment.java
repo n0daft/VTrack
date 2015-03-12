@@ -122,7 +122,7 @@ public class AbstractRecyclerviewFragment extends Fragment implements AdapterVie
                     }else{
                         if("for_me".equals(doc.getString("type"))){
                             //Voucher for me
-                            voucherForMeList.add(new VoucherForMe(created_on,valid_till,person,redeemedAt,redeemed,name));
+                            voucherForMeList.add(new VoucherForMe(name,person,null,valid_till,"","",redeemedAt));
                         }
                     }
 

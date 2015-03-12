@@ -3,25 +3,40 @@ package ch.mobop.mse.vtrack.model;
 import org.joda.time.DateTime;
 
 /**
+ * Represents a voucher which was given from a person to the user.
  * Created by n0daft on 01.03.2015.
  */
 public class VoucherForMe extends Voucher {
 
-    private DateTime dateOfReceipt;
-    private DateTime dateOfexpiration;
-    private DateTime redeemedAt;
-    private String receivedBy;
-    private String redeemWhere;
-    private String name;
+    /***************************************************************************
+     *                                                                         *
+     * Private fields                                                          *
+     *                                                                         *
+     **************************************************************************/
 
-    public VoucherForMe(DateTime dateOfReceipt, DateTime dateOfexpiration, String receivedBy, DateTime redeemedAt, String redeemWhere, String name) {
+    /** Date which states when the user received the voucher */
+    private DateTime dateOfReceipt;
+
+    /** From whom the voucher was received */
+    private String receivedBy;
+
+    /***************************************************************************
+     *                                                                         *
+     * Constructors                                                            *
+     *                                                                         *
+     **************************************************************************/
+
+    public VoucherForMe(String name, String receivedBy, DateTime dateOfReceipt, DateTime dateOfexpiration, String redeemWhere, String notes, DateTime redeemedAt) {
+        super(name,dateOfexpiration, redeemWhere, notes, redeemedAt);
         this.dateOfReceipt = dateOfReceipt;
-        this.dateOfexpiration = dateOfexpiration;
         this.receivedBy = receivedBy;
-        this.redeemedAt = redeemedAt;
-        this.redeemWhere = redeemWhere;
-        this.name = name;
     }
+
+    /***************************************************************************
+     *                                                                         *
+     * Getters / Setters                                                       *
+     *                                                                         *
+     **************************************************************************/
 
     public DateTime getDateOfReceipt() {
         return dateOfReceipt;
@@ -31,14 +46,6 @@ public class VoucherForMe extends Voucher {
         this.dateOfReceipt = dateOfReceipt;
     }
 
-    public DateTime getDateOfexpiration() {
-        return dateOfexpiration;
-    }
-
-    public void setDateOfexpiration(DateTime dateOfexpiration) {
-        this.dateOfexpiration = dateOfexpiration;
-    }
-
     public String getReceivedBy() {
         return receivedBy;
     }
@@ -46,43 +53,5 @@ public class VoucherForMe extends Voucher {
     public void setReceivedBy(String receivedBy) {
         this.receivedBy = receivedBy;
     }
-
-    public DateTime getRedeemedAt() {
-        return redeemedAt;
-    }
-
-    public void setRedeemedAt(DateTime redeemedAt) {
-        this.redeemedAt = redeemedAt;
-    }
-
-    public String getRedeemWhere() {
-        return redeemWhere;
-    }
-
-    public void setRedeemWhere(String redeemWhere) {
-        this.redeemWhere = redeemWhere;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-
-
-    @Override
-    public VoucherValidityStatusEnum getValidityStatus() {
-        if(dateOfexpiration.isBefore(DateTime.now().minusMonths(1))){
-            return VoucherValidityStatusEnum.valid;
-        }else if(dateOfexpiration.isBefore(DateTime.now())){
-            return VoucherValidityStatusEnum.soonToExpire;
-        }else {
-            return VoucherValidityStatusEnum.expired;
-        }
-    }
-
 
 }

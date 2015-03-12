@@ -27,6 +27,7 @@ import java.util.Iterator;
 import java.util.List;
 
 import ch.mobop.mse.vtrack.adapters.FromMeRecyclerviewAdapter;
+import ch.mobop.mse.vtrack.model.Voucher;
 import ch.mobop.mse.vtrack.model.VoucherFromMe;
 
 /**
@@ -36,7 +37,7 @@ public class FromMeRecyclerviewFragment extends Fragment implements AdapterView.
 
     private RecyclerView recyclerView;
     private FromMeRecyclerviewAdapter adapter;
-    private ArrayList<VoucherFromMe> voucherFromMeList;
+    private ArrayList<Voucher> voucherFromMeList;
 
     private RequestToken mRefresh;
 
@@ -120,7 +121,7 @@ public class FromMeRecyclerviewFragment extends Fragment implements AdapterView.
                     }else{
                         if("from_me".equals(doc.getString("type"))){
                             //Voucher for me
-                            voucherFromMeList.add(new VoucherFromMe(created_on,valid_till,person,redeemedAt,redeemed,name));
+                            voucherFromMeList.add(new VoucherFromMe(name,person,null,valid_till,"","",redeemedAt));
                         }
                     }
 

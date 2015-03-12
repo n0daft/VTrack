@@ -10,7 +10,6 @@ import android.widget.AdapterView;
 import android.widget.FrameLayout;
 import android.widget.TextView;
 
-import org.joda.time.DateTime;
 import org.joda.time.format.DateTimeFormat;
 import org.joda.time.format.DateTimeFormatter;
 
@@ -19,6 +18,7 @@ import java.util.List;
 import java.util.Locale;
 
 import ch.mobop.mse.vtrack.R;
+import ch.mobop.mse.vtrack.model.Voucher;
 import ch.mobop.mse.vtrack.model.VoucherForMe;
 
 /**
@@ -26,26 +26,12 @@ import ch.mobop.mse.vtrack.model.VoucherForMe;
  */
 public class RecyclerViewDemoAdapter extends RecyclerView.Adapter<RecyclerViewDemoAdapter.VerticalItemHolder>{
 
-    private ArrayList<VoucherForMe> mItems;
+    private ArrayList<Voucher> mItems;
 
     private AdapterView.OnItemClickListener mOnItemClickListener;
 
     public RecyclerViewDemoAdapter() {
-        mItems = new ArrayList<VoucherForMe>();
-    }
-
-    /*
-     * A common adapter modification or reset mechanism. As with ListAdapter,
-     * calling notifyDataSetChanged() will trigger the RecyclerView to update
-     * the view. However, this method will not trigger any of the RecyclerView
-     * animation features.
-     */
-    public void setItemCount(int count) {
-        mItems.clear();
-        mItems.addAll(generateDummyData(count));
-        System.out.println("setItemCOUNT aufgerufen");
-
-        notifyDataSetChanged();
+        mItems = new ArrayList<>();
     }
 
     public void setItemList(List<VoucherForMe> items) {
@@ -56,18 +42,15 @@ public class RecyclerViewDemoAdapter extends RecyclerView.Adapter<RecyclerViewDe
         notifyDataSetChanged();
     }
 
-
-
-
     /*
      * Inserting a new item at the head of the list. This uses a specialized
      * RecyclerView method, notifyItemInserted(), to trigger any enabled item
      * animations in addition to updating the view.
      */
-    public void addItem(int position) {
+    public void addItem(int position, Voucher item) {
         if (position >= mItems.size()) return;
 
-        mItems.add(position, generateDummyItem());
+        mItems.add(position, item);
         notifyItemInserted(position);
     }
 
@@ -93,21 +76,27 @@ public class RecyclerViewDemoAdapter extends RecyclerView.Adapter<RecyclerViewDe
 
     @Override
     public void onBindViewHolder(VerticalItemHolder itemHolder, int position) {
-        VoucherForMe item = mItems.get(position);
+        VoucherForMe item = (VoucherForMe) mItems.get(position);
 
         itemHolder.setVoucherName(item.getName());
         itemHolder.setReceivedBy(item.getReceivedBy());
         DateTimeFormatter format = DateTimeFormat.forPattern("dd.MM.yy").withLocale(Locale.GERMAN);
         itemHolder.setDateOfExpiration(format.print(item.getDateOfexpiration()));
 
-        int color = Color.GRAY;
+        int color;
         switch (item.getValidityStatus()){
             case valid:
                 color = Color.GREEN;
+                break;
             case soonToExpire:
                 color = Color.YELLOW;
+                break;
             case expired:
                 color = Color.RED;
+                break;
+            default:
+                color = Color.GRAY;
+                break;
         }
 
         itemHolder.setFlValidityStatusColor(color);
@@ -172,26 +161,5 @@ public class RecyclerViewDemoAdapter extends RecyclerView.Adapter<RecyclerViewDe
             //Drawable mDrawable = Drawable(R.drawable.circle);
             //mDrawable.setColorFilter(new PorterDuffColorFilter(0xffff00, PorterDuff.Mode.MULTIPLY));
         }
-    }
-
-    public static VoucherForMe generateDummyItem() {
-        VoucherForMe v1 = new VoucherForMe(new DateTime(), new DateTime(), "Marco", null, "Bad Zurzach", "Thermalbab");
-        return v1;
-    }
-
-    public static List<VoucherForMe> generateDummyData(int count) {
-        ArrayList<VoucherForMe> items = new ArrayList<>();
-
-        /*
-        for (int i=0; i < count; i++) {
-            items.add(new VoucherForMe(new DateTime(), new DateTime(), "Marco", "Test", "Thermalbad"));
-        }
-        */
-
-        items.add(new VoucherForMe(new DateTime().minusMonths(8), new DateTime().plusDays(12), "Marco", null, "Bad Zurzach", "Thermalbab"));
-        items.add(new VoucherForMe(new DateTime().minusMonths(10).minusDays(20), new DateTime().plusYears(1), "Marco", null, "Bad Zurzach", "Thermalbab"));
-        items.add(new VoucherForMe(new DateTime().minusMonths(14), new DateTime().minusDays(23), "Marco", null, "Bad Zurzach", "Thermalbab"));
-
-        return items;
     }
 }
