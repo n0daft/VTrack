@@ -87,18 +87,19 @@ public class FromMeRecyclerviewAdapter extends RecyclerView.Adapter<FromMeRecycl
         int color;
         switch (item.getValidityStatus()){
             case valid:
-                color = Color.GREEN;
+                color = Color.parseColor("#FF96AA39"); // pastel green
                 break;
             case soonToExpire:
-                color = Color.YELLOW;
+                color = Color.parseColor("#FFF4842D"); // pastel orange
                 break;
             case expired:
-                color = Color.RED;
+                color = Color.parseColor("#FFC74B46"); // pastel red
                 break;
             default:
                 color = Color.GRAY;
                 break;
         }
+
 
         itemHolder.setFlValidityStatusColor(color);
     }

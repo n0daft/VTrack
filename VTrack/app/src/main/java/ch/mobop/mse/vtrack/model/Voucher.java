@@ -99,9 +99,9 @@ public class Voucher {
      * @return
      */
     public VoucherValidityStatusEnum getValidityStatus() {
-        if(dateOfexpiration.isBefore(DateTime.now().minusMonths(1))){
+        if(DateTime.now().isBefore(dateOfexpiration.minusMonths(1))){
             return VoucherValidityStatusEnum.valid;
-        }else if(dateOfexpiration.isBefore(DateTime.now())){
+        }else if(DateTime.now().isBefore(dateOfexpiration)){
             return VoucherValidityStatusEnum.soonToExpire;
         }else {
             return VoucherValidityStatusEnum.expired;
