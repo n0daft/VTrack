@@ -115,6 +115,7 @@ public abstract class AbstractRecyclerviewFragment extends Fragment implements A
                     String name = doc.getString("name");
                     DateTime  created_on = formatter.parseDateTime(doc.getString("created_on"));
                     DateTime  valid_till = formatter.parseDateTime(doc.getString("valid_till"));
+                    DateTime  redeemedAt = null;
                     String person = doc.getString("person");
                     String redeemed = doc.getString("redeemed");
                     if(Boolean.valueOf(doc.getString("archive"))){
@@ -122,10 +123,10 @@ public abstract class AbstractRecyclerviewFragment extends Fragment implements A
                     }else{
                         if("for_me".equals(doc.getString("type"))){
                             //Voucher for me
-                            voucherForMeList.add(new VoucherForMe(created_on,valid_till,person,redeemed,name));
+                            voucherForMeList.add(new VoucherForMe(created_on,valid_till,person,redeemedAt,redeemed,name));
                         }else{
                             //Voucher from me
-                            voucherFromMeList.add(new VoucherForMe(created_on,valid_till,person,redeemed,name));
+                            voucherFromMeList.add(new VoucherForMe(created_on,valid_till,person,redeemedAt,redeemed,name));
                         }
                     }
 
@@ -138,6 +139,7 @@ public abstract class AbstractRecyclerviewFragment extends Fragment implements A
 
                 //onRefresh is asynchron and has to activate the display change somehow. like this?
                 adapter.setItemList(voucherForMeList);
+
 
                 //mListFragment.refresh(result.get());
             }catch (BaasInvalidSessionException e){
