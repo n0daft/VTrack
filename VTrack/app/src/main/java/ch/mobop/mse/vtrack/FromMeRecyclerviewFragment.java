@@ -26,23 +26,24 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
-import ch.mobop.mse.vtrack.adapters.FromMeRecyclerviewAdapter;
+import ch.mobop.mse.vtrack.adapters.FromMeRecyclerViewAdapter;
+import ch.mobop.mse.vtrack.decorators.DividerDecoration;
 import ch.mobop.mse.vtrack.model.Voucher;
 import ch.mobop.mse.vtrack.model.VoucherFromMe;
 
 /**
  * Created by n0daft on 12.03.2015.
  */
-public class FromMeRecyclerviewFragment extends Fragment implements AdapterView.OnItemClickListener {
+public class FromMeRecyclerViewFragment extends Fragment implements AdapterView.OnItemClickListener {
 
     private RecyclerView recyclerView;
-    private FromMeRecyclerviewAdapter adapter;
+    private FromMeRecyclerViewAdapter adapter;
     private ArrayList<Voucher> voucherFromMeList;
 
     private RequestToken mRefresh;
 
-    public static FromMeRecyclerviewFragment newInstance() {
-        FromMeRecyclerviewFragment fragment = new FromMeRecyclerviewFragment();
+    public static FromMeRecyclerViewFragment newInstance() {
+        FromMeRecyclerViewFragment fragment = new FromMeRecyclerViewFragment();
         Bundle args = new Bundle();
         fragment.setArguments(args);
         return fragment;
@@ -61,15 +62,15 @@ public class FromMeRecyclerviewFragment extends Fragment implements AdapterView.
         voucherFromMeList = new ArrayList<>();
 
         recyclerView = (RecyclerView) rootView.findViewById(R.id.section_list);
-        recyclerView.setLayoutManager(getLayoutManager());
-        recyclerView.addItemDecoration(getItemDecoration());
+        recyclerView.setLayoutManager(new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false));
+        recyclerView.addItemDecoration(new DividerDecoration(getActivity()));
 
         recyclerView.getItemAnimator().setAddDuration(1000);
         recyclerView.getItemAnimator().setChangeDuration(1000);
         recyclerView.getItemAnimator().setMoveDuration(1000);
         recyclerView.getItemAnimator().setRemoveDuration(1000);
 
-        adapter = new FromMeRecyclerviewAdapter();
+        adapter = new FromMeRecyclerViewAdapter();
         //adapter.setItemCount(getDefaultItemCount());
 
         //Load all Items from Server
@@ -140,16 +141,4 @@ public class FromMeRecyclerviewFragment extends Fragment implements AdapterView.
             }
         }
     };
-
-    protected RecyclerView.LayoutManager getLayoutManager() {
-        return new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false);
-    }
-
-    protected RecyclerView.ItemDecoration getItemDecoration() {
-        //We must draw dividers ourselves if we want them in a list
-        return new DividerDecoration(getActivity());
-    }
-    protected int getDefaultItemCount() {
-        return 100;
-    }
 }

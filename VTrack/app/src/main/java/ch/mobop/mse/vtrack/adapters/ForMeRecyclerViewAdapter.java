@@ -12,29 +12,29 @@ import org.joda.time.format.DateTimeFormatter;
 import java.util.Locale;
 
 import ch.mobop.mse.vtrack.R;
-import ch.mobop.mse.vtrack.adapters.viewholders.FromMeItemViewHolder;
+import ch.mobop.mse.vtrack.adapters.viewholders.ForMeItemViewHolder;
 import ch.mobop.mse.vtrack.adapters.viewholders.VoucherItemViewHolder;
-import ch.mobop.mse.vtrack.model.VoucherFromMe;
+import ch.mobop.mse.vtrack.model.VoucherForMe;
 
 /**
- * Created by n0daft on 12.03.2015.
+ * Created by n0daft on 05.03.2015.
  */
-public class FromMeRecyclerViewAdapter extends VoucherRecyclerViewAdapter {
+public class ForMeRecyclerViewAdapter extends VoucherRecyclerViewAdapter{
 
     @Override
-    public FromMeItemViewHolder onCreateViewHolder(ViewGroup container, int viewType) {
+    public ForMeItemViewHolder onCreateViewHolder(ViewGroup container, int viewType) {
         LayoutInflater inflater = LayoutInflater.from(container.getContext());
         View root = inflater.inflate(R.layout.recyclerview_item, container, false);
 
-        return new FromMeItemViewHolder(root, this);
+        return new ForMeItemViewHolder(root, this);
     }
 
     @Override
     public void onBindViewHolder(VoucherItemViewHolder itemHolder, int position) {
-        VoucherFromMe item = (VoucherFromMe) mItems.get(position);
+        VoucherForMe item = (VoucherForMe) mItems.get(position);
 
         itemHolder.setTxtVoucherName(item.getName());
-        itemHolder.setTxtPerson(item.getGivenTo());
+        itemHolder.setTxtPerson(item.getReceivedBy());
         DateTimeFormatter format = DateTimeFormat.forPattern("dd.MM.yy").withLocale(Locale.GERMAN);
         itemHolder.setTxtDate(format.print(item.getDateOfexpiration()));
 
@@ -54,13 +54,7 @@ public class FromMeRecyclerViewAdapter extends VoucherRecyclerViewAdapter {
                 break;
         }
 
-
         itemHolder.setFlValidityStatusColor(color);
-    }
-
-    @Override
-    public int getItemCount() {
-        return mItems.size();
     }
 
     public void setOnItemClickListener(AdapterView.OnItemClickListener onItemClickListener) {
@@ -73,5 +67,4 @@ public class FromMeRecyclerViewAdapter extends VoucherRecyclerViewAdapter {
                     itemHolder.getPosition(), itemHolder.getItemId());
         }
     }
-
 }

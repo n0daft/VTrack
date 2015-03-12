@@ -291,10 +291,10 @@ public class MainActivity extends FragmentActivity {
             switch(position) {
                 case 0:
                     System.out.println("Case 0");
-                    return AbstractRecyclerviewFragment.newInstance();
+                    return ForMeRecyclerViewFragment.newInstance();
                 case 1:
                     System.out.println("Case 1");
-                    return FromMeRecyclerviewFragment.newInstance();
+                    return FromMeRecyclerViewFragment.newInstance();
                 default:
                     return SuperAwesomeCardFragment.newInstance(position);
             }

@@ -1,4 +1,4 @@
-package ch.mobop.mse.vtrack;
+package ch.mobop.mse.vtrack.decorators;
 
 import android.content.Context;
 import android.content.res.TypedArray;
@@ -7,6 +7,8 @@ import android.graphics.Rect;
 import android.graphics.drawable.Drawable;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
+
+import ch.mobop.mse.vtrack.R;
 
 /**
  * Created by n0daft on 05.03.2015.

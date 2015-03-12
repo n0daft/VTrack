@@ -26,24 +26,24 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
-import ch.mobop.mse.vtrack.adapters.RecyclerViewDemoAdapter;
+import ch.mobop.mse.vtrack.adapters.ForMeRecyclerViewAdapter;
+import ch.mobop.mse.vtrack.decorators.DividerDecoration;
+import ch.mobop.mse.vtrack.model.Voucher;
 import ch.mobop.mse.vtrack.model.VoucherForMe;
 
 /**
- * Abstract implementation of a recyclerview fragment. This class can be extended
- * in order to create a custom recylcerview.
  * Created by n0daft on 01.03.2015.
  */
-public class AbstractRecyclerviewFragment extends Fragment implements AdapterView.OnItemClickListener{
+public class ForMeRecyclerViewFragment extends Fragment implements AdapterView.OnItemClickListener{
 
     private RecyclerView recyclerView;
-    private RecyclerViewDemoAdapter adapter;
-    private ArrayList<VoucherForMe> voucherForMeList;
+    private ForMeRecyclerViewAdapter adapter;
+    private ArrayList<Voucher> voucherForMeList;
 
     private RequestToken mRefresh;
 
-    public static AbstractRecyclerviewFragment newInstance() {
-        AbstractRecyclerviewFragment fragment = new AbstractRecyclerviewFragment();
+    public static ForMeRecyclerViewFragment newInstance() {
+        ForMeRecyclerViewFragment fragment = new ForMeRecyclerViewFragment();
         Bundle args = new Bundle();
         fragment.setArguments(args);
         return fragment;
@@ -62,16 +62,15 @@ public class AbstractRecyclerviewFragment extends Fragment implements AdapterVie
         voucherForMeList = new ArrayList<>();
 
         recyclerView = (RecyclerView) rootView.findViewById(R.id.section_list);
-        recyclerView.setLayoutManager(getLayoutManager());
-        recyclerView.addItemDecoration(getItemDecoration());
+        recyclerView.setLayoutManager(new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false));
+        recyclerView.addItemDecoration(new DividerDecoration(getActivity()));
 
         recyclerView.getItemAnimator().setAddDuration(1000);
         recyclerView.getItemAnimator().setChangeDuration(1000);
         recyclerView.getItemAnimator().setMoveDuration(1000);
         recyclerView.getItemAnimator().setRemoveDuration(1000);
 
-        adapter = new RecyclerViewDemoAdapter();
-        //adapter.setItemCount(getDefaultItemCount());
+        adapter = new ForMeRecyclerViewAdapter();
 
         //Load all Items from Server
         refreshDocuments();
@@ -128,11 +127,6 @@ public class AbstractRecyclerviewFragment extends Fragment implements AdapterVie
 
                 }
 
-                //Test-Output
-                for(VoucherForMe v:voucherForMeList) {
-                    System.out.println(v.getName() + " " + v.getReceivedBy());
-                }
-
                 //onRefresh is asynchron and has to activate the display change somehow. like this?
                 adapter.setItemList(voucherForMeList);
 
@@ -147,15 +141,4 @@ public class AbstractRecyclerviewFragment extends Fragment implements AdapterVie
         }
     };
 
-    protected RecyclerView.LayoutManager getLayoutManager() {
-        return new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false);
-    }
-
-    protected RecyclerView.ItemDecoration getItemDecoration() {
-        //We must draw dividers ourselves if we want them in a list
-        return new DividerDecoration(getActivity());
-    }
-    protected int getDefaultItemCount() {
-        return 100;
-    }
 }
