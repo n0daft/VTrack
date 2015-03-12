@@ -35,6 +35,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.PopupMenu;
+import android.widget.Toast;
 
 import com.astuetz.PagerSlidingTabStrip;
 import com.baasbox.android.BaasBox;
@@ -51,6 +52,8 @@ public class MainActivity extends FragmentActivity {
     private PagerSlidingTabStrip tabs;
     private ViewPager pager;
     private MyPagerAdapter adapter;
+
+    private final static int EDIT_CODE = 1;
 
     //private VerticalFragment mListFragment;
 
@@ -70,6 +73,7 @@ public class MainActivity extends FragmentActivity {
             startLoginScreen();
             return;
         }
+
 
         setContentView(R.layout.activity_main);
 
@@ -124,10 +128,15 @@ public class MainActivity extends FragmentActivity {
                         switch (item.getItemId()){
                             case R.id.action_newvoucher:
 
+                                Intent intent = new Intent(MainActivity.this,NewVoucherActivity.class);
+                                startActivityForResult(intent,EDIT_CODE);
+
+                                /*
                                 Intent intent = new Intent(MainActivity.this, NewVoucherActivity.class);
                                 intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                                 startActivity(intent);
                                 finish();
+                                */
 
                                 break;
                             case R.id.action_settings:
@@ -136,7 +145,7 @@ public class MainActivity extends FragmentActivity {
                                 break;
                             case R.id.action_logout:
                                 System.out.println("Logout selected");
-                                //BaasUser.current().logout(logoutHandler);
+                                BaasUser.current().logout(logoutHandler);
                                 break;
                             default: break;
                         }
@@ -159,6 +168,26 @@ public class MainActivity extends FragmentActivity {
 
         return super.onOptionsItemSelected(item);
     }
+
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (requestCode==EDIT_CODE){
+            if (resultCode==RESULT_OK){
+                Toast.makeText(this, "Added Voucher", Toast.LENGTH_LONG).show();
+            } else if(resultCode==NewVoucherActivity.RESULT_SESSION_EXPIRED){
+                startLoginScreen();
+            } else if (resultCode==NewVoucherActivity.RESULT_FAILED){
+                Toast.makeText(this, "Failed to add voucher", Toast.LENGTH_LONG).show();
+            } else if (resultCode==NewVoucherActivity.RESULT_CANCELED){
+                Toast.makeText(this, "Canceled new voucher", Toast.LENGTH_LONG).show();
+            }
+        }else {
+            super.onActivityResult(requestCode, resultCode, data);
+        }
+    }
+
+
 
     private void startLoginScreen(){
         //mDoRefresh = false;

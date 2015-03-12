@@ -1,5 +1,6 @@
 package ch.mobop.mse.vtrack;
 
+import android.app.Activity;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
@@ -17,6 +18,8 @@ import com.baasbox.android.BaasHandler;
 import com.baasbox.android.BaasInvalidSessionException;
 import com.baasbox.android.BaasResult;
 import com.baasbox.android.RequestToken;
+import com.baasbox.android.BaasQuery;
+import com.baasbox.android.BaasQuery.Criteria;
 
 import org.joda.time.DateTime;
 import org.joda.time.format.DateTimeFormat;
@@ -39,6 +42,7 @@ public class ForMeRecyclerViewFragment extends Fragment implements AdapterView.O
     private RecyclerView recyclerView;
     private ForMeRecyclerViewAdapter adapter;
     private ArrayList<Voucher> voucherForMeList;
+    private Criteria filter;
 
     private RequestToken mRefresh;
 
@@ -53,6 +57,16 @@ public class ForMeRecyclerViewFragment extends Fragment implements AdapterView.O
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
     }
+
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        //Reload Data after a Voucher was added or deleted
+        System.out.println("onResume()");
+        refreshDocuments();
+    }
+
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -73,6 +87,8 @@ public class ForMeRecyclerViewFragment extends Fragment implements AdapterView.O
         adapter = new ForMeRecyclerViewAdapter();
 
         //Load all Items from Server
+        filter = BaasQuery.builder().orderBy("dateOfexpiration").where("type='for_me' and archive='false'").criteria();
+
         refreshDocuments();
         //Doesn't really do something as refresh is not done yet....
         adapter.setItemList(voucherForMeList);
@@ -89,10 +105,13 @@ public class ForMeRecyclerViewFragment extends Fragment implements AdapterView.O
         Toast.makeText(getActivity(),
                 "Clicked: " + position + ", index " + recyclerView.indexOfChild(view),
                 Toast.LENGTH_SHORT).show();
+        System.out.println("onClick!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
     }
 
+
+
     private void refreshDocuments(){
-        mRefresh = BaasDocument.fetchAll("vtrack", onRefresh);
+        mRefresh = BaasDocument.fetchAll("vtrack", filter, onRefresh);
     }
 
     private final BaasHandler<List<BaasDocument>>
@@ -103,29 +122,28 @@ public class ForMeRecyclerViewFragment extends Fragment implements AdapterView.O
             mRefresh=null;
             try {
                 Iterator it = result.get().iterator();
-                DateTimeFormatter formatter = DateTimeFormat.forPattern("dd.MM.yyyy");
+                DateTimeFormatter formatter = DateTimeFormat.forPattern("yyyy.MM.dd");
 
                 //Clear Lists
                 voucherForMeList.clear();
 
                 while(it.hasNext()){
                     BaasDocument doc = (BaasDocument) it.next();
-                    String name = doc.getString("name");
-                    DateTime  created_on = formatter.parseDateTime(doc.getString("created_on"));
-                    DateTime  valid_till = formatter.parseDateTime(doc.getString("valid_till"));
-                    DateTime  redeemedAt = null;
-                    String person = doc.getString("person");
-                    String redeemed = doc.getString("redeemed");
-                    if(Boolean.valueOf(doc.getString("archive"))){
-                        //Add to archive list
-                    }else{
-                        if("for_me".equals(doc.getString("type"))){
-                            //Voucher for me
-                            voucherForMeList.add(new VoucherForMe(name,person,null,valid_till,"","",redeemedAt));
-                        }
+                    DateTime redeemedAt = null;
+                    if(!doc.getString("redeemedAt").equals("")){
+                        redeemedAt = formatter.parseDateTime(doc.getString("redeemedAt"));
                     }
+                    DateTime dateOfReceipt = formatter.parseDateTime(doc.getString("dateOfReceipt"));
+                    DateTime  dateOfexpiration = formatter.parseDateTime(doc.getString("dateOfexpiration"));
+                    String name = doc.getString("name");
+                    String notes = doc.getString("notes");
+                    String receivedBy = doc.getString("receivedBy");
+                    String redeemedWhere = doc.getString("redeemedWhere");
+
+                    voucherForMeList.add(new VoucherForMe(name,receivedBy,dateOfReceipt,dateOfexpiration,redeemedWhere,notes,redeemedAt));
 
                 }
+                System.out.println("ForMe___ Data loaded");
 
                 //onRefresh is asynchron and has to activate the display change somehow. like this?
                 adapter.setItemList(voucherForMeList);
