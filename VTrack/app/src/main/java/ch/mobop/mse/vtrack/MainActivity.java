@@ -35,7 +35,6 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.PopupMenu;
-import android.widget.Toast;
 
 import com.astuetz.PagerSlidingTabStrip;
 import com.baasbox.android.BaasBox;
@@ -53,7 +52,7 @@ public class MainActivity extends FragmentActivity {
     private ViewPager pager;
     private MyPagerAdapter adapter;
 
-    private VerticalFragment mListFragment;
+    //private VerticalFragment mListFragment;
 
     private Drawable oldBackground = null;
     private int currentColor = 0xFF666666;
@@ -86,7 +85,7 @@ public class MainActivity extends FragmentActivity {
         tabs.setShouldExpand(true); //Works
         tabs.setViewPager(pager);
 
-        mListFragment = (VerticalFragment)getSupportFragmentManager().findFragmentById(R.id.section_list);
+        //mListFragment = (VerticalFragment)getSupportFragmentManager().findFragmentById(R.id.section_list);
 
         changeColor(currentColor);
     }
@@ -130,13 +129,16 @@ public class MainActivity extends FragmentActivity {
                                 startActivity(intent);
                                 finish();
 
-                                Toast.makeText(getBaseContext(), "You selected the action: New Voucher directly", Toast.LENGTH_SHORT).show();
+                                break;
                             case R.id.action_settings:
                                 // call settings activity
                                 System.out.println("Settings selected");
+                                break;
                             case R.id.action_logout:
                                 System.out.println("Logout selected");
                                 //BaasUser.current().logout(logoutHandler);
+                                break;
+                            default: break;
                         }
                         //Toast.makeText(getBaseContext(), "You selected the action : " + item.getTitle(), Toast.LENGTH_SHORT).show();
                         return true;
@@ -289,10 +291,10 @@ public class MainActivity extends FragmentActivity {
             switch(position) {
                 case 0:
                     System.out.println("Case 0");
-                    return VerticalFragment.newInstance();
+                    return AbstractRecyclerviewFragment.newInstance();
                 case 1:
                     System.out.println("Case 1");
-                    return SuperAwesomeCardFragment.newInstance(position);
+                    return FromMeRecyclerviewFragment.newInstance();
                 default:
                     return SuperAwesomeCardFragment.newInstance(position);
             }

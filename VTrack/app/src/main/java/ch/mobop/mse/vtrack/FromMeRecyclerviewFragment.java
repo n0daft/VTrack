@@ -26,24 +26,22 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
-import ch.mobop.mse.vtrack.adapters.RecyclerViewDemoAdapter;
-import ch.mobop.mse.vtrack.model.VoucherForMe;
+import ch.mobop.mse.vtrack.adapters.FromMeRecyclerviewAdapter;
+import ch.mobop.mse.vtrack.model.VoucherFromMe;
 
 /**
- * Abstract implementation of a recyclerview fragment. This class can be extended
- * in order to create a custom recylcerview.
- * Created by n0daft on 01.03.2015.
+ * Created by n0daft on 12.03.2015.
  */
-public class AbstractRecyclerviewFragment extends Fragment implements AdapterView.OnItemClickListener{
+public class FromMeRecyclerviewFragment extends Fragment implements AdapterView.OnItemClickListener {
 
     private RecyclerView recyclerView;
-    private RecyclerViewDemoAdapter adapter;
-    private ArrayList<VoucherForMe> voucherForMeList;
+    private FromMeRecyclerviewAdapter adapter;
+    private ArrayList<VoucherFromMe> voucherFromMeList;
 
     private RequestToken mRefresh;
 
-    public static AbstractRecyclerviewFragment newInstance() {
-        AbstractRecyclerviewFragment fragment = new AbstractRecyclerviewFragment();
+    public static FromMeRecyclerviewFragment newInstance() {
+        FromMeRecyclerviewFragment fragment = new FromMeRecyclerviewFragment();
         Bundle args = new Bundle();
         fragment.setArguments(args);
         return fragment;
@@ -59,7 +57,7 @@ public class AbstractRecyclerviewFragment extends Fragment implements AdapterVie
 
         View rootView = inflater.inflate(R.layout.fragment_received, container, false);
 
-        voucherForMeList = new ArrayList<>();
+        voucherFromMeList = new ArrayList<>();
 
         recyclerView = (RecyclerView) rootView.findViewById(R.id.section_list);
         recyclerView.setLayoutManager(getLayoutManager());
@@ -70,13 +68,13 @@ public class AbstractRecyclerviewFragment extends Fragment implements AdapterVie
         recyclerView.getItemAnimator().setMoveDuration(1000);
         recyclerView.getItemAnimator().setRemoveDuration(1000);
 
-        adapter = new RecyclerViewDemoAdapter();
+        adapter = new FromMeRecyclerviewAdapter();
         //adapter.setItemCount(getDefaultItemCount());
 
         //Load all Items from Server
         refreshDocuments();
         //Doesn't really do something as refresh is not done yet....
-        adapter.setItemList(voucherForMeList);
+        adapter.setItemList(voucherFromMeList);
 
 
         adapter.setOnItemClickListener(this);
@@ -107,12 +105,12 @@ public class AbstractRecyclerviewFragment extends Fragment implements AdapterVie
                 DateTimeFormatter formatter = DateTimeFormat.forPattern("dd.MM.yyyy");
 
                 //Clear Lists
-                voucherForMeList.clear();
+                voucherFromMeList.clear();
 
                 while(it.hasNext()){
                     BaasDocument doc = (BaasDocument) it.next();
                     String name = doc.getString("name");
-                    DateTime  created_on = formatter.parseDateTime(doc.getString("created_on"));
+                    DateTime created_on = formatter.parseDateTime(doc.getString("created_on"));
                     DateTime  valid_till = formatter.parseDateTime(doc.getString("valid_till"));
                     DateTime  redeemedAt = null;
                     String person = doc.getString("person");
@@ -120,21 +118,16 @@ public class AbstractRecyclerviewFragment extends Fragment implements AdapterVie
                     if(Boolean.valueOf(doc.getString("archive"))){
                         //Add to archive list
                     }else{
-                        if("for_me".equals(doc.getString("type"))){
+                        if("from_me".equals(doc.getString("type"))){
                             //Voucher for me
-                            voucherForMeList.add(new VoucherForMe(created_on,valid_till,person,redeemedAt,redeemed,name));
+                            voucherFromMeList.add(new VoucherFromMe(created_on,valid_till,person,redeemedAt,redeemed,name));
                         }
                     }
 
                 }
 
-                //Test-Output
-                for(VoucherForMe v:voucherForMeList) {
-                    System.out.println(v.getName() + " " + v.getReceivedBy());
-                }
-
                 //onRefresh is asynchron and has to activate the display change somehow. like this?
-                adapter.setItemList(voucherForMeList);
+                adapter.setItemList(voucherFromMeList);
 
 
                 //mListFragment.refresh(result.get());
