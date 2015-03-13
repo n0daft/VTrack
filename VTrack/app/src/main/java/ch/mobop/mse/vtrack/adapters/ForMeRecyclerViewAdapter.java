@@ -62,6 +62,7 @@ public class ForMeRecyclerViewAdapter extends VoucherRecyclerViewAdapter{
     }
 
     private void onItemHolderClick(VoucherItemViewHolder itemHolder) {
+        System.out.println("11111111111111111111");
         if (mOnItemClickListener != null) {
             mOnItemClickListener.onItemClick(null, itemHolder.itemView,
                     itemHolder.getPosition(), itemHolder.getItemId());

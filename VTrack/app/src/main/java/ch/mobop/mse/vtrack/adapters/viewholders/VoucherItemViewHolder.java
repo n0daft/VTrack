@@ -45,6 +45,7 @@ public class VoucherItemViewHolder extends RecyclerView.ViewHolder implements Vi
         //mAdapter.onItemHolderClick(this);
     }
 
+
     public void setTxtDate(CharSequence date) {
         txtDate.setText(date);
     }
