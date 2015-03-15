@@ -73,6 +73,8 @@ public class NewVoucherActivity extends FragmentActivity  implements DatePickerF
                 setResult(RESULT_CANCELED);
                 finish();
 
+                break;
+
             case R.id.action_new_voucher_save:
                 //TODO read inputs and create voucher entity.
 
@@ -88,6 +90,8 @@ public class NewVoucherActivity extends FragmentActivity  implements DatePickerF
                 doc.put("notes", "Blabla");
 
                 saveOnBaasBox(doc);
+
+                break;
 
         }
 
