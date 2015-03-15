@@ -17,6 +17,8 @@ public abstract class VoucherRecyclerViewAdapter extends RecyclerView.Adapter<Vo
     protected ArrayList<Voucher> mItems;
     protected AdapterView.OnItemClickListener mOnItemClickListener;
 
+    public abstract void onItemHolderClick(VoucherItemViewHolder itemHolder);
+
     public VoucherRecyclerViewAdapter() {
         mItems = new ArrayList<>();
     }

@@ -67,7 +67,7 @@ public class FromMeRecyclerViewAdapter extends VoucherRecyclerViewAdapter {
         mOnItemClickListener = onItemClickListener;
     }
 
-    private void onItemHolderClick(VoucherItemViewHolder itemHolder) {
+    public void onItemHolderClick(VoucherItemViewHolder itemHolder) {
         if (mOnItemClickListener != null) {
             mOnItemClickListener.onItemClick(null, itemHolder.itemView,
                     itemHolder.getPosition(), itemHolder.getItemId());

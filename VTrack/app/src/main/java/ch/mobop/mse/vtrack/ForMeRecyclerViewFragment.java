@@ -105,7 +105,7 @@ public class ForMeRecyclerViewFragment extends Fragment implements AdapterView.O
         Toast.makeText(getActivity(),
                 "Clicked: " + position + ", index " + recyclerView.indexOfChild(view),
                 Toast.LENGTH_SHORT).show();
-        System.out.println("onClick!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
+        //Implement Intent to edit a voucher
     }
 
 
@@ -139,8 +139,9 @@ public class ForMeRecyclerViewFragment extends Fragment implements AdapterView.O
                     String notes = doc.getString("notes");
                     String receivedBy = doc.getString("receivedBy");
                     String redeemedWhere = doc.getString("redeemedWhere");
+                    String id = doc.getId();
 
-                    voucherForMeList.add(new VoucherForMe(name,receivedBy,dateOfReceipt,dateOfexpiration,redeemedWhere,notes,redeemedAt));
+                    voucherForMeList.add(new VoucherForMe(name,receivedBy,dateOfReceipt,dateOfexpiration,redeemedWhere,notes,redeemedAt,id));
 
                 }
                 System.out.println("ForMe___ Data loaded");

@@ -28,17 +28,21 @@ public class Voucher {
     /** Any Notes */
     private String notes;
 
+    /** BassBox ID */
+    private String id;
+
     /***************************************************************************
      *                                                                         *
      * Constructors                                                            *
      *                                                                         *
      **************************************************************************/
 
-    public Voucher(String name, DateTime dateOfexpiration, String redeemWhere, String notes, DateTime redeemedAt) {
+    public Voucher(String name, DateTime dateOfexpiration, String redeemWhere, String notes, DateTime redeemedAt, String id) {
         this.name = name;
         this.dateOfexpiration = dateOfexpiration;
         this.redeemedAt = redeemedAt;
         this.notes = notes;
+        this.id = id;
         this.redeemWhere = redeemWhere;
     }
 
@@ -86,6 +90,14 @@ public class Voucher {
 
     public void setNotes(String notes) {
         this.notes = notes;
+    }
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
     }
 
     /***************************************************************************

@@ -42,7 +42,8 @@ public class VoucherItemViewHolder extends RecyclerView.ViewHolder implements Vi
 
     @Override
     public void onClick(View v) {
-        //mAdapter.onItemHolderClick(this);
+        mAdapter.onItemHolderClick(this);
+
     }
 
 

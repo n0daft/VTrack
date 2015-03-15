@@ -142,8 +142,9 @@ public class FromMeRecyclerViewFragment extends Fragment implements AdapterView.
                     String notes = doc.getString("notes");
                     String givenTo = doc.getString("givenTo");
                     String redeemedWhere = doc.getString("redeemedWhere");
+                    String id = doc.getId();
 
-                    voucherFromMeList.add(new VoucherFromMe(name,givenTo,dateOfDelivery,dateOfexpiration,redeemedWhere,notes,redeemedAt));
+                    voucherFromMeList.add(new VoucherFromMe(name,givenTo,dateOfDelivery,dateOfexpiration,redeemedWhere,notes,redeemedAt,id));
 
                 }
 

@@ -25,8 +25,8 @@ public class VoucherFromMe extends Voucher {
      *                                                                         *
      **************************************************************************/
 
-    public VoucherFromMe(String name, String givenTo, DateTime dateOfDelivery, DateTime dateOfexpiration, String redeemWhere, String notes, DateTime redeemedAt) {
-        super(name, dateOfexpiration, redeemWhere, notes, redeemedAt);
+    public VoucherFromMe(String name, String givenTo, DateTime dateOfDelivery, DateTime dateOfexpiration, String redeemWhere, String notes, DateTime redeemedAt, String id) {
+        super(name, dateOfexpiration, redeemWhere, notes, redeemedAt, id);
         this.dateOfDelivery = dateOfDelivery;
         this.givenTo = givenTo;
     }
