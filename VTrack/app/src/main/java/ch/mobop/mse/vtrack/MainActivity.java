@@ -108,13 +108,15 @@ public class MainActivity extends FragmentActivity {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
 
-        // Get reference to option menu.
-        View menuItemView = findViewById(R.id.action_contact);
+        PopupMenu popup;
+
 
         switch (item.getItemId()) {
 
             case R.id.action_contact:
-                PopupMenu popup = new PopupMenu(getBaseContext(),menuItemView);
+                // Get reference to option menu.
+                View menuItemViewOther = findViewById(R.id.action_contact);
+                popup = new PopupMenu(getBaseContext(),menuItemViewOther);
 
                 // Adding menu items to the popup menu.
                 popup.getMenuInflater().inflate(R.menu.main_popup, popup.getMenu());
@@ -156,6 +158,42 @@ public class MainActivity extends FragmentActivity {
 
                 /** Showing the popup menu */
                 popup.show();
+
+                break;
+            case R.id.action_new_voucher:
+                View menuItemViewNew = findViewById(R.id.action_new_voucher);
+
+                popup = new PopupMenu(getBaseContext(),menuItemViewNew);
+
+                // Adding menu items to the popup menu.
+                popup.getMenuInflater().inflate(R.menu.main_new_popup, popup.getMenu());
+                //Intent intent = new Intent(this,NewVoucherActivity.class);
+                // Defining menu item click listener for the popup menu.
+                popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+
+                    @Override
+                    public boolean onMenuItemClick(MenuItem item) {
+                        System.out.println(item.getItemId());
+                        switch (item.getItemId()){
+                            case R.id.action_newvoucher_forme:
+
+                                System.out.println("action_newvoucher_forme selected");
+
+                                break;
+                            case R.id.action_newvoucher_fromme:
+                                // call settings activity
+                                System.out.println("action_newvoucher_fromme selected");
+                                break;
+                            default: break;
+                        }
+                        //Toast.makeText(getBaseContext(), "You selected the action : " + item.getTitle(), Toast.LENGTH_SHORT).show();
+                        return true;
+                    }
+                });
+
+                /** Showing the popup menu */
+                popup.show();
+
 
 
 

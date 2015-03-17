@@ -1,9 +1,17 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android" >
 
+
+    <item
+        android:id="@+id/action_new_voucher"
+        android:icon="@drawable/ic_action_new"
+        android:showAsAction="ifRoom"
+        android:title="New Voucher"/>
+
     <item
         android:id="@+id/action_contact"
-        android:icon="@drawable/ic_action_user"
+        android:icon="@drawable/ic_action_overflow"
         android:showAsAction="ifRoom"
         android:title="@string/action_contact"/>
+
 
 </menu>
