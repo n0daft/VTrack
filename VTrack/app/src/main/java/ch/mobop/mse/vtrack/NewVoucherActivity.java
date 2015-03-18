@@ -25,6 +25,7 @@ import com.baasbox.android.SaveMode;
 import org.joda.time.DateTime;
 import org.joda.time.format.DateTimeFormat;
 import org.joda.time.format.DateTimeFormatter;
+import java.util.Date;
 
 import ch.mobop.mse.vtrack.widgets.DatePickerFragment;
 
@@ -76,7 +77,7 @@ public class NewVoucherActivity extends FragmentActivity  implements DatePickerF
         txtReceivedFrom = (EditText) findViewById(R.id.txtReceivedFrom);
         txtNotes = (EditText) findViewById(R.id.txtNotes);
         txtReceivedFrom_header = (TextView) findViewById(R.id.txtReceivedFrom_header);
-        lblReceivedAt_header = (TextView) findViewById(R.id.txtReceivedFrom_header);
+        lblReceivedAt_header = (TextView) findViewById(R.id.lblReceivedAt_header);
 
         //Add content if it's an edit request
         if("edit".equals(intent.getStringExtra("intentType"))){
@@ -144,8 +145,15 @@ public class NewVoucherActivity extends FragmentActivity  implements DatePickerF
         DateTimeFormatter formatterBaas = DateTimeFormat.forPattern("yyyy.MM.dd");
         DateTimeFormatter formatterVoucher = DateTimeFormat.forPattern("dd.MM.yy");
 
-        DateTime date_validUntil = formatterVoucher.parseDateTime(lblValidUntil.getText().toString());
-        DateTime date_receivedAt = formatterVoucher.parseDateTime(lblReceivedAt.getText().toString());
+        DateTime date_validUntil = new DateTime(new Date());
+        if(!lblValidUntil.getText().toString().isEmpty()) {
+            date_validUntil = formatterVoucher.parseDateTime(lblValidUntil.getText().toString());
+        }
+
+        DateTime date_receivedAt = new DateTime(new Date());
+        if(!lblReceivedAt.getText().toString().isEmpty()) {
+             date_receivedAt = formatterVoucher.parseDateTime(lblReceivedAt.getText().toString());
+        }
 
         receivedDoc.put("name",txtVoucherName.getText().toString());
         receivedDoc.put("dateOfexpiration", formatterBaas.print(date_validUntil));
@@ -158,12 +166,12 @@ public class NewVoucherActivity extends FragmentActivity  implements DatePickerF
             //Content for_me voucher
             receivedDoc.put("type", "for_me");
             receivedDoc.put("dateOfReceipt", formatterBaas.print(date_receivedAt));
-            receivedDoc.put("receivedBy", "Callback-Agent");
+            receivedDoc.put("receivedBy", txtReceivedFrom.getText().toString());
         }else{
             //Content from_me voucher
             receivedDoc.put("type", "from_me");
             receivedDoc.put("dateOfDelivery", formatterBaas.print(date_receivedAt));
-            receivedDoc.put("givenTo", "Callback-Agent");
+            receivedDoc.put("givenTo", txtReceivedFrom.getText().toString());
         }
     }
 
