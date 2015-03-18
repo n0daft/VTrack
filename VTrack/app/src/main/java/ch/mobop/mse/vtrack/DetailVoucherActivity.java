@@ -67,10 +67,10 @@ public class DetailVoucherActivity extends FragmentActivity{
 
         //Set Intent Data
         txtVoucherName.setText(intent.getStringExtra("name"));
-        txtPerson.setText(intent.getStringExtra("person"));
+        txtPerson.setText(intent.getStringExtra("receivedBy"));
         txtNotes.setText(intent.getStringExtra("notes"));
-        txtValidUntil.setText(intent.getStringExtra("expiration"));
-        txtReceivedAt.setText(intent.getStringExtra("date"));
+        txtValidUntil.setText(intent.getStringExtra("dateOfexpiration"));
+        txtReceivedAt.setText(intent.getStringExtra("dateOfReceipt"));
 
         if("from_me".equals(intent.getStringExtra("type"))){
             desc_txtPerson.setText("Given to");
@@ -84,7 +84,7 @@ public class DetailVoucherActivity extends FragmentActivity{
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.new_voucher, menu);
+        getMenuInflater().inflate(R.menu.voucher_detail, menu);
         return true;
     }
 
@@ -99,17 +99,18 @@ public class DetailVoucherActivity extends FragmentActivity{
 
                 break;
 
-            case R.id.action_new_voucher_save:
+            case R.id.action_edit:
 
                 //Intent to edit the voucher
                 Intent edit = new Intent(DetailVoucherActivity.this,NewVoucherActivity.class);
                 edit.putExtra("intentType","edit");
-                edit.putExtra("baasID",intent.getStringExtra("id"));
+                edit.putExtra("baasID",intent.getStringExtra("baasID"));
                 edit.putExtra("name",intent.getStringExtra("name"));
                 edit.putExtra("notes",intent.getStringExtra("notes"));
                 edit.putExtra("archive",intent.getStringExtra("archive"));
                 edit.putExtra("redeemedAt",intent.getStringExtra("redeemedAt"));
                 edit.putExtra("redeemedWhere",intent.getStringExtra("redeemedWhere"));
+                edit.putExtra("dateOfexpiration",intent.getStringExtra("dateOfexpiration"));
 
                 if("from_me".equals(intent.getStringExtra("type"))){
                     edit.putExtra("dateOfDelivery",intent.getStringExtra("dateOfDelivery"));

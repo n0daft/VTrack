@@ -29,6 +29,7 @@ import org.joda.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Locale;
 
 import ch.mobop.mse.vtrack.adapters.ForMeRecyclerViewAdapter;
 import ch.mobop.mse.vtrack.decorators.DividerDecoration;
@@ -109,12 +110,14 @@ public class ForMeRecyclerViewFragment extends Fragment implements AdapterView.O
                 "Clicked: " + position + ", index " + recyclerView.indexOfChild(view),
                 Toast.LENGTH_SHORT).show();
         //Implement Intent to edit a voucher
+        DateTimeFormatter format = DateTimeFormat.forPattern("dd.MM.yy").withLocale(Locale.GERMAN);
+
         Intent intent = new Intent(getActivity(),DetailVoucherActivity.class);
-        intent.putExtra("id",voucherForMeList.get(position).getId());
+        intent.putExtra("baasID",voucherForMeList.get(position).getId());
         intent.putExtra("name",voucherForMeList.get(position).getName());
-        intent.putExtra("person",((VoucherForMe)voucherForMeList.get(position)).getReceivedBy());
-        intent.putExtra("date",((VoucherForMe)voucherForMeList.get(position)).getDateOfReceipt());
-        intent.putExtra("expiration",voucherForMeList.get(position).getDateOfexpiration());
+        intent.putExtra("receivedBy",((VoucherForMe)voucherForMeList.get(position)).getReceivedBy());
+        intent.putExtra("dateOfReceipt",format.print(((VoucherForMe)voucherForMeList.get(position)).getDateOfReceipt()));
+        intent.putExtra("dateOfexpiration",format.print((voucherForMeList.get(position)).getDateOfexpiration()));
         intent.putExtra("notes",voucherForMeList.get(position).getNotes());
         intent.putExtra("type","for_me");
         startActivityForResult(intent,DETAIL_CODE);

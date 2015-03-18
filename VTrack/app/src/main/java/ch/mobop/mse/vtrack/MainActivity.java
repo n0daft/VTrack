@@ -128,18 +128,8 @@ public class MainActivity extends FragmentActivity {
                     public boolean onMenuItemClick(MenuItem item) {
                         System.out.println(item.getItemId());
                         switch (item.getItemId()){
-                            case R.id.action_newvoucher:
+                            case R.id.action_refresh:
 
-                                Intent intent = new Intent(MainActivity.this,NewVoucherActivity.class);
-                                intent.putExtra("intentType","new");
-                                startActivityForResult(intent,NEW_CODE);
-
-                                /*
-                                Intent intent = new Intent(MainActivity.this, NewVoucherActivity.class);
-                                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                                startActivity(intent);
-                                finish();
-                                */
 
                                 break;
                             case R.id.action_settings:
@@ -174,16 +164,24 @@ public class MainActivity extends FragmentActivity {
 
                     @Override
                     public boolean onMenuItemClick(MenuItem item) {
+                        Intent intent = new Intent(MainActivity.this,NewVoucherActivity.class);
                         System.out.println(item.getItemId());
                         switch (item.getItemId()){
-                            case R.id.action_newvoucher_forme:
+                            case R.id.action_newvoucher_for_me:
 
                                 System.out.println("action_newvoucher_forme selected");
+                                intent.putExtra("intentType","new");
+                                intent.putExtra("type","for_me");
+                                startActivityForResult(intent,NEW_CODE);
 
                                 break;
-                            case R.id.action_newvoucher_fromme:
+                            case R.id.action_newvoucher_from_me:
                                 // call settings activity
                                 System.out.println("action_newvoucher_fromme selected");
+                                intent.putExtra("intentType","new");
+                                intent.putExtra("type","from_me");
+                                startActivityForResult(intent,NEW_CODE);
+
                                 break;
                             default: break;
                         }

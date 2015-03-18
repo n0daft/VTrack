@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
         <item
-    android:id="@+id/action_newvoucher_forme"
+    android:id="@+id/action_newvoucher_for_me"
     android:title="received" />
      
         <item
-    android:id="@+id/action_newvoucher_fromme"
+    android:id="@+id/action_newvoucher_from_me"
     android:title="given away" />
 </menu>

@@ -22,6 +22,10 @@ import com.baasbox.android.BaasResult;
 import com.baasbox.android.RequestToken;
 import com.baasbox.android.SaveMode;
 
+import org.joda.time.DateTime;
+import org.joda.time.format.DateTimeFormat;
+import org.joda.time.format.DateTimeFormatter;
+
 import ch.mobop.mse.vtrack.widgets.DatePickerFragment;
 
 /**
@@ -31,8 +35,10 @@ public class NewVoucherActivity extends FragmentActivity  implements DatePickerF
 
     private EditText txtVoucherName;
     private TextView lblReceivedAt;
+    private TextView lblReceivedAt_header;
     private TextView lblValidUntil;
     private EditText txtReceivedFrom;
+    private TextView txtReceivedFrom_header;
     private EditText txtNotes;
     private Intent intent;
     private BaasDocument receivedDoc;
@@ -69,10 +75,28 @@ public class NewVoucherActivity extends FragmentActivity  implements DatePickerF
         lblValidUntil = (TextView) findViewById(R.id.lblValidUntil);
         txtReceivedFrom = (EditText) findViewById(R.id.txtReceivedFrom);
         txtNotes = (EditText) findViewById(R.id.txtNotes);
+        txtReceivedFrom_header = (TextView) findViewById(R.id.txtReceivedFrom_header);
+        lblReceivedAt_header = (TextView) findViewById(R.id.txtReceivedFrom_header);
 
+        //Add content if it's an edit request
         if("edit".equals(intent.getStringExtra("intentType"))){
             txtVoucherName.setText(intent.getStringExtra("name"));
+            txtNotes.setText(intent.getStringExtra("notes"));
+            lblValidUntil.setText(intent.getStringExtra("dateOfexpiration"));
+            if("for_me".equals(intent.getStringExtra("type"))){
+                txtReceivedFrom.setText(intent.getStringExtra("receivedBy"));
+                lblReceivedAt.setText(intent.getStringExtra("dateOfReceipt"));
+            }else{
+                txtReceivedFrom.setText(intent.getStringExtra("givenTo"));
+                lblReceivedAt.setText(intent.getStringExtra("dateOfDelivery"));
+            }
         }
+
+        if("from_me".equals(intent.getStringExtra("type"))){
+            txtReceivedFrom_header.setText("Given to");
+            lblReceivedAt_header.setText("Date of Delivery");
+        }
+
 
         mDialog = new ProgressDialog(this);
         mDialog.setMessage("Uploading...");
@@ -117,8 +141,14 @@ public class NewVoucherActivity extends FragmentActivity  implements DatePickerF
 
 
     private void addContentToDocument(){
+        DateTimeFormatter formatterBaas = DateTimeFormat.forPattern("yyyy.MM.dd");
+        DateTimeFormatter formatterVoucher = DateTimeFormat.forPattern("dd.MM.yy");
+
+        DateTime date_validUntil = formatterVoucher.parseDateTime(lblValidUntil.getText().toString());
+        DateTime date_receivedAt = formatterVoucher.parseDateTime(lblReceivedAt.getText().toString());
+
         receivedDoc.put("name",txtVoucherName.getText().toString());
-        receivedDoc.put("dateOfexpiration", lblValidUntil.getText().toString());
+        receivedDoc.put("dateOfexpiration", formatterBaas.print(date_validUntil));
         receivedDoc.put("notes", txtNotes.getText().toString());
         receivedDoc.put("archive", "false");
         receivedDoc.put("redeemedAt", "");
@@ -127,12 +157,12 @@ public class NewVoucherActivity extends FragmentActivity  implements DatePickerF
         if("for_me".equals(intent.getStringExtra("type"))){
             //Content for_me voucher
             receivedDoc.put("type", "for_me");
-            receivedDoc.put("dateOfReceipt", "2014.01.01");
+            receivedDoc.put("dateOfReceipt", formatterBaas.print(date_receivedAt));
             receivedDoc.put("receivedBy", "Callback-Agent");
         }else{
             //Content from_me voucher
             receivedDoc.put("type", "from_me");
-            receivedDoc.put("dateOfDelivery", "Callback-Agent");
+            receivedDoc.put("dateOfDelivery", formatterBaas.print(date_receivedAt));
             receivedDoc.put("givenTo", "Callback-Agent");
         }
     }
