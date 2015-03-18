@@ -53,8 +53,8 @@ public class MainActivity extends FragmentActivity {
     private ViewPager pager;
     private MyPagerAdapter adapter;
 
-    private final static int EDIT_CODE = 1;
-
+    private final static int NEW_CODE = 1;
+    private final static int EDIT_CODE = 3;
     //private VerticalFragment mListFragment;
 
     private Drawable oldBackground = null;
@@ -131,7 +131,8 @@ public class MainActivity extends FragmentActivity {
                             case R.id.action_newvoucher:
 
                                 Intent intent = new Intent(MainActivity.this,NewVoucherActivity.class);
-                                startActivityForResult(intent,EDIT_CODE);
+                                intent.putExtra("intentType","new");
+                                startActivityForResult(intent,NEW_CODE);
 
                                 /*
                                 Intent intent = new Intent(MainActivity.this, NewVoucherActivity.class);
@@ -210,7 +211,7 @@ public class MainActivity extends FragmentActivity {
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (requestCode==EDIT_CODE){
+        if (requestCode==NEW_CODE){
             if (resultCode==RESULT_OK){
                 Toast.makeText(this, "Added Voucher", Toast.LENGTH_LONG).show();
             } else if(resultCode==NewVoucherActivity.RESULT_SESSION_EXPIRED){

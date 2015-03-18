@@ -27,6 +27,10 @@
             android:label="New Voucher"
             android:windowSoftInputMode="adjustResize|stateVisible" >
             </activity>
+        <activity android:name=".DetailVoucherActivity"
+            android:label="Voucher Details"
+            android:windowSoftInputMode="adjustResize|stateVisible" >
+        </activity>
     </application>
 
 </manifest>

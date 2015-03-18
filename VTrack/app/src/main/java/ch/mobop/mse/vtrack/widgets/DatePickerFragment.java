@@ -23,6 +23,8 @@ public class DatePickerFragment extends DialogFragment
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
 
+        System.out.println("onCreateDialog");
+
         Bundle arguments = getArguments();
         if(arguments != null){
             callerId = arguments.getInt("callerId");

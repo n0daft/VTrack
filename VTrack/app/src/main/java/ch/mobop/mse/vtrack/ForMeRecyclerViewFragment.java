@@ -1,6 +1,7 @@
 package ch.mobop.mse.vtrack;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
@@ -43,6 +44,8 @@ public class ForMeRecyclerViewFragment extends Fragment implements AdapterView.O
     private ForMeRecyclerViewAdapter adapter;
     private ArrayList<Voucher> voucherForMeList;
     private Criteria filter;
+
+    private final static int DETAIL_CODE = 2;
 
     private RequestToken mRefresh;
 
@@ -106,6 +109,28 @@ public class ForMeRecyclerViewFragment extends Fragment implements AdapterView.O
                 "Clicked: " + position + ", index " + recyclerView.indexOfChild(view),
                 Toast.LENGTH_SHORT).show();
         //Implement Intent to edit a voucher
+        Intent intent = new Intent(getActivity(),DetailVoucherActivity.class);
+        intent.putExtra("id",voucherForMeList.get(position).getId());
+        intent.putExtra("name",voucherForMeList.get(position).getName());
+        intent.putExtra("person",((VoucherForMe)voucherForMeList.get(position)).getReceivedBy());
+        intent.putExtra("date",((VoucherForMe)voucherForMeList.get(position)).getDateOfReceipt());
+        intent.putExtra("expiration",voucherForMeList.get(position).getDateOfexpiration());
+        intent.putExtra("notes",voucherForMeList.get(position).getNotes());
+        intent.putExtra("type","for_me");
+        startActivityForResult(intent,DETAIL_CODE);
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (requestCode==DETAIL_CODE){
+            if (resultCode==DetailVoucherActivity.RESULT_OK){
+                Toast.makeText(getActivity(), "OK", Toast.LENGTH_LONG).show();
+            }else{
+                Toast.makeText(getActivity(), "else", Toast.LENGTH_LONG).show();
+            }
+        }else {
+            super.onActivityResult(requestCode, resultCode, data);
+        }
     }
 
 
