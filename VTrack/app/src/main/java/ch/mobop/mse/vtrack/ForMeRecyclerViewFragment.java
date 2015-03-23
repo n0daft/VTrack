@@ -29,10 +29,10 @@ import org.joda.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Locale;
 
 import ch.mobop.mse.vtrack.adapters.ForMeRecyclerViewAdapter;
 import ch.mobop.mse.vtrack.decorators.DividerDecoration;
+import ch.mobop.mse.vtrack.helpers.Constants;
 import ch.mobop.mse.vtrack.model.Voucher;
 import ch.mobop.mse.vtrack.model.VoucherForMe;
 
@@ -48,7 +48,7 @@ public class ForMeRecyclerViewFragment extends Fragment implements AdapterView.O
 
     private SwipeRefreshLayout mSwipeRefreshLayout;
 
-    private final static int DETAIL_CODE = 2;
+
 
     private RequestToken mRefresh;
 
@@ -103,7 +103,6 @@ public class ForMeRecyclerViewFragment extends Fragment implements AdapterView.O
         adapter.setOnItemClickListener(this);
         recyclerView.setAdapter(adapter);
 
-
         mSwipeRefreshLayout = (SwipeRefreshLayout) rootView.findViewById(R.id.activity_main_swipe_refresh_layout);
         mSwipeRefreshLayout.setColorSchemeColors(R.color.orange, R.color.green, R.color.blue);
 
@@ -122,30 +121,20 @@ public class ForMeRecyclerViewFragment extends Fragment implements AdapterView.O
         Toast.makeText(getActivity(),
                 "Clicked: " + position + ", index " + recyclerView.indexOfChild(view),
                 Toast.LENGTH_SHORT).show();
-        //Implement Intent to edit a voucher
-        DateTimeFormatter format = DateTimeFormat.forPattern("dd.MM.yy").withLocale(Locale.GERMAN);
 
+        // Implement Intent to edit a voucher
         Intent intent = new Intent(getActivity(),DetailVoucherActivity.class);
         Bundle bundle = new Bundle();
         bundle.putParcelable("voucherParcelable", voucherForMeList.get(position));
         intent.putExtras(bundle);
         intent.putExtra("type","for_me");
 
-        /*
-        intent.putExtra("baasID",voucherForMeList.get(position).getId());
-        intent.putExtra("name",voucherForMeList.get(position).getName());
-        intent.putExtra("receivedBy",((VoucherForMe)voucherForMeList.get(position)).getReceivedBy());
-        intent.putExtra("dateOfReceipt",format.print(((VoucherForMe)voucherForMeList.get(position)).getDateOfReceipt()));
-        intent.putExtra("dateOfexpiration",format.print((voucherForMeList.get(position)).getDateOfexpiration()));
-        intent.putExtra("notes",voucherForMeList.get(position).getNotes());
-        intent.putExtra("type","for_me");
-        */
-        startActivityForResult(intent,DETAIL_CODE);
+        startActivityForResult(intent, Constants.DETAIL_CODE);
     }
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (requestCode==DETAIL_CODE){
+        if (requestCode== Constants.DETAIL_CODE){
             if (resultCode==DetailVoucherActivity.RESULT_OK){
                 Toast.makeText(getActivity(), "OK", Toast.LENGTH_LONG).show();
             }else{

@@ -35,6 +35,7 @@ public class DetailVoucherActivity extends FragmentActivity{
     private TextView desc_txtPerson;
     private TextView desc_txtReceivedAt;
     private Intent intent;
+    private Voucher voucher;
 
     private static final String PENDING_SAVE = "PENDING_SAVE";
     public static final int RESULT_SESSION_EXPIRED = Activity.RESULT_FIRST_USER+1;
@@ -60,9 +61,8 @@ public class DetailVoucherActivity extends FragmentActivity{
         desc_txtPerson = (TextView) findViewById(R.id.detail_desc_txtPerson);
         desc_txtReceivedAt = (TextView) findViewById(R.id.detail_desc_txtReceivedAt);
 
-        //Set Intent Data
-
-        Voucher voucher = getIntent().getParcelableExtra("voucherParcelable");
+        // Set Intent Data
+        voucher = getIntent().getParcelableExtra("voucherParcelable");
 
         txtVoucherName.setText(voucher.getName());
         txtNotes.setText(voucher.getNotes());
@@ -106,32 +106,18 @@ public class DetailVoucherActivity extends FragmentActivity{
                 break;
 
             case R.id.action_edit:
-
-                //Intent to edit the voucher
+                // Intent to edit the voucher
                 Intent edit = new Intent(DetailVoucherActivity.this,NewVoucherActivity.class);
-                edit.putExtra("intentType","edit");
-                edit.putExtra("baasID",intent.getStringExtra("baasID"));
-                edit.putExtra("name",intent.getStringExtra("name"));
-                edit.putExtra("notes",intent.getStringExtra("notes"));
-                edit.putExtra("archive",intent.getStringExtra("archive"));
-                edit.putExtra("redeemedAt",intent.getStringExtra("redeemedAt"));
-                edit.putExtra("redeemedWhere",intent.getStringExtra("redeemedWhere"));
-                edit.putExtra("dateOfexpiration",intent.getStringExtra("dateOfexpiration"));
 
-                if("from_me".equals(intent.getStringExtra("type"))){
-                    edit.putExtra("dateOfDelivery",intent.getStringExtra("dateOfDelivery"));
-                    edit.putExtra("givenTo",intent.getStringExtra("givenTo"));
-                    edit.putExtra("type","from_me");
-                }else{
-                    edit.putExtra("dateOfReceipt",intent.getStringExtra("dateOfReceipt"));
-                    edit.putExtra("receivedBy",intent.getStringExtra("receivedBy"));
-                    edit.putExtra("type","for_me");
-                }
+                // Add current voucher object to intent and reuse intent object type.
+                Bundle bundle = new Bundle();
+                bundle.putParcelable("voucherParcelable", voucher);
+                edit.putExtras(bundle);
+                edit.putExtra("intentType","edit");
+                edit.putExtra("type", intent.getStringExtra("type"));
 
                 startActivityForResult(edit,EDIT_CODE);
-
                 break;
-
         }
 
         return super.onOptionsItemSelected(item);

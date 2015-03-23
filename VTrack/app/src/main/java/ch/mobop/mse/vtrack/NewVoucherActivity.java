@@ -15,7 +15,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.baasbox.android.BaasDocument;
-import com.baasbox.android.BaasException;
 import com.baasbox.android.BaasHandler;
 import com.baasbox.android.BaasInvalidSessionException;
 import com.baasbox.android.BaasResult;
@@ -25,8 +24,13 @@ import com.baasbox.android.SaveMode;
 import org.joda.time.DateTime;
 import org.joda.time.format.DateTimeFormat;
 import org.joda.time.format.DateTimeFormatter;
+
 import java.util.Date;
 
+import ch.mobop.mse.vtrack.helpers.Config;
+import ch.mobop.mse.vtrack.model.Voucher;
+import ch.mobop.mse.vtrack.model.VoucherForMe;
+import ch.mobop.mse.vtrack.model.VoucherFromMe;
 import ch.mobop.mse.vtrack.widgets.DatePickerFragment;
 
 /**
@@ -43,6 +47,7 @@ public class NewVoucherActivity extends FragmentActivity  implements DatePickerF
     private EditText txtNotes;
     private Intent intent;
     private BaasDocument receivedDoc;
+    private Voucher voucher;
 
     private String type;
     private String name;
@@ -69,6 +74,7 @@ public class NewVoucherActivity extends FragmentActivity  implements DatePickerF
         setContentView(R.layout.activity_new_voucher);
 
         intent = getIntent();
+        voucher = getIntent().getParcelableExtra("voucherParcelable");
 
         // Get UI component references
         txtVoucherName = (EditText) findViewById(R.id.txtVoucherName);
@@ -81,15 +87,17 @@ public class NewVoucherActivity extends FragmentActivity  implements DatePickerF
 
         //Add content if it's an edit request
         if("edit".equals(intent.getStringExtra("intentType"))){
-            txtVoucherName.setText(intent.getStringExtra("name"));
-            txtNotes.setText(intent.getStringExtra("notes"));
-            lblValidUntil.setText(intent.getStringExtra("dateOfexpiration"));
+            txtVoucherName.setText(voucher.getName());
+            txtNotes.setText(voucher.getNotes());
+            lblValidUntil.setText(Config.dateTimeFormatter.print(voucher.getDateOfexpiration()));
             if("for_me".equals(intent.getStringExtra("type"))){
-                txtReceivedFrom.setText(intent.getStringExtra("receivedBy"));
-                lblReceivedAt.setText(intent.getStringExtra("dateOfReceipt"));
-            }else{
-                txtReceivedFrom.setText(intent.getStringExtra("givenTo"));
-                lblReceivedAt.setText(intent.getStringExtra("dateOfDelivery"));
+                VoucherForMe voucherForMe = (VoucherForMe) voucher;
+                txtReceivedFrom.setText(voucherForMe.getReceivedBy());
+                lblReceivedAt.setText(Config.dateTimeFormatter.print(voucherForMe.getDateOfReceipt()));
+            }else if("from_me".equals(intent.getStringExtra("type"))){
+                VoucherFromMe voucherFromMe = (VoucherFromMe) voucher;
+                txtReceivedFrom.setText(voucherFromMe.getGivenTo());
+                lblReceivedAt.setText(Config.dateTimeFormatter.print(voucherFromMe.getDateOfDelivery()));
             }
         }
 
@@ -143,16 +151,15 @@ public class NewVoucherActivity extends FragmentActivity  implements DatePickerF
 
     private void addContentToDocument(){
         DateTimeFormatter formatterBaas = DateTimeFormat.forPattern("yyyy.MM.dd");
-        DateTimeFormatter formatterVoucher = DateTimeFormat.forPattern("dd.MM.yy");
 
         DateTime date_validUntil = new DateTime(new Date());
         if(!lblValidUntil.getText().toString().isEmpty()) {
-            date_validUntil = formatterVoucher.parseDateTime(lblValidUntil.getText().toString());
+            date_validUntil = Config.dateTimeFormatter.parseDateTime(lblValidUntil.getText().toString());
         }
 
         DateTime date_receivedAt = new DateTime(new Date());
         if(!lblReceivedAt.getText().toString().isEmpty()) {
-             date_receivedAt = formatterVoucher.parseDateTime(lblReceivedAt.getText().toString());
+             date_receivedAt = Config.dateTimeFormatter.parseDateTime(lblReceivedAt.getText().toString());
         }
 
         receivedDoc.put("name",txtVoucherName.getText().toString());

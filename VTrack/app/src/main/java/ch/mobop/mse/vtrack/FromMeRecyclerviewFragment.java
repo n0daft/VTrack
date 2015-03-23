@@ -1,8 +1,9 @@
 package ch.mobop.mse.vtrack;
 
-import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -16,10 +17,10 @@ import com.baasbox.android.BaasDocument;
 import com.baasbox.android.BaasException;
 import com.baasbox.android.BaasHandler;
 import com.baasbox.android.BaasInvalidSessionException;
-import com.baasbox.android.BaasResult;
-import com.baasbox.android.RequestToken;
 import com.baasbox.android.BaasQuery;
 import com.baasbox.android.BaasQuery.Criteria;
+import com.baasbox.android.BaasResult;
+import com.baasbox.android.RequestToken;
 
 import org.joda.time.DateTime;
 import org.joda.time.format.DateTimeFormat;
@@ -31,6 +32,7 @@ import java.util.List;
 
 import ch.mobop.mse.vtrack.adapters.FromMeRecyclerViewAdapter;
 import ch.mobop.mse.vtrack.decorators.DividerDecoration;
+import ch.mobop.mse.vtrack.helpers.Constants;
 import ch.mobop.mse.vtrack.model.Voucher;
 import ch.mobop.mse.vtrack.model.VoucherFromMe;
 
@@ -43,6 +45,8 @@ public class FromMeRecyclerViewFragment extends Fragment implements AdapterView.
     private FromMeRecyclerViewAdapter adapter;
     private ArrayList<Voucher> voucherFromMeList;
     private Criteria filter;
+
+    private SwipeRefreshLayout mSwipeRefreshLayout;
 
     private RequestToken mRefresh;
 
@@ -101,6 +105,16 @@ public class FromMeRecyclerViewFragment extends Fragment implements AdapterView.
         adapter.setOnItemClickListener(this);
         recyclerView.setAdapter(adapter);
 
+        mSwipeRefreshLayout = (SwipeRefreshLayout) rootView.findViewById(R.id.activity_main_swipe_refresh_layout);
+        mSwipeRefreshLayout.setColorSchemeColors(R.color.orange, R.color.green, R.color.blue);
+
+        mSwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                refreshDocuments();
+            }
+        });
+
         return rootView;
     }
 
@@ -109,7 +123,15 @@ public class FromMeRecyclerViewFragment extends Fragment implements AdapterView.
         Toast.makeText(getActivity(),
                 "Clicked: " + position + ", index " + recyclerView.indexOfChild(view),
                 Toast.LENGTH_SHORT).show();
-        System.out.println("onClick!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
+
+        // Implement Intent to edit a voucher
+        Intent intent = new Intent(getActivity(),DetailVoucherActivity.class);
+        Bundle bundle = new Bundle();
+        bundle.putParcelable("voucherParcelable", voucherFromMeList.get(position));
+        intent.putExtras(bundle);
+        intent.putExtra("type","from_me");
+
+        startActivityForResult(intent, Constants.DETAIL_CODE);
     }
 
 
@@ -150,6 +172,7 @@ public class FromMeRecyclerViewFragment extends Fragment implements AdapterView.
 
                  System.out.println("FromMe Data loaded");
                 //onRefresh is asynchron and has to activate the display change somehow. like this?
+                mSwipeRefreshLayout.setRefreshing(false);
                 adapter.setItemList(voucherFromMeList);
 
 

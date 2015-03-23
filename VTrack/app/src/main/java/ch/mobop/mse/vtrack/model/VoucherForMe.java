@@ -64,7 +64,7 @@ public class VoucherForMe extends Voucher implements Parcelable{
 
     /***************************************************************************
      *                                                                         *
-     * Parcebale Interface                                                     *
+     * Parcelable Interface Implementation                                     *
      *                                                                         *
      **************************************************************************/
 
