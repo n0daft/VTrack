@@ -11,7 +11,4 @@ public abstract class Config {
 
     public static final DateTimeFormatter dateTimeFormatter = DateTimeFormat.forPattern("dd.MM.yy");
 
-
-
-
 }

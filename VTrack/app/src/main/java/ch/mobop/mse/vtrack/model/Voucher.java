@@ -6,6 +6,8 @@ import android.os.Parcelable;
 import org.joda.time.DateTime;
 
 /**
+ * Base class for voucher objects. Provides attributes that
+ * every type of voucher shares.
  * Created by n0daft on 09.03.2015.
  */
 public class Voucher implements Parcelable{
