@@ -1,6 +1,5 @@
 package ch.mobop.mse.vtrack;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -17,10 +16,10 @@ import com.baasbox.android.BaasDocument;
 import com.baasbox.android.BaasException;
 import com.baasbox.android.BaasHandler;
 import com.baasbox.android.BaasInvalidSessionException;
-import com.baasbox.android.BaasResult;
-import com.baasbox.android.RequestToken;
 import com.baasbox.android.BaasQuery;
 import com.baasbox.android.BaasQuery.Criteria;
+import com.baasbox.android.BaasResult;
+import com.baasbox.android.RequestToken;
 
 import org.joda.time.DateTime;
 import org.joda.time.format.DateTimeFormat;
@@ -113,6 +112,12 @@ public class ForMeRecyclerViewFragment extends Fragment implements AdapterView.O
         DateTimeFormatter format = DateTimeFormat.forPattern("dd.MM.yy").withLocale(Locale.GERMAN);
 
         Intent intent = new Intent(getActivity(),DetailVoucherActivity.class);
+        Bundle bundle = new Bundle();
+        bundle.putParcelable("voucherParcelable", voucherForMeList.get(position));
+        intent.putExtras(bundle);
+        intent.putExtra("type","for_me");
+
+        /*
         intent.putExtra("baasID",voucherForMeList.get(position).getId());
         intent.putExtra("name",voucherForMeList.get(position).getName());
         intent.putExtra("receivedBy",((VoucherForMe)voucherForMeList.get(position)).getReceivedBy());
@@ -120,6 +125,7 @@ public class ForMeRecyclerViewFragment extends Fragment implements AdapterView.O
         intent.putExtra("dateOfexpiration",format.print((voucherForMeList.get(position)).getDateOfexpiration()));
         intent.putExtra("notes",voucherForMeList.get(position).getNotes());
         intent.putExtra("type","for_me");
+        */
         startActivityForResult(intent,DETAIL_CODE);
     }
 

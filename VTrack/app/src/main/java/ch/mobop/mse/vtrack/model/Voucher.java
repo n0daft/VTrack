@@ -1,11 +1,14 @@
 package ch.mobop.mse.vtrack.model;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 import org.joda.time.DateTime;
 
 /**
  * Created by n0daft on 09.03.2015.
  */
-public class Voucher {
+public class Voucher implements Parcelable{
 
     /***************************************************************************
      *                                                                         *
@@ -28,7 +31,7 @@ public class Voucher {
     /** Any Notes */
     private String notes;
 
-    /** BassBox ID */
+    /** BaasBox ID */
     private String id;
 
     /***************************************************************************
@@ -44,6 +47,10 @@ public class Voucher {
         this.notes = notes;
         this.id = id;
         this.redeemWhere = redeemWhere;
+    }
+
+    public Voucher(){
+
     }
 
     /***************************************************************************
@@ -118,5 +125,15 @@ public class Voucher {
         }else {
             return VoucherValidityStatusEnum.expired;
         }
+    }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+
     }
 }

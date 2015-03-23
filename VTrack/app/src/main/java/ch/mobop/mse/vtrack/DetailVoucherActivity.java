@@ -2,28 +2,23 @@ package ch.mobop.mse.vtrack;
 
 
 import android.app.Activity;
-import android.content.Intent;
 import android.app.ProgressDialog;
+import android.content.Intent;
 import android.os.Bundle;
-import android.support.v4.app.DialogFragment;
 import android.support.v4.app.FragmentActivity;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
-import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.baasbox.android.BaasDocument;
-import com.baasbox.android.BaasException;
-import com.baasbox.android.BaasHandler;
-import com.baasbox.android.BaasInvalidSessionException;
-import com.baasbox.android.BaasResult;
 import com.baasbox.android.RequestToken;
-import com.baasbox.android.SaveMode;
 
-import ch.mobop.mse.vtrack.widgets.DatePickerFragment;
+import org.joda.time.format.DateTimeFormat;
+import org.joda.time.format.DateTimeFormatter;
+
+import ch.mobop.mse.vtrack.model.Voucher;
+import ch.mobop.mse.vtrack.model.VoucherForMe;
+import ch.mobop.mse.vtrack.model.VoucherFromMe;
 
 /**
  * Created by Simon on 16.03.2015.
@@ -66,13 +61,24 @@ public class DetailVoucherActivity extends FragmentActivity{
         desc_txtReceivedAt = (TextView) findViewById(R.id.detail_desc_txtReceivedAt);
 
         //Set Intent Data
-        txtVoucherName.setText(intent.getStringExtra("name"));
-        txtPerson.setText(intent.getStringExtra("receivedBy"));
-        txtNotes.setText(intent.getStringExtra("notes"));
-        txtValidUntil.setText(intent.getStringExtra("dateOfexpiration"));
-        txtReceivedAt.setText(intent.getStringExtra("dateOfReceipt"));
+
+        Voucher voucher = getIntent().getParcelableExtra("voucherParcelable");
+
+        txtVoucherName.setText(voucher.getName());
+        txtNotes.setText(voucher.getNotes());
+        DateTimeFormatter formatterVoucher = DateTimeFormat.forPattern("dd.MM.yy");
+        txtValidUntil.setText(formatterVoucher.print(voucher.getDateOfexpiration()));
+
+        if("for_me".equals(intent.getStringExtra("type"))){
+            VoucherForMe voucherForMe = (VoucherForMe) voucher;
+            txtPerson.setText(voucherForMe.getReceivedBy());
+            txtReceivedAt.setText(formatterVoucher.print(voucherForMe.getDateOfReceipt()));
+        }
 
         if("from_me".equals(intent.getStringExtra("type"))){
+            VoucherFromMe voucherFromMe = (VoucherFromMe) voucher;
+            txtPerson.setText(voucherFromMe.getGivenTo());
+            txtReceivedAt.setText(formatterVoucher.print(voucherFromMe.getDateOfDelivery()));
             desc_txtPerson.setText("Given to");
             desc_txtReceivedAt.setText("Delivered at");
         }
@@ -129,6 +135,23 @@ public class DetailVoucherActivity extends FragmentActivity{
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (requestCode==EDIT_CODE){
+            if (resultCode==RESULT_OK){
+
+            } else if(resultCode==NewVoucherActivity.RESULT_SESSION_EXPIRED){
+               // startLoginScreen();
+            } else if (resultCode==NewVoucherActivity.RESULT_FAILED){
+                Toast.makeText(this, "Failed to add voucher", Toast.LENGTH_LONG).show();
+            } else if (resultCode==NewVoucherActivity.RESULT_CANCELED){
+                Toast.makeText(this, "Canceled new voucher", Toast.LENGTH_LONG).show();
+            }
+        }else {
+            super.onActivityResult(requestCode, resultCode, data);
+        }
     }
 
 
