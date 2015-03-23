@@ -113,10 +113,10 @@ public class MainActivity extends FragmentActivity {
 
         switch (item.getItemId()) {
 
-            case R.id.action_contact:
+            case R.id.action_overflow:
                 // Get reference to option menu.
-                View menuItemViewOther = findViewById(R.id.action_contact);
-                popup = new PopupMenu(getBaseContext(),menuItemViewOther);
+                View menuItemViewOther = findViewById(R.id.action_overflow);
+                popup = new PopupMenu(getApplicationContext(),menuItemViewOther);
 
                 // Adding menu items to the popup menu.
                 popup.getMenuInflater().inflate(R.menu.main_popup, popup.getMenu());
@@ -128,10 +128,6 @@ public class MainActivity extends FragmentActivity {
                     public boolean onMenuItemClick(MenuItem item) {
                         System.out.println(item.getItemId());
                         switch (item.getItemId()){
-                            case R.id.action_refresh:
-
-
-                                break;
                             case R.id.action_settings:
                                 // call settings activity
                                 System.out.println("Settings selected");

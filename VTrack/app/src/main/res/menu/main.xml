@@ -8,7 +8,7 @@
         android:title="New Voucher"/>
 
     <item
-        android:id="@+id/action_contact"
+        android:id="@+id/action_overflow"
         android:icon="@drawable/ic_action_overflow"
         android:showAsAction="ifRoom"
         android:title="@string/action_contact"/>
