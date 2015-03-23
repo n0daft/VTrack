@@ -3,6 +3,7 @@ package ch.mobop.mse.vtrack;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -44,6 +45,8 @@ public class ForMeRecyclerViewFragment extends Fragment implements AdapterView.O
     private ForMeRecyclerViewAdapter adapter;
     private ArrayList<Voucher> voucherForMeList;
     private Criteria filter;
+
+    private SwipeRefreshLayout mSwipeRefreshLayout;
 
     private final static int DETAIL_CODE = 2;
 
@@ -99,6 +102,17 @@ public class ForMeRecyclerViewFragment extends Fragment implements AdapterView.O
 
         adapter.setOnItemClickListener(this);
         recyclerView.setAdapter(adapter);
+
+
+        mSwipeRefreshLayout = (SwipeRefreshLayout) rootView.findViewById(R.id.activity_main_swipe_refresh_layout);
+        mSwipeRefreshLayout.setColorSchemeColors(R.color.orange, R.color.green, R.color.blue);
+
+        mSwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                refreshDocuments();
+            }
+        });
 
         return rootView;
     }
@@ -181,6 +195,7 @@ public class ForMeRecyclerViewFragment extends Fragment implements AdapterView.O
                 System.out.println("ForMe___ Data loaded");
 
                 //onRefresh is asynchron and has to activate the display change somehow. like this?
+                mSwipeRefreshLayout.setRefreshing(false);
                 adapter.setItemList(voucherForMeList);
 
 
