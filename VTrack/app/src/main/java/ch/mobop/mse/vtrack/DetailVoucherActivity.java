@@ -6,15 +6,23 @@ import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.baasbox.android.BaasDocument;
+import com.baasbox.android.BaasHandler;
+import com.baasbox.android.BaasResult;
 import com.baasbox.android.RequestToken;
+import com.baasbox.android.SaveMode;
 
+import org.joda.time.DateTime;
 import org.joda.time.format.DateTimeFormat;
 import org.joda.time.format.DateTimeFormatter;
+
+import java.util.Date;
 
 import ch.mobop.mse.vtrack.helpers.Config;
 import ch.mobop.mse.vtrack.model.Voucher;
@@ -37,6 +45,9 @@ public class DetailVoucherActivity extends FragmentActivity{
     private TextView desc_txtReceivedAt;
     private Intent intent;
     private Voucher voucher;
+    private VoucherForMe voucherForMe;
+    private VoucherFromMe voucherFromMe;
+    private BaasDocument receivedDoc;
 
     private static final String PENDING_SAVE = "PENDING_SAVE";
     public static final int RESULT_SESSION_EXPIRED = Activity.RESULT_FIRST_USER+1;
@@ -85,8 +96,7 @@ public class DetailVoucherActivity extends FragmentActivity{
         }
 
         mDialog = new ProgressDialog(this);
-        mDialog.setMessage("Uploading...");
-
+        mDialog.setMessage("Archiving...");
     }
 
     @Override
@@ -100,10 +110,9 @@ public class DetailVoucherActivity extends FragmentActivity{
 
         switch (item.getItemId()) {
 
-            case R.id.action_new_voucher_cancel:
-                setResult(RESULT_CANCELED);
-                finish();
+            case R.id.action_archive:
 
+                retrieveOnBaasBox();
                 break;
 
             case R.id.action_edit:
@@ -112,7 +121,12 @@ public class DetailVoucherActivity extends FragmentActivity{
 
                 // Add current voucher object to intent and reuse intent object type.
                 Bundle bundle = new Bundle();
-                bundle.putParcelable("voucherParcelable", voucher);
+                updateVoucher();
+                if("for_me".equals(intent.getStringExtra("type"))) {
+                    bundle.putParcelable("voucherParcelable", voucherForMe);
+                }else{
+                    bundle.putParcelable("voucherParcelable", voucherFromMe);
+                }
                 edit.putExtras(bundle);
                 edit.putExtra("intentType","edit");
                 edit.putExtra("type", intent.getStringExtra("type"));
@@ -124,6 +138,81 @@ public class DetailVoucherActivity extends FragmentActivity{
         return super.onOptionsItemSelected(item);
     }
 
+    private void retrieveOnBaasBox(){
+        mDialog.show();
+        mAddToken= BaasDocument.fetch("vtrack", voucher.getId(), receiveHandler);
+    }
+
+
+    private final BaasHandler<BaasDocument> receiveHandler= new BaasHandler<BaasDocument>() {
+        @Override
+        public void handle(BaasResult<BaasDocument> res) {
+            mAddToken=null;
+            if(res.isSuccess()) {
+                receivedDoc = res.value();
+                editOnBaasBox();
+            } else {
+                setResult(RESULT_FAILED);
+                finish();
+                //Log.d("ERROR", "Failed with error", doc.error());
+            }
+        }
+    };
+
+    private void editOnBaasBox(){
+        //Set new content
+        mDialog.dismiss();
+        receivedDoc.put("archive", "true");
+        receivedDoc.put("redeemedAt", "2015.12.24");
+        receivedDoc.save(SaveMode.IGNORE_VERSION,new BaasHandler<BaasDocument>(){
+            @Override
+            public void handle(BaasResult<BaasDocument> res) {
+                mDialog.dismiss();
+
+                if(res.isSuccess()){
+                    Log.d("LOG", "Document saved " + res.value().getId());
+                    System.out.println("Archived Voucher");
+                    setResult(RESULT_OK);
+                    finish();
+                } else {
+                    Log.e("LOG", "Error", res.error());
+                    System.out.println("Save Fail");
+                    setResult(RESULT_FAILED);
+                    finish();
+                }
+            }
+        });
+    }
+
+    private void updateVoucher(){
+        //Needed in case you edit a voucher multiple times
+
+        DateTime date_validUntil = new DateTime(new Date());
+        if(!txtValidUntil.getText().toString().isEmpty()) {
+            date_validUntil = Config.dateTimeFormatter.parseDateTime(txtValidUntil.getText().toString());
+        }
+
+        DateTime date_receivedAt = new DateTime(new Date());
+        if(!txtReceivedAt.getText().toString().isEmpty()) {
+            date_receivedAt = Config.dateTimeFormatter.parseDateTime(txtReceivedAt.getText().toString());
+        }
+
+        String id = voucher.getId();
+        String name = txtVoucherName.getText().toString();
+        String notes = txtNotes.getText().toString();
+        String redeemedWhere = "";
+        DateTime redeemedAt = null;
+        String receivedBy = txtPerson.getText().toString();
+
+        if("for_me".equals(intent.getStringExtra("type"))){
+            voucherForMe = new VoucherForMe(name,receivedBy,date_receivedAt,date_validUntil,redeemedWhere,notes,redeemedAt,id);
+        }else{
+            voucherFromMe =  new VoucherFromMe(name,receivedBy,date_receivedAt,date_validUntil,redeemedWhere,notes,redeemedAt,id);
+        }
+
+    }
+
+
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (requestCode==EDIT_CODE){
@@ -132,18 +221,21 @@ public class DetailVoucherActivity extends FragmentActivity{
                 Toast.makeText(this, "Edited voucher successfully", Toast.LENGTH_LONG).show();
 
                 //Update text fields
-                if("from_me".equals(intent.getStringExtra("type"))){
-                    VoucherFromMe voucher = data.getParcelableExtra("voucherParcelableEdited");
-                    txtPerson.setText(voucher.getGivenTo());
-                    txtReceivedAt.setText(Config.dateTimeFormatter.print(voucher.getDateOfDelivery()));
+                if("from_me".equals(data.getStringExtra("type"))){
+                    VoucherFromMe voucherEdit = data.getParcelableExtra("voucherParcelableEdited");
+                    txtPerson.setText(voucherEdit.getGivenTo());
+                    txtReceivedAt.setText(Config.dateTimeFormatter.print(voucherEdit.getDateOfDelivery()));
                 }else{
-                    VoucherForMe voucher = data.getParcelableExtra("voucherParcelableEdited");
-                    txtPerson.setText(voucher.getReceivedBy());
-                    txtReceivedAt.setText(Config.dateTimeFormatter.print(voucher.getDateOfReceipt()));
+                    VoucherForMe voucherEdit = data.getParcelableExtra("voucherParcelableEdited");
+                    txtPerson.setText(voucherEdit.getReceivedBy());
+                    txtReceivedAt.setText(Config.dateTimeFormatter.print(voucherEdit.getDateOfReceipt()));
                 }
-                txtVoucherName.setText(voucher.getName());
-                txtNotes.setText(voucher.getNotes());
-                txtValidUntil.setText(Config.dateTimeFormatter.print(voucher.getDateOfexpiration()));
+                Voucher voucherEdit = data.getParcelableExtra("voucherParcelableEdited");
+                txtVoucherName.setText(voucherEdit.getName());
+                System.out.println("Name: " + voucherEdit.getName());
+                txtNotes.setText(voucherEdit.getNotes());
+                System.out.println("Notes: " + voucherEdit.getNotes());
+                txtValidUntil.setText(Config.dateTimeFormatter.print(voucherEdit.getDateOfexpiration()));
 
             } else if(resultCode==NewVoucherActivity.RESULT_SESSION_EXPIRED){
                // startLoginScreen();

@@ -89,6 +89,7 @@ public class NewVoucherActivity extends FragmentActivity  implements DatePickerF
 
         //Add content if it's an edit request
         if("edit".equals(intent.getStringExtra("intentType"))){
+            voucher = getIntent().getParcelableExtra("voucherParcelable");
             txtVoucherName.setText(voucher.getName());
             txtNotes.setText(voucher.getNotes());
             lblValidUntil.setText(Config.dateTimeFormatter.print(voucher.getDateOfexpiration()));
@@ -101,6 +102,8 @@ public class NewVoucherActivity extends FragmentActivity  implements DatePickerF
                 txtReceivedFrom.setText(voucherFromMe.getGivenTo());
                 lblReceivedAt.setText(Config.dateTimeFormatter.print(voucherFromMe.getDateOfDelivery()));
             }
+        }else{
+            voucher = new Voucher("",null,"","",null,"");
         }
 
         if("from_me".equals(intent.getStringExtra("type"))){
@@ -171,6 +174,33 @@ public class NewVoucherActivity extends FragmentActivity  implements DatePickerF
         receivedDoc.put("redeemedAt", "");
         receivedDoc.put("redeemedWhere", "");
 
+
+        if("for_me".equals(intent.getStringExtra("type"))){
+            //Content for_me voucher
+            receivedDoc.put("type", "for_me");
+            receivedDoc.put("dateOfReceipt", Config.dateTimeFormatterBaas.print(date_receivedAt));
+            receivedDoc.put("receivedBy", txtReceivedFrom.getText().toString());
+        }else{
+            //Content from_me voucher
+            receivedDoc.put("type", "from_me");
+            receivedDoc.put("dateOfDelivery", Config.dateTimeFormatterBaas.print(date_receivedAt));
+            receivedDoc.put("givenTo", txtReceivedFrom.getText().toString());
+        }
+    }
+
+
+    private void addContentToVoucher(){
+
+        DateTime date_validUntil = new DateTime(new Date());
+        if(!lblValidUntil.getText().toString().isEmpty()) {
+            date_validUntil = Config.dateTimeFormatter.parseDateTime(lblValidUntil.getText().toString());
+        }
+
+        DateTime date_receivedAt = new DateTime(new Date());
+        if(!lblReceivedAt.getText().toString().isEmpty()) {
+            date_receivedAt = Config.dateTimeFormatter.parseDateTime(lblReceivedAt.getText().toString());
+        }
+
         //Update voucher object
         voucher.setName(txtVoucherName.getText().toString());
         voucher.setDateOfexpiration(date_validUntil);
@@ -178,20 +208,10 @@ public class NewVoucherActivity extends FragmentActivity  implements DatePickerF
         voucher.setRedeemWhere("");
 
         if("for_me".equals(intent.getStringExtra("type"))){
-            //Content for_me voucher
-            receivedDoc.put("type", "for_me");
-            receivedDoc.put("dateOfReceipt", Config.dateTimeFormatterBaas.print(date_receivedAt));
-            receivedDoc.put("receivedBy", txtReceivedFrom.getText().toString());
-
             voucherForMe = (VoucherForMe) voucher;
             voucherForMe.setDateOfReceipt(date_receivedAt);
             voucherForMe.setReceivedBy(txtReceivedFrom.getText().toString());
         }else{
-            //Content from_me voucher
-            receivedDoc.put("type", "from_me");
-            receivedDoc.put("dateOfDelivery", Config.dateTimeFormatterBaas.print(date_receivedAt));
-            receivedDoc.put("givenTo", txtReceivedFrom.getText().toString());
-
             voucherFromMe = (VoucherFromMe) voucher;
             voucherFromMe.setDateOfDelivery(date_receivedAt);
             voucherFromMe.setGivenTo(txtReceivedFrom.getText().toString());
@@ -200,11 +220,10 @@ public class NewVoucherActivity extends FragmentActivity  implements DatePickerF
 
 
 
-
-
     private void editOnBaasBox(){
         //Set new content
         addContentToDocument();
+        addContentToVoucher();
         receivedDoc.save(SaveMode.IGNORE_VERSION,new BaasHandler<BaasDocument>(){
             @Override
             public void handle(BaasResult<BaasDocument> res) {
@@ -222,10 +241,11 @@ public class NewVoucherActivity extends FragmentActivity  implements DatePickerF
                         bundle.putParcelable("voucherParcelableEdited", voucherForMe);
                     }
                     resultIntent.putExtras(bundle);
+                    resultIntent.putExtra("type", intent.getStringExtra("type"));
                     setResult(RESULT_OK, resultIntent);
                     finish();
                 } else {
-                    Log.e("LOG","Error",res.error());
+                    Log.e("LOG", "Error", res.error());
                     System.out.println("Save Fail");
                     setResult(RESULT_FAILED);
                     finish();

@@ -61,8 +61,6 @@ public class FromMeRecyclerViewFragment extends Fragment implements AdapterView.
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-
-
     }
 
 
@@ -120,9 +118,6 @@ public class FromMeRecyclerViewFragment extends Fragment implements AdapterView.
 
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-        Toast.makeText(getActivity(),
-                "Clicked: " + position + ", index " + recyclerView.indexOfChild(view),
-                Toast.LENGTH_SHORT).show();
 
         // Implement Intent to edit a voucher
         Intent intent = new Intent(getActivity(),DetailVoucherActivity.class);
@@ -134,6 +129,18 @@ public class FromMeRecyclerViewFragment extends Fragment implements AdapterView.
         startActivityForResult(intent, Constants.DETAIL_CODE);
     }
 
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (requestCode== Constants.DETAIL_CODE){
+            if (resultCode==DetailVoucherActivity.RESULT_OK){
+                Toast.makeText(getActivity(), "OK", Toast.LENGTH_LONG).show();
+            }else{
+                Toast.makeText(getActivity(), "else", Toast.LENGTH_LONG).show();
+            }
+        }else {
+            super.onActivityResult(requestCode, resultCode, data);
+        }
+    }
 
     public void refreshDocuments(){
         mRefresh = BaasDocument.fetchAll("vtrack", filter, onRefresh);

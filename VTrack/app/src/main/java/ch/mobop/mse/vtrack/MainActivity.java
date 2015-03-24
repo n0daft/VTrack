@@ -358,7 +358,8 @@ public class MainActivity extends FragmentActivity {
                     System.out.println("Case 1");
                     return FromMeRecyclerViewFragment.newInstance();
                 default:
-                    return SuperAwesomeCardFragment.newInstance(position);
+                    System.out.println("Case 2");
+                    return ArchiveRecyclerViewFragment.newInstance();
             }
         }
 

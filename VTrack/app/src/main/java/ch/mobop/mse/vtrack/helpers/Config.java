@@ -11,5 +11,6 @@ public abstract class Config {
 
     public static final DateTimeFormatter dateTimeFormatter = DateTimeFormat.forPattern("dd.MM.yy");
     public static final DateTimeFormatter dateTimeFormatterBaas = DateTimeFormat.forPattern("yyyy.MM.dd");
+    public static final int RESULT_ARCHIVED    = 11;
 
 }

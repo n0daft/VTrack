@@ -18,7 +18,6 @@ import com.baasbox.android.BaasException;
 import com.baasbox.android.BaasHandler;
 import com.baasbox.android.BaasInvalidSessionException;
 import com.baasbox.android.BaasQuery;
-import com.baasbox.android.BaasQuery.Criteria;
 import com.baasbox.android.BaasResult;
 import com.baasbox.android.RequestToken;
 
@@ -30,28 +29,29 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
-import ch.mobop.mse.vtrack.adapters.ForMeRecyclerViewAdapter;
+import ch.mobop.mse.vtrack.adapters.ArchiveRecyclerViewAdapter;
 import ch.mobop.mse.vtrack.decorators.DividerDecoration;
 import ch.mobop.mse.vtrack.helpers.Constants;
 import ch.mobop.mse.vtrack.model.Voucher;
 import ch.mobop.mse.vtrack.model.VoucherForMe;
+import ch.mobop.mse.vtrack.model.VoucherFromMe;
 
 /**
- * Created by n0daft on 01.03.2015.
+ * Created by Simon on 24.03.2015.
  */
-public class ForMeRecyclerViewFragment extends Fragment implements AdapterView.OnItemClickListener{
+public class ArchiveRecyclerViewFragment extends Fragment implements AdapterView.OnItemClickListener{
 
     private RecyclerView recyclerView;
-    private ForMeRecyclerViewAdapter adapter;
-    private ArrayList<Voucher> voucherForMeList;
-    private Criteria filter;
+    private ArchiveRecyclerViewAdapter adapter;
+    private ArrayList<Voucher> voucherList;
+    private BaasQuery.Criteria filter;
 
     private SwipeRefreshLayout mSwipeRefreshLayout;
 
     private RequestToken mRefresh;
 
-    public static ForMeRecyclerViewFragment newInstance() {
-        ForMeRecyclerViewFragment fragment = new ForMeRecyclerViewFragment();
+    public static ArchiveRecyclerViewFragment newInstance() {
+        ArchiveRecyclerViewFragment fragment = new ArchiveRecyclerViewFragment();
         Bundle args = new Bundle();
         fragment.setArguments(args);
         return fragment;
@@ -77,7 +77,7 @@ public class ForMeRecyclerViewFragment extends Fragment implements AdapterView.O
 
         View rootView = inflater.inflate(R.layout.fragment_received, container, false);
 
-        voucherForMeList = new ArrayList<>();
+        voucherList = new ArrayList<>();
 
         recyclerView = (RecyclerView) rootView.findViewById(R.id.section_list);
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false));
@@ -88,14 +88,14 @@ public class ForMeRecyclerViewFragment extends Fragment implements AdapterView.O
         recyclerView.getItemAnimator().setMoveDuration(1000);
         recyclerView.getItemAnimator().setRemoveDuration(1000);
 
-        adapter = new ForMeRecyclerViewAdapter();
+        adapter = new ArchiveRecyclerViewAdapter();
 
         //Load all Items from Server
-        filter = BaasQuery.builder().orderBy("dateOfexpiration").where("type='for_me' and archive='false'").criteria();
+        filter = BaasQuery.builder().orderBy("dateOfexpiration").where("archive='true'").criteria();
 
         refreshDocuments();
         //Doesn't really do something as refresh is not done yet....
-        adapter.setItemList(voucherForMeList);
+        adapter.setItemList(voucherList);
 
 
         adapter.setOnItemClickListener(this);
@@ -120,7 +120,7 @@ public class ForMeRecyclerViewFragment extends Fragment implements AdapterView.O
         // Implement Intent to edit a voucher
         Intent intent = new Intent(getActivity(),DetailVoucherActivity.class);
         Bundle bundle = new Bundle();
-        bundle.putParcelable("voucherParcelable", voucherForMeList.get(position));
+        bundle.putParcelable("voucherParcelable", voucherList.get(position));
         intent.putExtras(bundle);
         intent.putExtra("type","for_me");
 
@@ -157,7 +157,7 @@ public class ForMeRecyclerViewFragment extends Fragment implements AdapterView.O
                 DateTimeFormatter formatter = DateTimeFormat.forPattern("yyyy.MM.dd");
 
                 //Clear Lists
-                voucherForMeList.clear();
+                voucherList.clear();
 
                 while(it.hasNext()){
                     BaasDocument doc = (BaasDocument) it.next();
@@ -165,22 +165,30 @@ public class ForMeRecyclerViewFragment extends Fragment implements AdapterView.O
                     if(!doc.getString("redeemedAt").equals("")){
                         redeemedAt = formatter.parseDateTime(doc.getString("redeemedAt"));
                     }
-                    DateTime dateOfReceipt = formatter.parseDateTime(doc.getString("dateOfReceipt"));
+
                     DateTime  dateOfexpiration = formatter.parseDateTime(doc.getString("dateOfexpiration"));
                     String name = doc.getString("name");
                     String notes = doc.getString("notes");
-                    String receivedBy = doc.getString("receivedBy");
                     String redeemedWhere = doc.getString("redeemedWhere");
                     String id = doc.getId();
 
-                    voucherForMeList.add(new VoucherForMe(name,receivedBy,dateOfReceipt,dateOfexpiration,redeemedWhere,notes,redeemedAt,id));
+                    if(doc.getString("type").equals("for_me")){
+                        DateTime dateOfReceipt = formatter.parseDateTime(doc.getString("dateOfReceipt"));
+                        String receivedBy = doc.getString("receivedBy");
+                        voucherList.add(new VoucherForMe(name,receivedBy,dateOfReceipt,dateOfexpiration,redeemedWhere,notes,redeemedAt,id));
+                    }else{
+                        DateTime dateOfDelivery = formatter.parseDateTime(doc.getString("dateOfDelivery"));
+                        String givenTo = doc.getString("givenTo");
+                        voucherList.add(new VoucherFromMe(name,givenTo,dateOfDelivery,dateOfexpiration,redeemedWhere,notes,redeemedAt,id));
+                    }
+
 
                 }
-                System.out.println("ForMe___ Data loaded");
+                System.out.println("Archive Data loaded");
 
-                //onRefresh is asynchron and has to activate the display change somehow. like this?
+                //onRefresh is asynchron
                 mSwipeRefreshLayout.setRefreshing(false);
-                adapter.setItemList(voucherForMeList);
+                adapter.setItemList(voucherList);
 
 
                 //mListFragment.refresh(result.get());
@@ -192,5 +200,7 @@ public class ForMeRecyclerViewFragment extends Fragment implements AdapterView.O
             }
         }
     };
+
+
 
 }
