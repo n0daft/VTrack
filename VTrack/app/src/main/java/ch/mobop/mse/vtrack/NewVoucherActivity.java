@@ -48,6 +48,8 @@ public class NewVoucherActivity extends FragmentActivity  implements DatePickerF
     private Intent intent;
     private BaasDocument receivedDoc;
     private Voucher voucher;
+    private VoucherForMe voucherForMe;
+    private VoucherFromMe voucherFromMe;
 
     private String type;
     private String name;
@@ -150,7 +152,6 @@ public class NewVoucherActivity extends FragmentActivity  implements DatePickerF
 
 
     private void addContentToDocument(){
-        DateTimeFormatter formatterBaas = DateTimeFormat.forPattern("yyyy.MM.dd");
 
         DateTime date_validUntil = new DateTime(new Date());
         if(!lblValidUntil.getText().toString().isEmpty()) {
@@ -162,23 +163,38 @@ public class NewVoucherActivity extends FragmentActivity  implements DatePickerF
              date_receivedAt = Config.dateTimeFormatter.parseDateTime(lblReceivedAt.getText().toString());
         }
 
+        //Update BaasDoc
         receivedDoc.put("name",txtVoucherName.getText().toString());
-        receivedDoc.put("dateOfexpiration", formatterBaas.print(date_validUntil));
+        receivedDoc.put("dateOfexpiration", Config.dateTimeFormatterBaas.print(date_validUntil));
         receivedDoc.put("notes", txtNotes.getText().toString());
         receivedDoc.put("archive", "false");
         receivedDoc.put("redeemedAt", "");
         receivedDoc.put("redeemedWhere", "");
 
+        //Update voucher object
+        voucher.setName(txtVoucherName.getText().toString());
+        voucher.setDateOfexpiration(date_validUntil);
+        voucher.setNotes(txtNotes.getText().toString());
+        voucher.setRedeemWhere("");
+
         if("for_me".equals(intent.getStringExtra("type"))){
             //Content for_me voucher
             receivedDoc.put("type", "for_me");
-            receivedDoc.put("dateOfReceipt", formatterBaas.print(date_receivedAt));
+            receivedDoc.put("dateOfReceipt", Config.dateTimeFormatterBaas.print(date_receivedAt));
             receivedDoc.put("receivedBy", txtReceivedFrom.getText().toString());
+
+            voucherForMe = (VoucherForMe) voucher;
+            voucherForMe.setDateOfReceipt(date_receivedAt);
+            voucherForMe.setReceivedBy(txtReceivedFrom.getText().toString());
         }else{
             //Content from_me voucher
             receivedDoc.put("type", "from_me");
-            receivedDoc.put("dateOfDelivery", formatterBaas.print(date_receivedAt));
+            receivedDoc.put("dateOfDelivery", Config.dateTimeFormatterBaas.print(date_receivedAt));
             receivedDoc.put("givenTo", txtReceivedFrom.getText().toString());
+
+            voucherFromMe = (VoucherFromMe) voucher;
+            voucherFromMe.setDateOfDelivery(date_receivedAt);
+            voucherFromMe.setGivenTo(txtReceivedFrom.getText().toString());
         }
     }
 
@@ -197,7 +213,16 @@ public class NewVoucherActivity extends FragmentActivity  implements DatePickerF
                 if(res.isSuccess()){
                     Log.d("LOG","Document saved "+res.value().getId());
                     System.out.println("Save OK");
-                    setResult(RESULT_OK);
+                    Intent  resultIntent = new Intent();
+
+                    Bundle bundle = new Bundle();
+                    if("from_me".equals(intent.getStringExtra("type"))){
+                        bundle.putParcelable("voucherParcelableEdited", voucherFromMe);
+                    }else{
+                        bundle.putParcelable("voucherParcelableEdited", voucherForMe);
+                    }
+                    resultIntent.putExtras(bundle);
+                    setResult(RESULT_OK, resultIntent);
                     finish();
                 } else {
                     Log.e("LOG","Error",res.error());
@@ -211,7 +236,7 @@ public class NewVoucherActivity extends FragmentActivity  implements DatePickerF
 
     private void retrieveOnBaasBox(){
         mDialog.show();
-        mAddToken=BaasDocument.fetch("vtrack",intent.getStringExtra("baasID"),receiveHandler);
+        mAddToken=BaasDocument.fetch("vtrack",voucher.getId(),receiveHandler);
     }
 
 

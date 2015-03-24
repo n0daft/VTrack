@@ -16,6 +16,7 @@ import com.baasbox.android.RequestToken;
 import org.joda.time.format.DateTimeFormat;
 import org.joda.time.format.DateTimeFormatter;
 
+import ch.mobop.mse.vtrack.helpers.Config;
 import ch.mobop.mse.vtrack.model.Voucher;
 import ch.mobop.mse.vtrack.model.VoucherForMe;
 import ch.mobop.mse.vtrack.model.VoucherFromMe;
@@ -127,6 +128,22 @@ public class DetailVoucherActivity extends FragmentActivity{
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (requestCode==EDIT_CODE){
             if (resultCode==RESULT_OK){
+                //Update text elements
+                Toast.makeText(this, "Edited voucher successfully", Toast.LENGTH_LONG).show();
+
+                //Update text fields
+                if("from_me".equals(intent.getStringExtra("type"))){
+                    VoucherFromMe voucher = data.getParcelableExtra("voucherParcelableEdited");
+                    txtPerson.setText(voucher.getGivenTo());
+                    txtReceivedAt.setText(Config.dateTimeFormatter.print(voucher.getDateOfDelivery()));
+                }else{
+                    VoucherForMe voucher = data.getParcelableExtra("voucherParcelableEdited");
+                    txtPerson.setText(voucher.getReceivedBy());
+                    txtReceivedAt.setText(Config.dateTimeFormatter.print(voucher.getDateOfReceipt()));
+                }
+                txtVoucherName.setText(voucher.getName());
+                txtNotes.setText(voucher.getNotes());
+                txtValidUntil.setText(Config.dateTimeFormatter.print(voucher.getDateOfexpiration()));
 
             } else if(resultCode==NewVoucherActivity.RESULT_SESSION_EXPIRED){
                // startLoginScreen();
