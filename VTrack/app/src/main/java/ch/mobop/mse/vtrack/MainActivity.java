@@ -55,7 +55,9 @@ public class MainActivity extends FragmentActivity {
 
     private final static int NEW_CODE = 1;
     private final static int EDIT_CODE = 3;
-    //private VerticalFragment mListFragment;
+    private ForMeRecyclerViewFragment ForMeFragment;
+    private FromMeRecyclerViewFragment FromMeFragment;
+    private ArchiveRecyclerViewFragment ArchiveFragment;
 
     private Drawable oldBackground = null;
     private int currentColor = 0xFF666666;
@@ -208,6 +210,8 @@ public class MainActivity extends FragmentActivity {
         if (requestCode==NEW_CODE){
             if (resultCode==RESULT_OK){
                 Toast.makeText(this, "Added Voucher", Toast.LENGTH_LONG).show();
+                if(ForMeFragment != null){ForMeFragment.refreshDocuments();}
+                if(FromMeFragment != null){FromMeFragment.refreshDocuments();}
             } else if(resultCode==NewVoucherActivity.RESULT_SESSION_EXPIRED){
                 startLoginScreen();
             } else if (resultCode==NewVoucherActivity.RESULT_FAILED){
@@ -353,10 +357,12 @@ public class MainActivity extends FragmentActivity {
             switch(position) {
                 case 0:
                     System.out.println("Case 0");
-                    return ForMeRecyclerViewFragment.newInstance();
+                    ForMeFragment = ForMeRecyclerViewFragment.newInstance();
+                    return ForMeFragment;
                 case 1:
                     System.out.println("Case 1");
-                    return FromMeRecyclerViewFragment.newInstance();
+                    FromMeFragment = FromMeRecyclerViewFragment.newInstance();
+                    return FromMeFragment;
                 default:
                     System.out.println("Case 2");
                     return ArchiveRecyclerViewFragment.newInstance();

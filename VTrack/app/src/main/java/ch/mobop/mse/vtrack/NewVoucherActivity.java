@@ -45,6 +45,7 @@ public class NewVoucherActivity extends FragmentActivity  implements DatePickerF
     private EditText txtReceivedFrom;
     private TextView txtReceivedFrom_header;
     private EditText txtNotes;
+    private EditText txtLocation;
     private Intent intent;
     private BaasDocument receivedDoc;
     private Voucher voucher;
@@ -84,6 +85,7 @@ public class NewVoucherActivity extends FragmentActivity  implements DatePickerF
         lblValidUntil = (TextView) findViewById(R.id.lblValidUntil);
         txtReceivedFrom = (EditText) findViewById(R.id.txtReceivedFrom);
         txtNotes = (EditText) findViewById(R.id.txtNotes);
+        txtLocation = (EditText) findViewById(R.id.txtLocation);
         txtReceivedFrom_header = (TextView) findViewById(R.id.txtReceivedFrom_header);
         lblReceivedAt_header = (TextView) findViewById(R.id.lblReceivedAt_header);
 
@@ -172,7 +174,7 @@ public class NewVoucherActivity extends FragmentActivity  implements DatePickerF
         receivedDoc.put("notes", txtNotes.getText().toString());
         receivedDoc.put("archive", "false");
         receivedDoc.put("redeemedAt", "");
-        receivedDoc.put("redeemedWhere", "");
+        receivedDoc.put("redeemedWhere", txtLocation.getText().toString());
 
 
         if("for_me".equals(intent.getStringExtra("type"))){
@@ -205,7 +207,7 @@ public class NewVoucherActivity extends FragmentActivity  implements DatePickerF
         voucher.setName(txtVoucherName.getText().toString());
         voucher.setDateOfexpiration(date_validUntil);
         voucher.setNotes(txtNotes.getText().toString());
-        voucher.setRedeemWhere("");
+        voucher.setRedeemWhere(txtLocation.getText().toString());
 
         if("for_me".equals(intent.getStringExtra("type"))){
             voucherForMe = (VoucherForMe) voucher;

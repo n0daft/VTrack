@@ -10,6 +10,7 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.EditText;
 import android.widget.PopupMenu;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -43,6 +44,7 @@ public class DetailVoucherActivity extends FragmentActivity{
     private TextView txtValidUntil;
     private TextView txtPerson;
     private TextView txtNotes;
+    private EditText txtLocation;
     private TextView desc_txtPerson;
     private TextView desc_txtReceivedAt;
     private Intent intent;
@@ -73,6 +75,7 @@ public class DetailVoucherActivity extends FragmentActivity{
         txtValidUntil = (TextView) findViewById(R.id.detail_txtValidUntil);
         txtPerson = (TextView) findViewById(R.id.detail_txtPerson);
         txtNotes = (TextView) findViewById(R.id.detail_txtNotes);
+        txtLocation = (EditText) findViewById(R.id.detail_txtLocation);
         desc_txtPerson = (TextView) findViewById(R.id.detail_desc_txtPerson);
         desc_txtReceivedAt = (TextView) findViewById(R.id.detail_desc_txtReceivedAt);
 
@@ -81,6 +84,7 @@ public class DetailVoucherActivity extends FragmentActivity{
 
         txtVoucherName.setText(voucher.getName());
         txtNotes.setText(voucher.getNotes());
+        txtLocation.setText(voucher.getRedeemWhere());
         DateTimeFormatter formatterVoucher = DateTimeFormat.forPattern("dd.MM.yy");
         txtValidUntil.setText(formatterVoucher.print(voucher.getDateOfexpiration()));
 
@@ -308,6 +312,7 @@ public class DetailVoucherActivity extends FragmentActivity{
                 txtVoucherName.setText(voucher.getName());
                 System.out.println("Name: " + voucher.getName());
                 txtNotes.setText(voucher.getNotes());
+                txtLocation.setText(voucher.getRedeemWhere());
                 System.out.println("Notes: " + voucher.getNotes());
                 txtValidUntil.setText(Config.dateTimeFormatter.print(voucher.getDateOfexpiration()));
 

@@ -69,7 +69,7 @@ public class FromMeRecyclerViewFragment extends Fragment implements AdapterView.
         super.onResume();
         //Reload Data after a Voucher was added or deleted
         System.out.println("onResume()");
-        refreshDocuments();
+        //refreshDocuments();
     }
 
     @Override
@@ -90,15 +90,9 @@ public class FromMeRecyclerViewFragment extends Fragment implements AdapterView.
 
         adapter = new FromMeRecyclerViewAdapter();
 
-        //adapter.setItemCount(getDefaultItemCount());
-
         //Load all Items from Server
         filter = BaasQuery.builder().orderBy("dateOfexpiration").where("type='from_me' and archive='false'").criteria();
-
         refreshDocuments();
-        //Doesn't really do something as refresh is not done yet....
-        adapter.setItemList(voucherFromMeList);
-
 
         adapter.setOnItemClickListener(this);
         recyclerView.setAdapter(adapter);
@@ -143,6 +137,7 @@ public class FromMeRecyclerViewFragment extends Fragment implements AdapterView.
     }
 
     public void refreshDocuments(){
+        System.out.println("FromMeFrag - refreshDocuments()");
         mRefresh = BaasDocument.fetchAll("vtrack", filter, onRefresh);
     }
 

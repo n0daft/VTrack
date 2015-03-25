@@ -68,7 +68,7 @@ public class ForMeRecyclerViewFragment extends Fragment implements AdapterView.O
         super.onResume();
         //Reload Data after a Voucher was added or deleted
         System.out.println("onResume()");
-        refreshDocuments();
+        //refreshDocuments();
     }
 
 
@@ -142,7 +142,8 @@ public class ForMeRecyclerViewFragment extends Fragment implements AdapterView.O
 
 
 
-    private void refreshDocuments(){
+    public void refreshDocuments(){
+        System.out.println("ForMeFrag - refreshDocuments()");
         mRefresh = BaasDocument.fetchAll("vtrack", filter, onRefresh);
     }
 
