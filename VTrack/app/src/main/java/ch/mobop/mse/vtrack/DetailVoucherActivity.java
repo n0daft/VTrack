@@ -157,12 +157,7 @@ public class DetailVoucherActivity extends FragmentActivity{
 
                 // Add current voucher object to intent and reuse intent object type.
                 Bundle bundle = new Bundle();
-                updateVoucher();
-                if("for_me".equals(intent.getStringExtra("type"))) {
-                    bundle.putParcelable("voucherParcelable", voucherForMe);
-                }else{
-                    bundle.putParcelable("voucherParcelable", voucherFromMe);
-                }
+                bundle.putParcelable("voucherParcelable", voucher);
                 edit.putExtras(bundle);
                 edit.putExtra("intentType","edit");
                 edit.putExtra("type", intent.getStringExtra("type"));
@@ -256,34 +251,6 @@ public class DetailVoucherActivity extends FragmentActivity{
         });
     }
 
-    private void updateVoucher(){
-        //Needed in case you edit a voucher multiple times
-
-        DateTime date_validUntil = new DateTime(new Date());
-        if(!txtValidUntil.getText().toString().isEmpty()) {
-            date_validUntil = Config.dateTimeFormatter.parseDateTime(txtValidUntil.getText().toString());
-        }
-
-        DateTime date_receivedAt = new DateTime(new Date());
-        if(!txtReceivedAt.getText().toString().isEmpty()) {
-            date_receivedAt = Config.dateTimeFormatter.parseDateTime(txtReceivedAt.getText().toString());
-        }
-
-        String id = voucher.getId();
-        String name = txtVoucherName.getText().toString();
-        String notes = txtNotes.getText().toString();
-        String redeemedWhere = "";
-        DateTime redeemedAt = null;
-        String receivedBy = txtPerson.getText().toString();
-
-        if("for_me".equals(intent.getStringExtra("type"))){
-            voucherForMe = new VoucherForMe(name,receivedBy,date_receivedAt,date_validUntil,redeemedWhere,notes,redeemedAt,id);
-        }else{
-            voucherFromMe =  new VoucherFromMe(name,receivedBy,date_receivedAt,date_validUntil,redeemedWhere,notes,redeemedAt,id);
-        }
-
-    }
-
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -302,12 +269,12 @@ public class DetailVoucherActivity extends FragmentActivity{
                     txtPerson.setText(voucherEdit.getReceivedBy());
                     txtReceivedAt.setText(Config.dateTimeFormatter.print(voucherEdit.getDateOfReceipt()));
                 }
-                Voucher voucherEdit = data.getParcelableExtra("voucherParcelableEdited");
-                txtVoucherName.setText(voucherEdit.getName());
-                System.out.println("Name: " + voucherEdit.getName());
-                txtNotes.setText(voucherEdit.getNotes());
-                System.out.println("Notes: " + voucherEdit.getNotes());
-                txtValidUntil.setText(Config.dateTimeFormatter.print(voucherEdit.getDateOfexpiration()));
+                voucher = data.getParcelableExtra("voucherParcelableEdited");
+                txtVoucherName.setText(voucher.getName());
+                System.out.println("Name: " + voucher.getName());
+                txtNotes.setText(voucher.getNotes());
+                System.out.println("Notes: " + voucher.getNotes());
+                txtValidUntil.setText(Config.dateTimeFormatter.print(voucher.getDateOfexpiration()));
 
             } else if(resultCode==NewVoucherActivity.RESULT_SESSION_EXPIRED){
                // startLoginScreen();
