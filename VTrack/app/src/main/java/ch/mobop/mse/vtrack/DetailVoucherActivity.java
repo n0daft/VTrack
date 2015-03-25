@@ -99,7 +99,6 @@ public class DetailVoucherActivity extends FragmentActivity{
         }
 
         mDialog = new ProgressDialog(this);
-        mDialog.setMessage("Archiving...");
     }
 
     @Override
@@ -178,7 +177,7 @@ public class DetailVoucherActivity extends FragmentActivity{
                     public boolean onMenuItemClick(MenuItem item) {
                         switch (item.getItemId()){
                             case R.id.action_delete:
-                                //deleteOnBaasBox();
+                                deleteVoucher();
                                 break;
                             default: break;
                         }
@@ -196,7 +195,43 @@ public class DetailVoucherActivity extends FragmentActivity{
         return super.onOptionsItemSelected(item);
     }
 
+    private void deleteVoucher(){
+        mDialog.setMessage("Deleting...");
+        mDialog.show();
+        mAddToken= BaasDocument.fetch("vtrack", voucher.getId(), deleteHandler);
+    }
+
+    private final BaasHandler<BaasDocument> deleteHandler= new BaasHandler<BaasDocument>() {
+        @Override
+        public void handle(BaasResult<BaasDocument> res) {
+            mAddToken=null;
+            if(res.isSuccess()) {
+                receivedDoc = res.value();
+                receivedDoc.delete(new BaasHandler<Void>() {
+                    @Override
+                    public void handle(BaasResult<Void> res) {
+                        mDialog.dismiss();
+                        if (res.isSuccess()) {
+                            setResult(RESULT_OK);
+                            finish();
+                        } else {
+                            setResult(RESULT_FAILED);
+                            finish();
+                        }
+                    }
+                });
+
+            } else {
+                setResult(RESULT_FAILED);
+                finish();
+                //Log.d("ERROR", "Failed with error", doc.error());
+            }
+        }
+    };
+
+
     private void archiveOnBaasBox(){
+        mDialog.setMessage("Archiving...");
         mDialog.show();
         mAddToken= BaasDocument.fetch("vtrack", voucher.getId(), receiveHandler);
     }
