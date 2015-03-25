@@ -91,7 +91,7 @@ public class ArchiveRecyclerViewFragment extends Fragment implements AdapterView
         adapter = new ArchiveRecyclerViewAdapter();
 
         //Load all Items from Server
-        filter = BaasQuery.builder().orderBy("dateOfexpiration").where("archive='true'").criteria();
+        filter = BaasQuery.builder().orderBy("redeemedAt").where("archive='true'").criteria();
 
         refreshDocuments();
         //Doesn't really do something as refresh is not done yet....
@@ -122,8 +122,13 @@ public class ArchiveRecyclerViewFragment extends Fragment implements AdapterView
         Bundle bundle = new Bundle();
         bundle.putParcelable("voucherParcelable", voucherList.get(position));
         intent.putExtras(bundle);
-        intent.putExtra("type","for_me");
 
+        if (voucherList.get(position) instanceof VoucherForMe){
+            intent.putExtra("type","for_me");
+        }else{
+            intent.putExtra("type","from_me");
+        }
+        intent.putExtra("archive","true");
         startActivityForResult(intent, Constants.DETAIL_CODE);
     }
 
@@ -175,11 +180,15 @@ public class ArchiveRecyclerViewFragment extends Fragment implements AdapterView
                     if(doc.getString("type").equals("for_me")){
                         DateTime dateOfReceipt = formatter.parseDateTime(doc.getString("dateOfReceipt"));
                         String receivedBy = doc.getString("receivedBy");
-                        voucherList.add(new VoucherForMe(name,receivedBy,dateOfReceipt,dateOfexpiration,redeemedWhere,notes,redeemedAt,id));
+                        VoucherForMe voucher = new VoucherForMe(name,receivedBy,dateOfReceipt,dateOfexpiration,redeemedWhere,notes,redeemedAt,id);
+                        voucher.setRedeemed(Boolean.valueOf(doc.getString("redeemed")));
+                        voucherList.add(voucher);
                     }else{
                         DateTime dateOfDelivery = formatter.parseDateTime(doc.getString("dateOfDelivery"));
                         String givenTo = doc.getString("givenTo");
-                        voucherList.add(new VoucherFromMe(name,givenTo,dateOfDelivery,dateOfexpiration,redeemedWhere,notes,redeemedAt,id));
+                        VoucherFromMe voucher = new VoucherFromMe(name,givenTo,dateOfDelivery,dateOfexpiration,redeemedWhere,notes,redeemedAt,id);
+                        voucher.setRedeemed(Boolean.valueOf(doc.getString("redeemed")));
+                        voucherList.add(voucher);
                     }
 
 

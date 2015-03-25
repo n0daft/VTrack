@@ -36,6 +36,9 @@ public class Voucher implements Parcelable{
     /** BaasBox ID */
     private String id;
 
+    /** Reedemed */
+    private boolean redeemed;
+
     /***************************************************************************
      *                                                                         *
      * Constructors                                                            *
@@ -109,7 +112,15 @@ public class Voucher implements Parcelable{
         this.id = id;
     }
 
-    /***************************************************************************
+    public boolean isRedeemed() {
+        return redeemed;
+    }
+
+    public void setRedeemed(boolean redeemed) {
+        this.redeemed = redeemed;
+    }
+
+/***************************************************************************
      *                                                                         *
      * Public API                                                              *
      *                                                                         *

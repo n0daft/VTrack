@@ -9,6 +9,8 @@ import android.support.v4.app.FragmentActivity;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.PopupMenu;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -48,6 +50,7 @@ public class DetailVoucherActivity extends FragmentActivity{
     private VoucherForMe voucherForMe;
     private VoucherFromMe voucherFromMe;
     private BaasDocument receivedDoc;
+    private boolean redeemed;
 
     private static final String PENDING_SAVE = "PENDING_SAVE";
     public static final int RESULT_SESSION_EXPIRED = Activity.RESULT_FIRST_USER+1;
@@ -101,18 +104,51 @@ public class DetailVoucherActivity extends FragmentActivity{
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.voucher_detail, menu);
+        if(Boolean.valueOf(intent.getStringExtra("archive"))){
+            getMenuInflater().inflate(R.menu.voucher_detail_archive, menu);
+        }else{
+            getMenuInflater().inflate(R.menu.voucher_detail, menu);
+        }
         return true;
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
 
+        PopupMenu popup;
+
         switch (item.getItemId()) {
 
             case R.id.action_archive:
 
-                retrieveOnBaasBox();
+                View menuItemViewNew = findViewById(R.id.action_archive);
+                popup = new PopupMenu(getBaseContext(),menuItemViewNew);
+
+                // Adding menu items to the popup menu.
+                popup.getMenuInflater().inflate(R.menu.voucher_detail_popup, popup.getMenu());
+
+                popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+
+                    @Override
+                    public boolean onMenuItemClick(MenuItem item) {
+                        switch (item.getItemId()){
+                            case R.id.action_redeemed:
+                                redeemed = true;
+                                archiveOnBaasBox();
+                                break;
+                            case R.id.action_expired:
+                                redeemed = false;
+                                archiveOnBaasBox();
+                                break;
+                            default: break;
+                        }
+                        //Toast.makeText(getBaseContext(), "You selected the action : " + item.getTitle(), Toast.LENGTH_SHORT).show();
+                        return true;
+                    }
+                });
+
+                /** Showing the popup menu */
+                popup.show();
                 break;
 
             case R.id.action_edit:
@@ -133,12 +169,39 @@ public class DetailVoucherActivity extends FragmentActivity{
 
                 startActivityForResult(edit,EDIT_CODE);
                 break;
+
+            case R.id.action_overflow:
+
+                View menuItemViewNewOver = findViewById(R.id.action_overflow);
+                popup = new PopupMenu(getBaseContext(),menuItemViewNewOver);
+
+                // Adding menu items to the popup menu.
+                popup.getMenuInflater().inflate(R.menu.voucher_detail_delete, popup.getMenu());
+                popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+
+                    @Override
+                    public boolean onMenuItemClick(MenuItem item) {
+                        switch (item.getItemId()){
+                            case R.id.action_delete:
+                                //deleteOnBaasBox();
+                                break;
+                            default: break;
+                        }
+                        //Toast.makeText(getBaseContext(), "You selected the action : " + item.getTitle(), Toast.LENGTH_SHORT).show();
+                        return true;
+                    }
+                });
+
+                /** Showing the popup menu */
+                popup.show();
+
+                break;
         }
 
         return super.onOptionsItemSelected(item);
     }
 
-    private void retrieveOnBaasBox(){
+    private void archiveOnBaasBox(){
         mDialog.show();
         mAddToken= BaasDocument.fetch("vtrack", voucher.getId(), receiveHandler);
     }
@@ -162,8 +225,17 @@ public class DetailVoucherActivity extends FragmentActivity{
     private void editOnBaasBox(){
         //Set new content
         mDialog.dismiss();
+
+
+        if(redeemed){
+            receivedDoc.put("redeemed", "true");
+        }else{
+            receivedDoc.put("redeemed", "false");
+        }
         receivedDoc.put("archive", "true");
-        receivedDoc.put("redeemedAt", "2015.12.24");
+        DateTime date_redeemedAt = new DateTime(new Date());
+        receivedDoc.put("redeemedAt", Config.dateTimeFormatterBaas.print(date_redeemedAt));
+
         receivedDoc.save(SaveMode.IGNORE_VERSION,new BaasHandler<BaasDocument>(){
             @Override
             public void handle(BaasResult<BaasDocument> res) {
@@ -248,6 +320,9 @@ public class DetailVoucherActivity extends FragmentActivity{
             super.onActivityResult(requestCode, resultCode, data);
         }
     }
+
+
+
 
 
 

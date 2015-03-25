@@ -40,19 +40,11 @@ public class ArchiveRecyclerViewAdapter extends VoucherRecyclerViewAdapter{
         itemHolder.setTxtDate(format.print(item.getDateOfexpiration()));
 
         int color;
-        switch (item.getValidityStatus()){
-            case valid:
-                color = Color.parseColor("#FF96AA39"); // pastel green
-                break;
-            case soonToExpire:
-                color = Color.parseColor("#FFF4842D"); // pastel orange
-                break;
-            case expired:
-                color = Color.parseColor("#FFC74B46"); // pastel red
-                break;
-            default:
-                color = Color.GRAY;
-                break;
+
+        if(item.isRedeemed()){
+            color = Color.parseColor("#FF96AA39"); // pastel green
+        }else{
+            color = Color.parseColor("#FFC74B46"); // pastel red
         }
 
         if(mItems.get(position) instanceof VoucherForMe){
