@@ -16,6 +16,11 @@ import android.view.inputmethod.EditorInfo;
 import android.widget.EditText;
 import android.widget.TextView;
 
+import android.app.AlertDialog;
+import android.view.LayoutInflater;
+import android.content.Context;
+import android.content.DialogInterface;
+
 import com.baasbox.android.BaasHandler;
 import com.baasbox.android.BaasResult;
 import com.baasbox.android.BaasUser;
@@ -36,8 +41,10 @@ public class LoginActivity extends FragmentActivity {
     private View mLoginFormView;
     private View mLoginStatusView;
     private TextView mLoginStatusMessageView;
+    private TextView dialogError;
 
-
+    //Password Dialog
+    final Context context = this;
 
     private RequestToken mSignupOrLogin;
 
@@ -71,7 +78,68 @@ public class LoginActivity extends FragmentActivity {
         findViewById(R.id.register_button).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                attemptLogin(true);
+                //attemptLogin(true);
+
+
+
+
+
+                // get prompts.xml view
+                LayoutInflater li = LayoutInflater.from(context);
+                final View promptsView = li.inflate(R.layout.dialog_password, null);
+
+                AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(
+                        context);
+
+                // set prompts.xml to alertdialog builder
+                alertDialogBuilder.setView(promptsView);
+
+                final EditText passwordCheck = (EditText) promptsView
+                        .findViewById(R.id.editTextDialogUserInput);
+
+                // set dialog message
+                alertDialogBuilder
+                        .setCancelable(false)
+                        .setPositiveButton("OK",
+                                new DialogInterface.OnClickListener() {
+                                    public void onClick(DialogInterface dialog,
+                                                        int id) {
+                                        //Do nothing here because we override this button later to change the close behaviour.
+                                        //However, we still need this because on older versions of Android unless we
+                                        //pass a handler the button doesn't get instantiated
+                                        //result.setText(userInput.getText());
+                                    }
+                                })
+                        .setNegativeButton("Cancel",
+                                new DialogInterface.OnClickListener() {
+                                    public void onClick(DialogInterface dialog,
+                                                        int id) {
+                                        dialog.cancel();
+                                    }
+                                });
+
+                // create alert dialog
+                final AlertDialog alertDialog = alertDialogBuilder.create();
+
+                // show it
+                alertDialog.show();
+
+                //Overwrite the OK button
+                alertDialog.getButton(AlertDialog.BUTTON_POSITIVE).setOnClickListener(new View.OnClickListener(){
+                    @Override
+                    public void onClick(View v)
+                    {
+                        if(passwordCheck.getText().toString().equals(mPasswordView.getText().toString())){
+                            alertDialog.dismiss();
+                            attemptLogin(true);
+                        }else{
+                            dialogError = (TextView) promptsView.findViewById(R.id.txtError);
+                            dialogError.setText("Password doesn't match");
+                        }
+                    }
+                });
+
+
             }
         });
 
@@ -235,4 +303,8 @@ public class LoginActivity extends FragmentActivity {
         }
     }
 
+
 }
+
+
+
