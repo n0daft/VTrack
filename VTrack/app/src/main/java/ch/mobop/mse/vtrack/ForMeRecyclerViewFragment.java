@@ -132,8 +132,9 @@ public class ForMeRecyclerViewFragment extends Fragment implements AdapterView.O
         if (requestCode== Constants.DETAIL_CODE){
             if (resultCode==DetailVoucherActivity.RESULT_OK){
                 Toast.makeText(getActivity(), "OK", Toast.LENGTH_LONG).show();
+                refreshDocuments();
             }else{
-                Toast.makeText(getActivity(), "else", Toast.LENGTH_LONG).show();
+                //Toast.makeText(getActivity(), "else", Toast.LENGTH_LONG).show();
             }
         }else {
             super.onActivityResult(requestCode, resultCode, data);

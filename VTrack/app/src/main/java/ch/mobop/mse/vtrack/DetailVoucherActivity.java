@@ -53,6 +53,7 @@ public class DetailVoucherActivity extends FragmentActivity{
     private VoucherFromMe voucherFromMe;
     private BaasDocument receivedDoc;
     private boolean redeemed;
+    private boolean isEdited;
 
     private static final String PENDING_SAVE = "PENDING_SAVE";
     public static final int RESULT_SESSION_EXPIRED = Activity.RESULT_FIRST_USER+1;
@@ -68,6 +69,7 @@ public class DetailVoucherActivity extends FragmentActivity{
         setContentView(R.layout.activity_detail_voucher);
 
         intent = getIntent();
+        isEdited = false;
 
         // Get UI component references
         txtVoucherName = (TextView) findViewById(R.id.detail_txtVoucherName);
@@ -296,6 +298,7 @@ public class DetailVoucherActivity extends FragmentActivity{
         if (requestCode==EDIT_CODE){
             if (resultCode==RESULT_OK){
                 //Update text elements
+                isEdited = true;
                 Toast.makeText(this, "Edited voucher successfully", Toast.LENGTH_LONG).show();
 
                 //Update text fields
@@ -329,7 +332,12 @@ public class DetailVoucherActivity extends FragmentActivity{
     }
 
 
-
+    @Override
+    public void onBackPressed() {
+        //If the voucher was edited, refresh the list automaticly
+        if(isEdited){setResult(RESULT_OK);}
+        super.onBackPressed();
+    }
 
 
 
