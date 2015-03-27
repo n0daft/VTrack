@@ -45,9 +45,7 @@ public class ArchiveRecyclerViewFragment extends Fragment implements AdapterView
     private ArchiveRecyclerViewAdapter adapter;
     private ArrayList<Voucher> voucherList;
     private BaasQuery.Criteria filter;
-
     private SwipeRefreshLayout mSwipeRefreshLayout;
-
     private RequestToken mRefresh;
 
     public static ArchiveRecyclerViewFragment newInstance() {
@@ -61,16 +59,6 @@ public class ArchiveRecyclerViewFragment extends Fragment implements AdapterView
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
     }
-
-
-    @Override
-    public void onResume() {
-        super.onResume();
-        //Reload Data after a Voucher was added or deleted
-        System.out.println("onResume()");
-        refreshDocuments();
-    }
-
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -115,6 +103,14 @@ public class ArchiveRecyclerViewFragment extends Fragment implements AdapterView
     }
 
     @Override
+    public void onResume() {
+        super.onResume();
+        //Reload Data after a Voucher was added or deleted
+        System.out.println("onResume()");
+        //refreshDocuments();
+    }
+
+    @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 
         // Implement Intent to edit a voucher
@@ -147,7 +143,8 @@ public class ArchiveRecyclerViewFragment extends Fragment implements AdapterView
 
 
 
-    private void refreshDocuments(){
+    public void refreshDocuments(){
+        System.out.println("refreshDocuments()");
         mRefresh = BaasDocument.fetchAll("vtrack", filter, onRefresh);
     }
 
