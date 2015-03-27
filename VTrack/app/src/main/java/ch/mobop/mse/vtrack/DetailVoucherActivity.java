@@ -204,20 +204,22 @@ public class DetailVoucherActivity extends FragmentActivity{
 
     private void deleteVoucher(){
         mDialog.setMessage("Deleting...");
-        mDialog.show();
+        if(!mDialog.isShowing())mDialog.show();
         mAddToken= BaasDocument.fetch("vtrack", voucher.getId(), deleteHandler);
     }
 
     private final BaasHandler<BaasDocument> deleteHandler= new BaasHandler<BaasDocument>() {
         @Override
         public void handle(BaasResult<BaasDocument> res) {
+
             mAddToken=null;
+            if(mDialog.isShowing())mDialog.dismiss();
+
             if(res.isSuccess()) {
                 receivedDoc = res.value();
                 receivedDoc.delete(new BaasHandler<Void>() {
                     @Override
                     public void handle(BaasResult<Void> res) {
-                        mDialog.dismiss();
                         if (res.isSuccess()) {
                             setResult(RESULT_OK);
                             finish();
@@ -231,7 +233,6 @@ public class DetailVoucherActivity extends FragmentActivity{
             } else {
                 setResult(RESULT_FAILED);
                 finish();
-                //Log.d("ERROR", "Failed with error", doc.error());
             }
         }
     };
@@ -239,7 +240,7 @@ public class DetailVoucherActivity extends FragmentActivity{
 
     private void archiveOnBaasBox(){
         mDialog.setMessage("Archiving...");
-        mDialog.show();
+        if(!mDialog.isShowing())mDialog.show();
         mAddToken= BaasDocument.fetch("vtrack", voucher.getId(), receiveHandler);
     }
 
@@ -260,9 +261,6 @@ public class DetailVoucherActivity extends FragmentActivity{
     };
 
     private void editOnBaasBox(){
-        //Set new content
-        mDialog.dismiss();
-
 
         if(redeemed){
             receivedDoc.put("redeemed", "true");
@@ -276,23 +274,20 @@ public class DetailVoucherActivity extends FragmentActivity{
         receivedDoc.save(SaveMode.IGNORE_VERSION,new BaasHandler<BaasDocument>(){
             @Override
             public void handle(BaasResult<BaasDocument> res) {
-                mDialog.dismiss();
+
+                if(mDialog.isShowing())mDialog.dismiss();
 
                 if(res.isSuccess()){
-                    Log.d("LOG", "Document saved " + res.value().getId());
-                    System.out.println("Archived Voucher");
                     setResult(Constants.RESULT_ARCHIVED);
                     finish();
                 } else {
                     Log.e("LOG", "Error", res.error());
-                    System.out.println("Save Fail");
                     setResult(RESULT_FAILED);
                     finish();
                 }
             }
         });
     }
-
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -314,24 +309,19 @@ public class DetailVoucherActivity extends FragmentActivity{
                 }
                 voucher = data.getParcelableExtra("voucherParcelableEdited");
                 txtVoucherName.setText(voucher.getName());
-                System.out.println("Name: " + voucher.getName());
                 txtNotes.setText(voucher.getNotes());
                 txtLocation.setText(voucher.getRedeemWhere());
-                System.out.println("Notes: " + voucher.getNotes());
                 txtValidUntil.setText(Config.dateTimeFormatter.print(voucher.getDateOfexpiration()));
 
             } else if(resultCode==NewVoucherActivity.RESULT_SESSION_EXPIRED){
-               // startLoginScreen();
+               startLoginScreen();
             } else if (resultCode==NewVoucherActivity.RESULT_FAILED){
-                Toast.makeText(this, "Failed to add voucher", Toast.LENGTH_LONG).show();
-            } else if (resultCode==NewVoucherActivity.RESULT_CANCELED){
-                Toast.makeText(this, "Canceled new voucher", Toast.LENGTH_LONG).show();
+                Toast.makeText(this, "Failed to add voucher.", Toast.LENGTH_LONG).show();
             }
         }else {
             super.onActivityResult(requestCode, resultCode, data);
         }
     }
-
 
     @Override
     public void onBackPressed() {
@@ -340,7 +330,12 @@ public class DetailVoucherActivity extends FragmentActivity{
         super.onBackPressed();
     }
 
-
+    private void startLoginScreen(){
+        Intent intent = new Intent(this,LoginActivity.class);
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        startActivity(intent);
+        finish();
+    }
 
 
 }

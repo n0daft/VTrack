@@ -76,6 +76,7 @@ public class FromMeRecyclerViewFragment extends Fragment implements AdapterView.
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
+        System.out.println("FromMe Create");
         View rootView = inflater.inflate(R.layout.fragment_received, container, false);
 
         voucherFromMeList = new ArrayList<>();
@@ -115,6 +116,7 @@ public class FromMeRecyclerViewFragment extends Fragment implements AdapterView.
     @Override
     public void onResume() {
         super.onResume();
+        System.out.println("FromMe Resume");
         //Due to anonymous tab fragments we reload the data not here
     }
 
@@ -165,7 +167,9 @@ public class FromMeRecyclerViewFragment extends Fragment implements AdapterView.
     }
 
     public void refreshDocuments(){
-        if(!mDialog.isShowing())mDialog.show();
+        if (getUserVisibleHint()){
+            if(!mDialog.isShowing())mDialog.show();
+        }
         mRefresh = BaasDocument.fetchAll("vtrack", filter, onRefresh);
     }
 
@@ -175,7 +179,7 @@ public class FromMeRecyclerViewFragment extends Fragment implements AdapterView.
         public void handle(BaasResult<List<BaasDocument>> result) {
 
             mRefresh=null;
-            mDialog.dismiss();
+            if(mDialog.isShowing())mDialog.dismiss();
 
             try {
 

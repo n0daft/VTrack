@@ -1,5 +1,6 @@
 package ch.mobop.mse.vtrack;
 
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -45,6 +46,7 @@ public class ArchiveRecyclerViewFragment extends Fragment implements AdapterView
     private ArchiveRecyclerViewAdapter adapter;
     private ArrayList<Voucher> voucherList;
     private BaasQuery.Criteria filter;
+    private ProgressDialog mDialog;
     private SwipeRefreshLayout mSwipeRefreshLayout;
     private RequestToken mRefresh;
 
@@ -77,21 +79,18 @@ public class ArchiveRecyclerViewFragment extends Fragment implements AdapterView
         recyclerView.getItemAnimator().setRemoveDuration(1000);
 
         adapter = new ArchiveRecyclerViewAdapter();
-
-        //Load all Items from Server
-        filter = BaasQuery.builder().orderBy("redeemedAt").where("archive='true'").criteria();
-
-        refreshDocuments();
-        //Doesn't really do something as refresh is not done yet....
-        adapter.setItemList(voucherList);
-
-
         adapter.setOnItemClickListener(this);
         recyclerView.setAdapter(adapter);
 
+        mDialog = new ProgressDialog(this.getActivity());
+        mDialog.setMessage("Refreshing...");
+
+        //Load all Items from Server
+        filter = BaasQuery.builder().orderBy("redeemedAt").where("archive='true'").criteria();
+        refreshDocuments();
+
         mSwipeRefreshLayout = (SwipeRefreshLayout) rootView.findViewById(R.id.activity_main_swipe_refresh_layout);
         mSwipeRefreshLayout.setColorSchemeColors(R.color.orange, R.color.green, R.color.blue);
-
         mSwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
@@ -105,9 +104,7 @@ public class ArchiveRecyclerViewFragment extends Fragment implements AdapterView
     @Override
     public void onResume() {
         super.onResume();
-        //Reload Data after a Voucher was added or deleted
-        System.out.println("onResume()");
-        //refreshDocuments();
+        //Due to anonymous tab fragments we reload the data not here
     }
 
     @Override
@@ -132,9 +129,8 @@ public class ArchiveRecyclerViewFragment extends Fragment implements AdapterView
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (requestCode== Constants.DETAIL_CODE){
             if (resultCode==DetailVoucherActivity.RESULT_OK){
-                Toast.makeText(getActivity(), "OK", Toast.LENGTH_LONG).show();
-            }else{
-                Toast.makeText(getActivity(), "else", Toast.LENGTH_LONG).show();
+                //If voucher gets deleted
+                refreshDocuments();
             }
         }else {
             super.onActivityResult(requestCode, resultCode, data);
@@ -144,7 +140,9 @@ public class ArchiveRecyclerViewFragment extends Fragment implements AdapterView
 
 
     public void refreshDocuments(){
-        System.out.println("refreshDocuments()");
+        if (getUserVisibleHint()){
+            if(!mDialog.isShowing())mDialog.show();
+        }
         mRefresh = BaasDocument.fetchAll("vtrack", filter, onRefresh);
     }
 
@@ -152,8 +150,10 @@ public class ArchiveRecyclerViewFragment extends Fragment implements AdapterView
             onRefresh = new BaasHandler<List<BaasDocument>>() {
         @Override
         public void handle(BaasResult<List<BaasDocument>> result) {
-            //mDialog.dismiss();
+
+            if(mDialog.isShowing())mDialog.dismiss();
             mRefresh=null;
+
             try {
                 Iterator it = result.get().iterator();
                 DateTimeFormatter formatter = DateTimeFormat.forPattern("yyyy.MM.dd");
@@ -190,23 +190,25 @@ public class ArchiveRecyclerViewFragment extends Fragment implements AdapterView
 
 
                 }
-                System.out.println("Archive Data loaded");
 
                 //onRefresh is asynchron
                 mSwipeRefreshLayout.setRefreshing(false);
                 adapter.setItemList(voucherList);
 
-
-                //mListFragment.refresh(result.get());
             }catch (BaasInvalidSessionException e){
-                //startLoginScreen();
+                startLoginScreen();
             }catch (BaasException e){
                 Log.e("LOGERR", "Error " + e.getMessage(), e);
-                //Toast.makeText(NoteListActivity.this,"Error while talking with the box",Toast.LENGTH_LONG).show();
+                Toast.makeText(getActivity(),"Error while talking to the server",Toast.LENGTH_LONG).show();
             }
         }
     };
 
-
+    private void startLoginScreen(){
+        Intent intent = new Intent(this.getActivity(),LoginActivity.class);
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        startActivity(intent);
+        getActivity().finish();
+    }
 
 }

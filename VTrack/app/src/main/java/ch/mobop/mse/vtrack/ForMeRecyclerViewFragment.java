@@ -74,7 +74,6 @@ public class ForMeRecyclerViewFragment extends Fragment implements AdapterView.O
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
-        System.out.println("Create");
         View rootView = inflater.inflate(R.layout.fragment_received, container, false);
 
         voucherForMeList = new ArrayList<>();
@@ -164,7 +163,9 @@ public class ForMeRecyclerViewFragment extends Fragment implements AdapterView.O
     }
 
     public void refreshDocuments(){
-        if(!mDialog.isShowing())mDialog.show();
+        if (getUserVisibleHint()){
+            if(!mDialog.isShowing())mDialog.show();
+        }
         mRefresh = BaasDocument.fetchAll("vtrack", filter, onRefresh);
     }
 
@@ -174,7 +175,7 @@ public class ForMeRecyclerViewFragment extends Fragment implements AdapterView.O
         public void handle(BaasResult<List<BaasDocument>> result) {
 
             mRefresh=null;
-            mDialog.dismiss();
+            if(mDialog.isShowing())mDialog.dismiss();
 
             try {
                 //Clear list and add new objects
