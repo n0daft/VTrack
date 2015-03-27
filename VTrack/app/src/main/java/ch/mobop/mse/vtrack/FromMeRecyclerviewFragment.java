@@ -1,5 +1,6 @@
 package ch.mobop.mse.vtrack;
 
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -32,6 +33,7 @@ import java.util.List;
 
 import ch.mobop.mse.vtrack.adapters.FromMeRecyclerViewAdapter;
 import ch.mobop.mse.vtrack.decorators.DividerDecoration;
+import ch.mobop.mse.vtrack.helpers.Config;
 import ch.mobop.mse.vtrack.helpers.Constants;
 import ch.mobop.mse.vtrack.model.Voucher;
 import ch.mobop.mse.vtrack.model.VoucherFromMe;
@@ -45,9 +47,8 @@ public class FromMeRecyclerViewFragment extends Fragment implements AdapterView.
     private FromMeRecyclerViewAdapter adapter;
     private ArrayList<Voucher> voucherFromMeList;
     private Criteria filter;
-
+    private ProgressDialog mDialog;
     private SwipeRefreshLayout mSwipeRefreshLayout;
-
     private RequestToken mRefresh;
 
     public static FromMeRecyclerViewFragment newInstance() {
@@ -60,16 +61,6 @@ public class FromMeRecyclerViewFragment extends Fragment implements AdapterView.
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-    }
-
-
-    @Override
-    public void onResume() {
-        super.onResume();
-        //Reload Data after a Voucher was added or deleted
-        System.out.println("onResume()");
-        //refreshDocuments();
     }
 
     @Override
@@ -89,17 +80,18 @@ public class FromMeRecyclerViewFragment extends Fragment implements AdapterView.
         recyclerView.getItemAnimator().setRemoveDuration(1000);
 
         adapter = new FromMeRecyclerViewAdapter();
+        adapter.setOnItemClickListener(this);
+        recyclerView.setAdapter(adapter);
+
+        mDialog = new ProgressDialog(this.getActivity());
+        mDialog.setMessage("Refreshing...");
 
         //Load all Items from Server
         filter = BaasQuery.builder().orderBy("dateOfexpiration").where("type='from_me' and archive='false'").criteria();
         refreshDocuments();
 
-        adapter.setOnItemClickListener(this);
-        recyclerView.setAdapter(adapter);
-
         mSwipeRefreshLayout = (SwipeRefreshLayout) rootView.findViewById(R.id.activity_main_swipe_refresh_layout);
         mSwipeRefreshLayout.setColorSchemeColors(R.color.orange, R.color.green, R.color.blue);
-
         mSwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
@@ -108,6 +100,28 @@ public class FromMeRecyclerViewFragment extends Fragment implements AdapterView.
         });
 
         return rootView;
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        //Due to anonymous tab fragments we reload the data not here
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        if (mDialog.isShowing()){
+            mDialog.dismiss();
+        }
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        if (mRefresh!=null){
+            mRefresh.suspendAndSave(outState,Constants.REFRESH_TOKEN_KEY);
+        }
     }
 
     @Override
@@ -127,10 +141,8 @@ public class FromMeRecyclerViewFragment extends Fragment implements AdapterView.
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (requestCode== Constants.DETAIL_CODE){
             if (resultCode==DetailVoucherActivity.RESULT_OK){
-                Toast.makeText(getActivity(), "OK", Toast.LENGTH_LONG).show();
+                //A voucher was edited, do a refresh
                 refreshDocuments();
-            }else{
-                //Toast.makeText(getActivity(), "else", Toast.LENGTH_LONG).show();
             }
         }else {
             super.onActivityResult(requestCode, resultCode, data);
@@ -138,7 +150,7 @@ public class FromMeRecyclerViewFragment extends Fragment implements AdapterView.
     }
 
     public void refreshDocuments(){
-        System.out.println("FromMeFrag - refreshDocuments()");
+        if(!mDialog.isShowing())mDialog.show();
         mRefresh = BaasDocument.fetchAll("vtrack", filter, onRefresh);
     }
 
@@ -146,46 +158,47 @@ public class FromMeRecyclerViewFragment extends Fragment implements AdapterView.
             onRefresh = new BaasHandler<List<BaasDocument>>() {
         @Override
         public void handle(BaasResult<List<BaasDocument>> result) {
-            //mDialog.dismiss();
-            mRefresh=null;
-            try {
-                Iterator it = result.get().iterator();
-                DateTimeFormatter formatter = DateTimeFormat.forPattern("yyyy.MM.dd");
 
-                //Clear Lists
+            mRefresh=null;
+            mDialog.dismiss();
+
+            try {
+
+                //Clear list and add new objects
+                Iterator it = result.get().iterator();
                 voucherFromMeList.clear();
 
                 while(it.hasNext()){
                     BaasDocument doc = (BaasDocument) it.next();
                     DateTime redeemedAt = null;
-                    if(!doc.getString("redeemedAt").equals("")){
-                        redeemedAt = formatter.parseDateTime(doc.getString("redeemedAt"));
-                    }
-                    DateTime dateOfDelivery = formatter.parseDateTime(doc.getString("dateOfDelivery"));
-                    DateTime  dateOfexpiration = formatter.parseDateTime(doc.getString("dateOfexpiration"));
+                    DateTime dateOfDelivery = Config.dateTimeFormatterBaas.parseDateTime(doc.getString("dateOfDelivery"));
+                    DateTime  dateOfExpiration = Config.dateTimeFormatterBaas.parseDateTime(doc.getString("dateOfexpiration"));
                     String name = doc.getString("name");
                     String notes = doc.getString("notes");
                     String givenTo = doc.getString("givenTo");
                     String redeemedWhere = doc.getString("redeemedWhere");
                     String id = doc.getId();
 
-                    voucherFromMeList.add(new VoucherFromMe(name,givenTo,dateOfDelivery,dateOfexpiration,redeemedWhere,notes,redeemedAt,id));
-
+                    voucherFromMeList.add(new VoucherFromMe(name,givenTo,dateOfDelivery,dateOfExpiration,redeemedWhere,notes,redeemedAt,id));
                 }
 
-                 System.out.println("FromMe Data loaded");
-                //onRefresh is asynchron and has to activate the display change somehow. like this?
+                //onRefresh is asynchron and updates the display here
                 mSwipeRefreshLayout.setRefreshing(false);
                 adapter.setItemList(voucherFromMeList);
 
-
-                //mListFragment.refresh(result.get());
             }catch (BaasInvalidSessionException e){
-                //startLoginScreen();
+                startLoginScreen();
             }catch (BaasException e){
                 Log.e("LOGERR", "Error " + e.getMessage(), e);
-                //Toast.makeText(NoteListActivity.this,"Error while talking with the box",Toast.LENGTH_LONG).show();
+                Toast.makeText(getActivity(),"Error while talking to the server",Toast.LENGTH_LONG).show();
             }
         }
     };
+
+    private void startLoginScreen(){
+        Intent intent = new Intent(this.getActivity(),LoginActivity.class);
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        startActivity(intent);
+        getActivity().finish();
+    }
 }

@@ -6,7 +6,7 @@ package ch.mobop.mse.vtrack.helpers;
  */
 public class Constants {
 
-
+    public final static String REFRESH_TOKEN_KEY = "refresh";
     public final static int DETAIL_CODE = 2;
 
 }
