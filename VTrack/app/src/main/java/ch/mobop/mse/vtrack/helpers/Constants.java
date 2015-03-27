@@ -8,5 +8,6 @@ public class Constants {
 
     public final static String REFRESH_TOKEN_KEY = "refresh";
     public final static int DETAIL_CODE = 2;
+    public final static int RESULT_ARCHIVED = 5;
 
 }

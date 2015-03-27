@@ -28,6 +28,7 @@ import org.joda.time.format.DateTimeFormatter;
 import java.util.Date;
 
 import ch.mobop.mse.vtrack.helpers.Config;
+import ch.mobop.mse.vtrack.helpers.Constants;
 import ch.mobop.mse.vtrack.model.Voucher;
 import ch.mobop.mse.vtrack.model.VoucherForMe;
 import ch.mobop.mse.vtrack.model.VoucherFromMe;
@@ -280,7 +281,7 @@ public class DetailVoucherActivity extends FragmentActivity{
                 if(res.isSuccess()){
                     Log.d("LOG", "Document saved " + res.value().getId());
                     System.out.println("Archived Voucher");
-                    setResult(RESULT_OK);
+                    setResult(Constants.RESULT_ARCHIVED);
                     finish();
                 } else {
                     Log.e("LOG", "Error", res.error());

@@ -48,6 +48,16 @@ public class ForMeRecyclerViewFragment extends Fragment implements AdapterView.O
     private ProgressDialog mDialog;
     private SwipeRefreshLayout mSwipeRefreshLayout;
     private RequestToken mRefresh;
+    private ArchiveListenerForMe listener;
+
+    //Listener to communicate with Archive Fragment
+    public interface ArchiveListenerForMe {
+        public void voucherArchived();
+    }
+
+    public void setArchiveListener(ArchiveListenerForMe listener) {
+        this.listener = listener;
+    }
 
     public static ForMeRecyclerViewFragment newInstance() {
         ForMeRecyclerViewFragment fragment = new ForMeRecyclerViewFragment();
@@ -142,6 +152,11 @@ public class ForMeRecyclerViewFragment extends Fragment implements AdapterView.O
             if (resultCode==DetailVoucherActivity.RESULT_OK){
                 //A voucher was edited, do a refresh
                 refreshDocuments();
+            }
+            if (resultCode==Constants.RESULT_ARCHIVED){
+                //Refresh Archive Fragment and this
+                refreshDocuments();
+                if (null != listener) {listener.voucherArchived();}
             }
         }else {
             super.onActivityResult(requestCode, resultCode, data);

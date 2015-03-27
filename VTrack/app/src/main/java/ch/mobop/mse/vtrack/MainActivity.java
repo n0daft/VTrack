@@ -44,6 +44,9 @@ import com.baasbox.android.BaasResult;
 import com.baasbox.android.BaasUser;
 import com.baasbox.android.RequestToken;
 
+import ch.mobop.mse.vtrack.ForMeRecyclerViewFragment.ArchiveListenerForMe;
+import ch.mobop.mse.vtrack.FromMeRecyclerViewFragment.ArchiveListenerFromMe;
+
 public class MainActivity extends FragmentActivity {
 
     private final Handler handler = new Handler();
@@ -356,16 +359,33 @@ public class MainActivity extends FragmentActivity {
 
             switch(position) {
                 case 0:
-                    System.out.println("Case 0");
+                    System.out.println("getItem(0) - ForMeRecyclerViewFragment");
                     ForMeFragment = ForMeRecyclerViewFragment.newInstance();
+                    ForMeFragment.setArchiveListener(new ArchiveListenerForMe() {
+                        @Override
+                        public void voucherArchived() {
+                            if(ArchiveFragment != null){
+                                ArchiveFragment.refreshDocuments();
+                            }
+                        }
+                    });
                     return ForMeFragment;
                 case 1:
-                    System.out.println("Case 1");
+                    System.out.println("getItem(1) - FromMeRecyclerViewFragment");
                     FromMeFragment = FromMeRecyclerViewFragment.newInstance();
+                    FromMeFragment.setArchiveListener(new ArchiveListenerFromMe() {
+                        @Override
+                        public void voucherArchived() {
+                            if(ArchiveFragment != null){
+                                ArchiveFragment.refreshDocuments();
+                            }
+                        }
+                    });
                     return FromMeFragment;
                 default:
-                    System.out.println("Case 2");
-                    return ArchiveRecyclerViewFragment.newInstance();
+                    System.out.println("getItem(2) - ArchiveRecyclerViewFragment");
+                    ArchiveFragment = ArchiveRecyclerViewFragment.newInstance();
+                    return ArchiveFragment;
             }
         }
 

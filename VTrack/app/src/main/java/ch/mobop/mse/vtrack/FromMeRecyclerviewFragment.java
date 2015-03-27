@@ -50,6 +50,16 @@ public class FromMeRecyclerViewFragment extends Fragment implements AdapterView.
     private ProgressDialog mDialog;
     private SwipeRefreshLayout mSwipeRefreshLayout;
     private RequestToken mRefresh;
+    private ArchiveListenerFromMe listener;
+
+    //Listener to communicate with Archive Fragment
+    public interface ArchiveListenerFromMe {
+        public void voucherArchived();
+    }
+
+    public void setArchiveListener(ArchiveListenerFromMe listener) {
+        this.listener = listener;
+    }
 
     public static FromMeRecyclerViewFragment newInstance() {
         FromMeRecyclerViewFragment fragment = new FromMeRecyclerViewFragment();
@@ -143,6 +153,11 @@ public class FromMeRecyclerViewFragment extends Fragment implements AdapterView.
             if (resultCode==DetailVoucherActivity.RESULT_OK){
                 //A voucher was edited, do a refresh
                 refreshDocuments();
+            }
+            if (resultCode==Constants.RESULT_ARCHIVED){
+                //Refresh Archive Fragment and this
+                refreshDocuments();
+                if (null != listener) {listener.voucherArchived();}
             }
         }else {
             super.onActivityResult(requestCode, resultCode, data);
