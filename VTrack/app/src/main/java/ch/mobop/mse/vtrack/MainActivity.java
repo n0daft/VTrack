@@ -155,7 +155,7 @@ public class MainActivity extends FragmentActivity {
             case R.id.action_new_voucher:
                 View menuItemViewNew = findViewById(R.id.action_new_voucher);
 
-                popup = new PopupMenu(getBaseContext(),menuItemViewNew);
+                popup = new PopupMenu(getApplicationContext(),menuItemViewNew);
 
                 // Adding menu items to the popup menu.
                 popup.getMenuInflater().inflate(R.menu.main_new_popup, popup.getMenu());

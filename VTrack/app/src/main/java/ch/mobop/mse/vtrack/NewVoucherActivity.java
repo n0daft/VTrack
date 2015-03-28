@@ -88,6 +88,7 @@ public class NewVoucherActivity extends FragmentActivity  implements DatePickerF
             voucher = getIntent().getParcelableExtra("voucherParcelable");
             txtVoucherName.setText(voucher.getName());
             txtNotes.setText(voucher.getNotes());
+            txtLocation.setText(voucher.getRedeemWhere());
             lblValidUntil.setText(Config.dateTimeFormatter.print(voucher.getDateOfexpiration()));
             if("for_me".equals(intent.getStringExtra("type"))){
                 VoucherForMe voucherForMe = (VoucherForMe) voucher;
@@ -103,8 +104,8 @@ public class NewVoucherActivity extends FragmentActivity  implements DatePickerF
         }
 
         if("from_me".equals(intent.getStringExtra("type"))){
-            txtReceivedFrom.setHint("'Given to'");
-            lblReceivedAt.setHint("'Date of Delivery'");
+            txtReceivedFrom.setHint("add given to");
+            lblReceivedAt.setHint("add date of delivery'");
         }
 
 
