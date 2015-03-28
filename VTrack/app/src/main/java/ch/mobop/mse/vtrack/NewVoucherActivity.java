@@ -22,8 +22,6 @@ import com.baasbox.android.RequestToken;
 import com.baasbox.android.SaveMode;
 
 import org.joda.time.DateTime;
-import org.joda.time.format.DateTimeFormat;
-import org.joda.time.format.DateTimeFormatter;
 
 import java.util.Date;
 
@@ -40,10 +38,8 @@ public class NewVoucherActivity extends FragmentActivity  implements DatePickerF
 
     private EditText txtVoucherName;
     private TextView lblReceivedAt;
-    private TextView lblReceivedAt_header;
     private TextView lblValidUntil;
     private EditText txtReceivedFrom;
-    private TextView txtReceivedFrom_header;
     private EditText txtNotes;
     private EditText txtLocation;
     private Intent intent;
@@ -86,8 +82,6 @@ public class NewVoucherActivity extends FragmentActivity  implements DatePickerF
         txtReceivedFrom = (EditText) findViewById(R.id.txtReceivedFrom);
         txtNotes = (EditText) findViewById(R.id.txtNotes);
         txtLocation = (EditText) findViewById(R.id.txtLocation);
-        txtReceivedFrom_header = (TextView) findViewById(R.id.txtReceivedFrom_header);
-        lblReceivedAt_header = (TextView) findViewById(R.id.lblReceivedAt_header);
 
         //Add content if it's an edit request
         if("edit".equals(intent.getStringExtra("intentType"))){
@@ -109,8 +103,8 @@ public class NewVoucherActivity extends FragmentActivity  implements DatePickerF
         }
 
         if("from_me".equals(intent.getStringExtra("type"))){
-            txtReceivedFrom_header.setText("Given to");
-            lblReceivedAt_header.setText("Date of Delivery");
+            txtReceivedFrom.setHint("'Given to'");
+            lblReceivedAt.setHint("'Date of Delivery'");
         }
 
 

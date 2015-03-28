@@ -5,134 +5,152 @@ android:layout_height="wrap_content">
 
 <TableLayout
     android:layout_width="fill_parent"
-    android:layout_height="wrap_content">
+    android:layout_height="wrap_content"
+    android:layout_margin="8dp"
+    android:baselineAligned="false">
 
     <TableRow
         android:layout_width="fill_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:paddingBottom="10dp">
 
-        <TextView
-            android:layout_width="0dp"
-            android:layout_weight="2"
+        <ImageView
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textAppearance="?android:attr/textAppearanceMedium"
-            android:text="Name"/>
+            android:layout_column="13"
+            android:src="@drawable/ic_action_bookmark"
+            android:layout_gravity="center"
+            android:layout_weight="1" />
+
+
 
         <EditText
             android:id="@+id/txtVoucherName"
             android:layout_width="0dp"
-            android:layout_weight="3"
+            android:layout_weight="20"
             android:layout_height="wrap_content"
             android:singleLine="true"
-            android:hint="'Cinema'" />
+            android:hint="add name" />
+
+
     </TableRow>
 
     <TableRow
         android:layout_width="fill_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:paddingBottom="10dp">
 
-        <TextView
-            android:id="@+id/lblReceivedAt_header"
-            android:layout_width="0dp"
+        <ImageView
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_weight="2"
-            android:textAppearance="?android:attr/textAppearanceMedium"
-            android:text="Received at"/>
+            android:layout_column="13"
+            android:src="@drawable/ic_action_calendar_day"
+            android:layout_gravity="center"
+            android:layout_weight="1" />
 
-        <TextView
+
+        <EditText
             android:id="@+id/lblReceivedAt"
             android:layout_width="0dp"
-            android:textSize="20dp"
-            android:layout_weight="3"
+            android:layout_weight="20"
             android:layout_height="wrap_content"
             android:singleLine="true"
-            android:hint="'18.02.2015'"
+            android:hint="add date of receipt"
             android:onClick="handleReceivedAt" />
     </TableRow>
 
     <TableRow
         android:layout_width="fill_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:paddingBottom="10dp">
 
-        <TextView
-            android:layout_width="0dp"
-            android:layout_weight="2"
+        <ImageView
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textAppearance="?android:attr/textAppearanceMedium"
-            android:text="Valid until"/>
+            android:layout_column="13"
+            android:src="@drawable/ic_action_calendar_day"
+            android:layout_gravity="center"
+            android:layout_weight="1" />
 
-        <TextView
+
+        <EditText
             android:id="@+id/lblValidUntil"
             android:layout_width="0dp"
-            android:layout_weight="3"
-            android:textSize="20dp"
             android:layout_height="wrap_content"
             android:singleLine="true"
-            android:hint="'18.02.2016'"
-            android:onClick="handleValidUntil" />
+            android:hint="add date of expiry"
+            android:onClick="handleValidUntil"
+            android:layout_weight="20" />
     </TableRow>
 
     <TableRow
         android:layout_width="fill_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:paddingBottom="10dp">
 
-        <TextView
-            android:id="@+id/txtReceivedFrom_header"
-            android:layout_width="0dp"
-            android:layout_weight="2"
+        <ImageView
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textAppearance="?android:attr/textAppearanceMedium"
-            android:text="Received from"/>
+            android:layout_column="13"
+            android:src="@drawable/ic_action_user"
+            android:layout_gravity="center"
+            android:layout_weight="1" />
 
         <EditText
             android:id="@+id/txtReceivedFrom"
             android:layout_width="0dp"
-            android:layout_weight="3"
+            android:layout_weight="20"
             android:layout_height="wrap_content"
             android:singleLine="true"
-            android:hint="'Marco'"
-            android:inputType="text"/>
+            android:hint="add received from"
+            android:inputType="text"
+            android:layout_gravity="center_vertical" />
     </TableRow>
 
 
     <TableRow
         android:layout_width="fill_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:paddingBottom="10dp">
 
-        <TextView
-            android:id="@+id/txtLocation_header"
-            android:layout_width="0dp"
-            android:layout_weight="2"
+        <ImageView
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textAppearance="?android:attr/textAppearanceMedium"
-            android:text="Location"/>
+            android:layout_column="13"
+            android:src="@drawable/ic_action_location"
+            android:layout_gravity="center"
+            android:layout_weight="1" />
 
         <EditText
             android:id="@+id/txtLocation"
             android:layout_width="0dp"
-            android:layout_weight="3"
+            android:layout_weight="20"
             android:layout_height="wrap_content"
             android:singleLine="true"
-            android:hint="'add location'"
-            android:inputType="text"/>
+            android:hint="add location"
+            android:inputType="text"
+            android:layout_gravity="center_vertical" />
     </TableRow>
 
-    <TableRow>
-        <TextView
-            android:layout_width="0dp"
-            android:layout_weight="2"
-            android:layout_gravity="top"
+    <TableRow android:paddingBottom="10dp">
+
+        <ImageView
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textAppearance="?android:attr/textAppearanceMedium"
-            android:text="Notes"/>
+            android:layout_column="13"
+            android:src="@drawable/ic_action_paste"
+            android:layout_gravity="center_horizontal"
+            android:layout_weight="1" />
 
         <EditText
             android:id="@+id/txtNotes"
             android:layout_width="0dp"
             android:layout_height="100dp"
-            android:layout_weight="3"
+            android:layout_weight="20"
             android:inputType="textMultiLine"
-            android:layout_column="12" />
+            android:hint="add notes"
+            android:layout_column="12"
+            android:gravity="top" />
     </TableRow>
 
 </TableLayout>
