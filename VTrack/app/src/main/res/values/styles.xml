@@ -9,7 +9,7 @@
     </style>
 
     <style name="ActionBarStyle" parent="@android:style/Widget.Holo.Light.ActionBar.Solid.Inverse">
-        <item name="android:icon">@drawable/ic_launcher_actionbar</item>
+        <item name="android:icon">@drawable/ic_logo</item>
         <item name="android:background">#ff005d66</item>
     </style>
 

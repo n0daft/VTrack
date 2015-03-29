@@ -48,9 +48,9 @@
             android:layout_height="match_parent"
             android:layout_margin="4dip"
             android:layout_weight="1"
-            android:background="#FFC74B46"
+            android:background="#ff005d66"
             android:onClick="onColorClicked"
-            android:tag="#FFC74B46" />
+            android:tag="#ff005d66" />
 
         <ImageView
             android:layout_width="0dip"
