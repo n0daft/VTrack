@@ -68,17 +68,17 @@
                 android:layout_marginTop="16dp"
                 android:paddingLeft="32dp"
                 android:paddingRight="32dp"
-                android:text="Sign in" />
+                android:text="@string/activity_login_button_login" />
 
             <Button
                 android:id="@+id/register_button"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_gravity="right"
+                android:layout_gravity="end"
                 android:layout_marginTop="16dp"
                 android:paddingLeft="32dp"
                 android:paddingRight="32dp"
-                android:text="Register" />
+                android:text="@string/activity_login_button_register" />
         </LinearLayout>
     </ScrollView>
 

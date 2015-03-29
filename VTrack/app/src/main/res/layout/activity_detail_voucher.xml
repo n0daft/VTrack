@@ -17,7 +17,7 @@
                 android:layout_weight="2"
                 android:layout_height="wrap_content"
                 android:textAppearance="?android:attr/textAppearanceMedium"
-                android:text="Name"/>
+                android:text="@string/activity_detail_voucher_textview_name"/>
 
             <EditText
                 android:id="@+id/detail_txtVoucherName"
@@ -26,7 +26,7 @@
                 android:layout_height="wrap_content"
                 android:editable="false"
                 android:focusable="false"
-                android:hint="-"/>
+                android:hint="@string/activity_detail_voucher_textview_defaultHint"/>
         </TableRow>
 
         <TableRow
@@ -39,7 +39,7 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="2"
                 android:textAppearance="?android:attr/textAppearanceMedium"
-                android:text="Received at"/>
+                android:text="@string/activity_detail_voucher_textview_receivedAt"/>
 
             <EditText
                 android:id="@+id/detail_txtReceivedAt"
@@ -48,7 +48,7 @@
                 android:layout_weight="3"
                 android:editable="false"
                 android:focusable="false"
-                android:hint="-"/>
+                android:hint="@string/activity_detail_voucher_textview_defaultHint"/>
         </TableRow>
 
         <TableRow
@@ -60,7 +60,7 @@
                 android:layout_weight="2"
                 android:layout_height="wrap_content"
                 android:textAppearance="?android:attr/textAppearanceMedium"
-                android:text="Valid until"/>
+                android:text="@string/activity_detail_voucher_textview_validUntil"/>
 
             <EditText
                 android:id="@+id/detail_txtValidUntil"
@@ -69,7 +69,7 @@
                 android:layout_height="wrap_content"
                 android:editable="false"
                 android:focusable="false"
-                android:hint="-"/>
+                android:hint="@string/activity_detail_voucher_textview_defaultHint"/>
         </TableRow>
 
         <TableRow
@@ -82,7 +82,7 @@
                 android:layout_weight="2"
                 android:layout_height="wrap_content"
                 android:textAppearance="?android:attr/textAppearanceMedium"
-                android:text="Received from"/>
+                android:text="@string/activity_detail_voucher_textview_receivedFrom"/>
 
             <EditText
                 android:id="@+id/detail_txtPerson"
@@ -91,7 +91,7 @@
                 android:layout_height="wrap_content"
                 android:editable="false"
                 android:focusable="false"
-                android:hint="-"/>
+                android:hint="@string/activity_detail_voucher_textview_defaultHint"/>
         </TableRow>
 
         <TableRow
@@ -104,7 +104,7 @@
                 android:layout_weight="2"
                 android:layout_height="wrap_content"
                 android:textAppearance="?android:attr/textAppearanceMedium"
-                android:text="Location"/>
+                android:text="@string/activity_detail_voucher_textview_location"/>
 
             <EditText
                 android:id="@+id/detail_txtLocation"
@@ -112,7 +112,7 @@
                 android:layout_weight="3"
                 android:layout_height="wrap_content"
                 android:singleLine="true"
-                android:hint="-"
+                android:hint="@string/activity_detail_voucher_textview_defaultHint"
                 android:editable="false"
                 android:focusable="false"
                 android:inputType="none"/>
@@ -125,7 +125,7 @@
                 android:layout_gravity="top"
                 android:layout_height="wrap_content"
                 android:textAppearance="?android:attr/textAppearanceMedium"
-                android:text="Notes"/>
+                android:text="@string/activity_detail_voucher_textview_notes"/>
 
             <EditText
                 android:id="@+id/detail_txtNotes"
@@ -135,7 +135,7 @@
                 android:layout_height="wrap_content"
                 android:editable="false"
                 android:focusable="false"
-                android:hint="-"/>
+                android:hint="@string/activity_detail_voucher_textview_defaultHint"/>
         </TableRow>
 
     </TableLayout>

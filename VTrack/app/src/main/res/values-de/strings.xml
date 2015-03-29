@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">VTrack</string>
+    <string name="action_contact">Contact</string>
+
+    <!-- Strings related to login -->
+    <string name="prompt_username">Benutzername</string>
+    <string name="prompt_password">Passwort</string>
+
+    <string name="action_sign_in_register"><b>Sign in</b> or register</string>
+    <string name="action_sign_in_short">Anmelden</string>
+
+    <string name="action_forgot_password">Passwort zurücksetzen</string>
+
+    <string name="login_progress_signing_in">anmelden...&#8230;</string>
+
+    <string name="error_invalid_email">Ungültige Email Adresse</string>
+    <string name="error_invalid_password">Das Passwort ist zu kurz</string>
+    <string name="error_incorrect_password">Das Passwort ist falsch</string>
+    <string name="error_field_required">Dieses Feld wird benötigt</string>
+
+
+    <string name="activity_detail_voucher_textview_name">Name</string>
+    <string name="activity_detail_voucher_textview_defaultHint">-</string>
+    <string name="activity_detail_voucher_textview_receivedAt">Erhalten am</string>
+    <string name="activity_detail_voucher_textview_validUntil">Läuft ab am</string>
+    <string name="activity_detail_voucher_textview_receivedFrom">Erhalten von</string>
+    <string name="activity_detail_voucher_textview_location">Ort</string>
+    <string name="activity_detail_voucher_textview_notes">Kommentar</string>
+
+
+    <string name="activity_new_voucher_edittext_name_hint">Name hinzufügen</string>
+    <string name="activity_new_voucher_edittext_receivedAt_hint">Erhaltungsdatum hinzufügen</string>
+    <string name="activity_new_voucher_edittext_validUntil_hint">Ablaufdatum hinzufügen</string>
+    <string name="activity_new_voucher_edittext_receivedFrom_hint">Beschenker hinzufügen</string>
+    <string name="activity_new_voucher_edittext_location_hint">Ort hinzufügen</string>
+    <string name="activity_new_voucher_edittext_notes_hint">Kommentar hinzufügen</string>
+    <string name="activity_settings_textview_language">Sprache</string>
+
+    <string-array name="language_array">
+        <item>Deutsch</item>
+        <item>English</item>
+    </string-array>
+
+</resources>

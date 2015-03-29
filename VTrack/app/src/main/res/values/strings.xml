@@ -8,6 +8,9 @@
     <string name="prompt_username">Username</string>
     <string name="prompt_password">Password</string>
 
+    <string name="activity_login_button_login">Sign in</string>
+    <string name="activity_login_button_register">Register</string>
+
     <string name="action_sign_in_register"><b>Sign in</b> or register</string>
     <string name="action_sign_in_short">Sign in</string>
 
@@ -19,5 +22,29 @@
     <string name="error_invalid_password">This password is too short</string>
     <string name="error_incorrect_password">This password is incorrect</string>
     <string name="error_field_required">This field is required</string>
+
+
+    <string name="activity_detail_voucher_textview_name">Name</string>
+    <string name="activity_detail_voucher_textview_defaultHint">-</string>
+    <string name="activity_detail_voucher_textview_receivedAt">Received at</string>
+    <string name="activity_detail_voucher_textview_validUntil">Valid until</string>
+    <string name="activity_detail_voucher_textview_receivedFrom">Received from</string>
+    <string name="activity_detail_voucher_textview_location">Location</string>
+    <string name="activity_detail_voucher_textview_notes">Notes</string>
+
+
+    <string name="activity_new_voucher_edittext_name_hint">add name</string>
+    <string name="activity_new_voucher_edittext_receivedAt_hint">add date of receipt</string>
+    <string name="activity_new_voucher_edittext_validUntil_hint">add date of expiry</string>
+    <string name="activity_new_voucher_edittext_receivedFrom_hint">add received from</string>
+    <string name="activity_new_voucher_edittext_location_hint">add location</string>
+    <string name="activity_new_voucher_edittext_notes_hint">add notes</string>
+    <string name="activity_settings_textview_language">Language</string>
+
+
+    <string-array name="language_array">
+        <item>Deutsch</item>
+        <item>English</item>
+    </string-array>
 
 </resources>
