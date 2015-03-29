@@ -55,6 +55,9 @@ public class LoginActivity extends FragmentActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
 
+        // Todo remove this eventually
+        getActionBar().hide();
+
         getActionBar().setBackgroundDrawable(Config.currentActionBarColor);
 
         if (savedInstanceState!=null){
@@ -79,7 +82,7 @@ public class LoginActivity extends FragmentActivity {
             }
         });
 
-        findViewById(R.id.register_button).setOnClickListener(new View.OnClickListener() {
+        findViewById(R.id.register_label).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 //attemptLogin(true);
