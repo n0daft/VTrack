@@ -26,6 +26,8 @@ import com.baasbox.android.BaasResult;
 import com.baasbox.android.BaasUser;
 import com.baasbox.android.RequestToken;
 
+import ch.mobop.mse.vtrack.helpers.Config;
+
 /**
  * Created by Andrea Tortorella on 24/01/14.
  */
@@ -52,6 +54,8 @@ public class LoginActivity extends FragmentActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
+
+        getActionBar().setBackgroundDrawable(Config.currentActionBarColor);
 
         if (savedInstanceState!=null){
             mSignupOrLogin = savedInstanceState.getParcelable(SIGNUP_TOKEN_KEY);

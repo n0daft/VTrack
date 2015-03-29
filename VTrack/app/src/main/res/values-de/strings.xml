@@ -20,6 +20,10 @@
     <string name="error_incorrect_password">Das Passwort ist falsch</string>
     <string name="error_field_required">Dieses Feld wird benötigt</string>
 
+    <string name="activity_main_actionbaritem_received">Erhalten</string>
+    <string name="activity_main_actionbaritem_givenAway">Verschenkt</string>
+    <string name="activity_main_actionbaritem_archive">Archiv</string>
+
 
     <string name="activity_detail_voucher_textview_name">Name</string>
     <string name="activity_detail_voucher_textview_defaultHint">-</string>
@@ -37,6 +41,7 @@
     <string name="activity_new_voucher_edittext_location_hint">Ort hinzufügen</string>
     <string name="activity_new_voucher_edittext_notes_hint">Kommentar hinzufügen</string>
     <string name="activity_settings_textview_language">Sprache</string>
+    <string name="activity_settings_textview_colors">Menüfarbe</string>
 
     <string-array name="language_array">
         <item>Deutsch</item>

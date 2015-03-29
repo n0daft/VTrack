@@ -69,6 +69,8 @@ public class DetailVoucherActivity extends FragmentActivity{
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_detail_voucher);
 
+        getActionBar().setBackgroundDrawable(Config.currentActionBarColor);
+
         intent = getIntent();
         isEdited = false;
 

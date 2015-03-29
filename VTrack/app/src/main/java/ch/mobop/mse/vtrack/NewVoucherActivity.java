@@ -72,6 +72,8 @@ public class NewVoucherActivity extends FragmentActivity  implements DatePickerF
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_new_voucher);
 
+        getActionBar().setBackgroundDrawable(Config.currentActionBarColor);
+
         intent = getIntent();
         voucher = getIntent().getParcelableExtra("voucherParcelable");
 

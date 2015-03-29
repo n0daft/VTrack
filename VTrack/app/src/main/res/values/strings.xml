@@ -24,6 +24,11 @@
     <string name="error_field_required">This field is required</string>
 
 
+    <string name="activity_main_actionbaritem_received">Received</string>
+    <string name="activity_main_actionbaritem_givenAway">Given away</string>
+    <string name="activity_main_actionbaritem_archive">Archive</string>
+
+
     <string name="activity_detail_voucher_textview_name">Name</string>
     <string name="activity_detail_voucher_textview_defaultHint">-</string>
     <string name="activity_detail_voucher_textview_receivedAt">Received at</string>
@@ -40,6 +45,7 @@
     <string name="activity_new_voucher_edittext_location_hint">add location</string>
     <string name="activity_new_voucher_edittext_notes_hint">add notes</string>
     <string name="activity_settings_textview_language">Language</string>
+    <string name="activity_settings_textview_colors">Actionbar Design</string>
 
 
     <string-array name="language_array">

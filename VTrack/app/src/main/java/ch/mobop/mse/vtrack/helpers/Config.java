@@ -1,5 +1,7 @@
 package ch.mobop.mse.vtrack.helpers;
 
+import android.graphics.drawable.ColorDrawable;
+
 import org.joda.time.format.DateTimeFormat;
 import org.joda.time.format.DateTimeFormatter;
 
@@ -12,6 +14,8 @@ public abstract class Config {
     public static final DateTimeFormatter dateTimeFormatter = DateTimeFormat.forPattern("dd.MM.yy");
     public static final DateTimeFormatter dateTimeFormatterBaas = DateTimeFormat.forPattern("yyyy.MM.dd");
     public static final int RESULT_ARCHIVED    = 11;
+
+    public static ColorDrawable currentActionBarColor = new ColorDrawable(0xff005d66);
 
 
 }
