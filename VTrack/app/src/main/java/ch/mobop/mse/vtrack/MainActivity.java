@@ -16,6 +16,7 @@
 
 package ch.mobop.mse.vtrack;
 
+import android.app.ActionBar;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
@@ -57,6 +58,7 @@ public class MainActivity extends FragmentActivity {
     private MyPagerAdapter adapter;
 
     private final static int NEW_CODE = 1;
+    private final static int SETTINGS_CODE = 2;
     private final static int EDIT_CODE = 3;
     private ForMeRecyclerViewFragment ForMeFragment;
     private FromMeRecyclerViewFragment FromMeFragment;
@@ -78,7 +80,6 @@ public class MainActivity extends FragmentActivity {
             startLoginScreen();
             return;
         }
-
 
         setContentView(R.layout.activity_main);
 
@@ -136,6 +137,8 @@ public class MainActivity extends FragmentActivity {
                             case R.id.action_settings:
                                 // call settings activity
                                 System.out.println("Settings selected");
+                                Intent intent = new Intent(MainActivity.this,SettingsActivity.class);
+                                startActivityForResult(intent,SETTINGS_CODE);
                                 break;
                             case R.id.action_logout:
                                 System.out.println("Logout selected");
@@ -241,6 +244,10 @@ public class MainActivity extends FragmentActivity {
 
         tabs.setIndicatorColor(newColor);
 
+        ActionBar actionBar = getActionBar();
+        if(actionBar != null){
+
+
         // change ActionBar color just if an ActionBar is available
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
 
@@ -280,6 +287,7 @@ public class MainActivity extends FragmentActivity {
             getActionBar().setDisplayShowTitleEnabled(true);
 
         }
+    }
 
         currentColor = newColor;
 
