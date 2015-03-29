@@ -47,6 +47,10 @@
     <string name="activity_settings_textview_language">Language</string>
     <string name="activity_settings_textview_colors">Actionbar Design</string>
 
+    <string name="menu_voucher_detail_delete_item_delete">Delete</string>
+    <string name="menu_voucher_detail_popup_item_redeemed">Redeemed</string>
+    <string name="menu_voucher_detail_popup_item_expired">Not redeemed</string>
+
 
     <string-array name="language_array">
         <item>Deutsch</item>

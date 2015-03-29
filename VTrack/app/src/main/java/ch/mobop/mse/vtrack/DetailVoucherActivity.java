@@ -130,7 +130,7 @@ public class DetailVoucherActivity extends FragmentActivity{
             case R.id.action_archive:
 
                 View menuItemViewNew = findViewById(R.id.action_archive);
-                popup = new PopupMenu(getBaseContext(),menuItemViewNew);
+                popup = new PopupMenu(getApplicationContext(),menuItemViewNew);
 
                 // Adding menu items to the popup menu.
                 popup.getMenuInflater().inflate(R.menu.voucher_detail_popup, popup.getMenu());
@@ -176,7 +176,7 @@ public class DetailVoucherActivity extends FragmentActivity{
             case R.id.action_overflow:
 
                 View menuItemViewNewOver = findViewById(R.id.action_overflow);
-                popup = new PopupMenu(getBaseContext(),menuItemViewNewOver);
+                popup = new PopupMenu(getApplicationContext(),menuItemViewNewOver);
 
                 // Adding menu items to the popup menu.
                 popup.getMenuInflater().inflate(R.menu.voucher_detail_delete, popup.getMenu());
