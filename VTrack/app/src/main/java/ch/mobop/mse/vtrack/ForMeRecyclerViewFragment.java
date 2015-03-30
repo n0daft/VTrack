@@ -73,10 +73,9 @@ public class ForMeRecyclerViewFragment extends Fragment implements AdapterView.O
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        System.out.println("OnCreateView");
 
         View rootView = inflater.inflate(R.layout.fragment_received, container, false);
-
-        voucherForMeList = new ArrayList<>();
 
         recyclerView = (RecyclerView) rootView.findViewById(R.id.section_list);
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false));
@@ -96,14 +95,19 @@ public class ForMeRecyclerViewFragment extends Fragment implements AdapterView.O
 
         //Load all Items from Server
         filter = BaasQuery.builder().orderBy("dateOfexpiration").where("type='for_me' and archive='false'").criteria();
-        refreshDocuments();
+        if(voucherForMeList == null){
+            voucherForMeList = new ArrayList<>();
+            refreshDocuments(true);
+        }else{
+            adapter.setItemList(voucherForMeList);
+        }
 
         mSwipeRefreshLayout = (SwipeRefreshLayout) rootView.findViewById(R.id.activity_main_swipe_refresh_layout);
         mSwipeRefreshLayout.setColorSchemeColors(R.color.orange, R.color.green, R.color.blue);
         mSwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
-                refreshDocuments();
+                refreshDocuments(false);
             }
         });
 
@@ -150,11 +154,12 @@ public class ForMeRecyclerViewFragment extends Fragment implements AdapterView.O
         if (requestCode== Constants.DETAIL_CODE){
             if (resultCode==DetailVoucherActivity.RESULT_OK){
                 //A voucher was edited, do a refresh
-                refreshDocuments();
+                if(!mDialog.isShowing())mDialog.show();
+                refreshDocuments(true);
             }
             if (resultCode==Constants.RESULT_ARCHIVED){
                 //Refresh Archive Fragment and this
-                refreshDocuments();
+                refreshDocuments(true);
                 if (null != listener) {listener.voucherArchived();}
             }
         }else {
@@ -162,8 +167,8 @@ public class ForMeRecyclerViewFragment extends Fragment implements AdapterView.O
         }
     }
 
-    public void refreshDocuments(){
-        if (getUserVisibleHint()){
+    public void refreshDocuments(boolean setSpinner){
+        if (getUserVisibleHint() && setSpinner){
             if(!mDialog.isShowing())mDialog.show();
         }
         mRefresh = BaasDocument.fetchAll("vtrack", filter, onRefresh);

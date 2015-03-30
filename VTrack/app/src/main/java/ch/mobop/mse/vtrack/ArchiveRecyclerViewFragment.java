@@ -67,8 +67,6 @@ public class ArchiveRecyclerViewFragment extends Fragment implements AdapterView
 
         View rootView = inflater.inflate(R.layout.fragment_received, container, false);
 
-        voucherList = new ArrayList<>();
-
         recyclerView = (RecyclerView) rootView.findViewById(R.id.section_list);
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false));
         recyclerView.addItemDecoration(new DividerDecoration(getActivity()));
@@ -87,14 +85,19 @@ public class ArchiveRecyclerViewFragment extends Fragment implements AdapterView
 
         //Load all Items from Server
         filter = BaasQuery.builder().orderBy("redeemedAt").where("archive='true'").criteria();
-        refreshDocuments();
+        if(voucherList == null) {
+            voucherList = new ArrayList<>();
+            refreshDocuments(true);
+        }else{
+            adapter.setItemList(voucherList);
+        }
 
         mSwipeRefreshLayout = (SwipeRefreshLayout) rootView.findViewById(R.id.activity_main_swipe_refresh_layout);
         mSwipeRefreshLayout.setColorSchemeColors(R.color.orange, R.color.green, R.color.blue);
         mSwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
-                refreshDocuments();
+                refreshDocuments(false);
             }
         });
 
@@ -130,7 +133,8 @@ public class ArchiveRecyclerViewFragment extends Fragment implements AdapterView
         if (requestCode== Constants.DETAIL_CODE){
             if (resultCode==DetailVoucherActivity.RESULT_OK){
                 //If voucher gets deleted
-                refreshDocuments();
+                if(!mDialog.isShowing())mDialog.show();
+                refreshDocuments(true);
             }
         }else {
             super.onActivityResult(requestCode, resultCode, data);
@@ -139,8 +143,8 @@ public class ArchiveRecyclerViewFragment extends Fragment implements AdapterView
 
 
 
-    public void refreshDocuments(){
-        if (getUserVisibleHint()){
+    public void refreshDocuments(boolean setSpinner){
+        if (getUserVisibleHint() && setSpinner){
             if(!mDialog.isShowing())mDialog.show();
         }
         mRefresh = BaasDocument.fetchAll("vtrack", filter, onRefresh);

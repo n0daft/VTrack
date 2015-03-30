@@ -2,9 +2,9 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
         <item
     android:id="@+id/action_newvoucher_for_me"
-    android:title="Received" />
+    android:title="@string/activity_main_actionbaritem_received" />
      
         <item
     android:id="@+id/action_newvoucher_from_me"
-    android:title="Given away" />
+    android:title="@string/activity_main_actionbaritem_givenAway" />
 </menu>

@@ -220,8 +220,8 @@ public class MainActivity extends FragmentActivity {
         if (requestCode==NEW_CODE){
             if (resultCode==RESULT_OK){
                 Toast.makeText(this, "Added Voucher", Toast.LENGTH_LONG).show();
-                if(ForMeFragment != null){ForMeFragment.refreshDocuments();}
-                if(FromMeFragment != null){FromMeFragment.refreshDocuments();}
+                if(ForMeFragment != null){ForMeFragment.refreshDocuments(true);}
+                if(FromMeFragment != null){FromMeFragment.refreshDocuments(true);}
             } else if(resultCode==NewVoucherActivity.RESULT_SESSION_EXPIRED){
                 startLoginScreen();
             } else if (resultCode==NewVoucherActivity.RESULT_FAILED){
@@ -343,11 +343,12 @@ public class MainActivity extends FragmentActivity {
                 case 0:
                     System.out.println("getItem(0) - ForMeRecyclerViewFragment");
                     ForMeFragment = ForMeRecyclerViewFragment.newInstance();
+                    System.out.println("After newInstance");
                     ForMeFragment.setArchiveListener(new ArchiveListenerForMe() {
                         @Override
                         public void voucherArchived() {
                             if(ArchiveFragment != null){
-                                ArchiveFragment.refreshDocuments();
+                                ArchiveFragment.refreshDocuments(false);
                             }
                         }
                     });
@@ -359,7 +360,7 @@ public class MainActivity extends FragmentActivity {
                         @Override
                         public void voucherArchived() {
                             if(ArchiveFragment != null){
-                                ArchiveFragment.refreshDocuments();
+                                ArchiveFragment.refreshDocuments(false);
                             }
                         }
                     });
