@@ -15,7 +15,6 @@ public abstract class Config {
     public static final DateTimeFormatter dateTimeFormatterBaas = DateTimeFormat.forPattern("yyyy.MM.dd");
     public static final int RESULT_ARCHIVED    = 11;
 
-    public static ColorDrawable currentActionBarColor = new ColorDrawable(0xff005d66);
-
+    public static ColorDrawable defaultActionBarColor = new ColorDrawable(0xff005d66);
 
 }

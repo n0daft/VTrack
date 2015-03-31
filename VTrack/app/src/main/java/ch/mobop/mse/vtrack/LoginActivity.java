@@ -4,6 +4,8 @@ import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.annotation.TargetApi;
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
@@ -27,6 +29,7 @@ import com.baasbox.android.BaasUser;
 import com.baasbox.android.RequestToken;
 
 import ch.mobop.mse.vtrack.helpers.Config;
+import ch.mobop.mse.vtrack.helpers.Constants;
 
 /**
  * Created by Andrea Tortorella on 24/01/14.
@@ -58,7 +61,9 @@ public class LoginActivity extends FragmentActivity {
         // Todo remove this eventually
         getActionBar().hide();
 
-        getActionBar().setBackgroundDrawable(Config.currentActionBarColor);
+        SharedPreferences sharedpreferences = getSharedPreferences(Constants.MyPREFERENCES, Context.MODE_PRIVATE);
+        ColorDrawable color = new ColorDrawable(sharedpreferences.getInt(Constants.actionBarColor,Config.defaultActionBarColor.getColor()));
+        getActionBar().setBackgroundDrawable(color);
 
         if (savedInstanceState!=null){
             mSignupOrLogin = savedInstanceState.getParcelable(SIGNUP_TOKEN_KEY);

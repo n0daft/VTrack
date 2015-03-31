@@ -2,7 +2,10 @@ package ch.mobop.mse.vtrack;
 
 import android.app.Activity;
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.app.FragmentActivity;
@@ -26,6 +29,7 @@ import org.joda.time.DateTime;
 import java.util.Date;
 
 import ch.mobop.mse.vtrack.helpers.Config;
+import ch.mobop.mse.vtrack.helpers.Constants;
 import ch.mobop.mse.vtrack.model.Voucher;
 import ch.mobop.mse.vtrack.model.VoucherForMe;
 import ch.mobop.mse.vtrack.model.VoucherFromMe;
@@ -72,7 +76,9 @@ public class NewVoucherActivity extends FragmentActivity  implements DatePickerF
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_new_voucher);
 
-        getActionBar().setBackgroundDrawable(Config.currentActionBarColor);
+        SharedPreferences sharedpreferences = getSharedPreferences(Constants.MyPREFERENCES, Context.MODE_PRIVATE);
+        ColorDrawable color = new ColorDrawable(sharedpreferences.getInt(Constants.actionBarColor,Config.defaultActionBarColor.getColor()));
+        getActionBar().setBackgroundDrawable(color);
 
         intent = getIntent();
         voucher = getIntent().getParcelableExtra("voucherParcelable");

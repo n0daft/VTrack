@@ -18,6 +18,9 @@ package ch.mobop.mse.vtrack;
 
 import android.app.ActionBar;
 import android.content.Intent;
+import android.content.Context;
+import android.content.SharedPreferences;
+import android.content.SharedPreferences.Editor;
 import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
 import android.graphics.drawable.LayerDrawable;
@@ -36,6 +39,7 @@ import android.view.View;
 import android.widget.PopupMenu;
 import android.widget.Toast;
 
+
 import com.astuetz.PagerSlidingTabStrip;
 import com.baasbox.android.BaasBox;
 import com.baasbox.android.BaasHandler;
@@ -46,6 +50,7 @@ import com.baasbox.android.RequestToken;
 import ch.mobop.mse.vtrack.ForMeRecyclerViewFragment.ArchiveListenerForMe;
 import ch.mobop.mse.vtrack.FromMeRecyclerViewFragment.ArchiveListenerFromMe;
 import ch.mobop.mse.vtrack.helpers.Config;
+import ch.mobop.mse.vtrack.helpers.Constants;
 
 public class MainActivity extends FragmentActivity {
 
@@ -63,6 +68,8 @@ public class MainActivity extends FragmentActivity {
     private FromMeRecyclerViewFragment FromMeFragment;
     private ArchiveRecyclerViewFragment ArchiveFragment;
 
+    private SharedPreferences sharedpreferences;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -79,11 +86,12 @@ public class MainActivity extends FragmentActivity {
 
         setContentView(R.layout.activity_main);
 
-
-
         tabs = (PagerSlidingTabStrip) findViewById(R.id.tabs);
         pager = (ViewPager) findViewById(R.id.pager);
         adapter = new MyPagerAdapter(getSupportFragmentManager());
+
+        sharedpreferences = getSharedPreferences(Constants.MyPREFERENCES, Context.MODE_PRIVATE);
+        changeColor(sharedpreferences.getInt(Constants.actionBarColor,Config.defaultActionBarColor.getColor()));
 
         pager.setAdapter(adapter);
 
@@ -93,15 +101,13 @@ public class MainActivity extends FragmentActivity {
         tabs.setShouldExpand(true); //Works
         tabs.setViewPager(pager);
 
-        //mListFragment = (VerticalFragment)getSupportFragmentManager().findFragmentById(R.id.section_list);
 
-       changeColor(Config.currentActionBarColor.getColor());
     }
 
     @Override
     public void onResume(){
         super.onResume();
-        changeColor(Config.currentActionBarColor.getColor());
+        changeColor(sharedpreferences.getInt(Constants.actionBarColor,Config.defaultActionBarColor.getColor()));
     }
 
     @Override
@@ -119,7 +125,6 @@ public class MainActivity extends FragmentActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
 
         PopupMenu popup;
-
 
         switch (item.getItemId()) {
 
@@ -201,19 +206,13 @@ public class MainActivity extends FragmentActivity {
                 /** Showing the popup menu */
                 popup.show();
 
-
-
-
                 //QuickContactFragment dialog = new QuickContactFragment();
                 //dialog.show(getSupportFragmentManager(), "QuickContactFragment");
                 return true;
         }
 
-
-
         return super.onOptionsItemSelected(item);
     }
-
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -233,8 +232,6 @@ public class MainActivity extends FragmentActivity {
             super.onActivityResult(requestCode, resultCode, data);
         }
     }
-
-
 
     private void startLoginScreen(){
         //mDoRefresh = false;
@@ -288,19 +285,6 @@ public class MainActivity extends FragmentActivity {
                 }
             };
 
-    @Override
-    protected void onSaveInstanceState(Bundle outState) {
-        super.onSaveInstanceState(outState);
-        outState.putInt("currentColor", Config.currentActionBarColor.getColor());
-    }
-
-    @Override
-    protected void onRestoreInstanceState(Bundle savedInstanceState) {
-        super.onRestoreInstanceState(savedInstanceState);
-        Config.currentActionBarColor = new ColorDrawable(savedInstanceState.getInt("currentColor"));
-        changeColor(Config.currentActionBarColor.getColor());
-    }
-
     private Drawable.Callback drawableCallback = new Drawable.Callback() {
         @Override
         public void invalidateDrawable(Drawable who) {
@@ -341,9 +325,7 @@ public class MainActivity extends FragmentActivity {
 
             switch(position) {
                 case 0:
-                    System.out.println("getItem(0) - ForMeRecyclerViewFragment");
                     ForMeFragment = ForMeRecyclerViewFragment.newInstance();
-                    System.out.println("After newInstance");
                     ForMeFragment.setArchiveListener(new ArchiveListenerForMe() {
                         @Override
                         public void voucherArchived() {
@@ -354,7 +336,6 @@ public class MainActivity extends FragmentActivity {
                     });
                     return ForMeFragment;
                 case 1:
-                    System.out.println("getItem(1) - FromMeRecyclerViewFragment");
                     FromMeFragment = FromMeRecyclerViewFragment.newInstance();
                     FromMeFragment.setArchiveListener(new ArchiveListenerFromMe() {
                         @Override
@@ -366,7 +347,6 @@ public class MainActivity extends FragmentActivity {
                     });
                     return FromMeFragment;
                 default:
-                    System.out.println("getItem(2) - ArchiveRecyclerViewFragment");
                     ArchiveFragment = ArchiveRecyclerViewFragment.newInstance();
                     return ArchiveFragment;
             }

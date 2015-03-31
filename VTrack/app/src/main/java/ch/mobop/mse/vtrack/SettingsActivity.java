@@ -1,5 +1,8 @@
 package ch.mobop.mse.vtrack;
 
+import android.content.Context;
+import android.content.SharedPreferences;
+import android.content.SharedPreferences.Editor;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
@@ -11,6 +14,7 @@ import android.support.v4.app.FragmentActivity;
 import android.view.View;
 
 import ch.mobop.mse.vtrack.helpers.Config;
+import ch.mobop.mse.vtrack.helpers.Constants;
 
 /**
  * Created by n0daft on 28.03.2015.
@@ -18,23 +22,29 @@ import ch.mobop.mse.vtrack.helpers.Config;
 public class SettingsActivity extends FragmentActivity {
 
     private final Handler handler = new Handler();
+    private SharedPreferences sharedpreferences;
+    private Editor editor;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_settings);
 
-        getActionBar().setBackgroundDrawable(Config.currentActionBarColor);
+        sharedpreferences = getSharedPreferences(Constants.MyPREFERENCES, Context.MODE_PRIVATE);
+        editor = sharedpreferences.edit();
+
+        getActionBar().setBackgroundDrawable(new ColorDrawable(sharedpreferences.getInt(Constants.actionBarColor,Config.defaultActionBarColor.getColor())));
 
     }
 
 
     public void onColorClicked(View v) {
         int color = Color.parseColor(v.getTag().toString());
-        ColorDrawable oldColor = Config.currentActionBarColor;
+        ColorDrawable oldColor = new ColorDrawable(sharedpreferences.getInt(Constants.actionBarColor,Config.defaultActionBarColor.getColor()));
         ColorDrawable newColor = new ColorDrawable(color);
 
-        Config.currentActionBarColor = newColor;
+        editor.putInt(Constants.actionBarColor,color);
+        editor.commit();
 
         changeColor(oldColor, newColor);
     }
