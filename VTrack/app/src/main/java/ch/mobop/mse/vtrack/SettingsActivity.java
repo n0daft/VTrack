@@ -32,8 +32,8 @@ public class SettingsActivity extends FragmentActivity {
 
         sharedpreferences = getSharedPreferences(Constants.MyPREFERENCES, Context.MODE_PRIVATE);
         editor = sharedpreferences.edit();
-
-        getActionBar().setBackgroundDrawable(new ColorDrawable(sharedpreferences.getInt(Constants.actionBarColor,Config.defaultActionBarColor.getColor())));
+        ColorDrawable color = new ColorDrawable(sharedpreferences.getInt(Constants.actionBarColor,Config.defaultActionBarColor.getColor()));
+        getActionBar().setBackgroundDrawable(color);
 
     }
 

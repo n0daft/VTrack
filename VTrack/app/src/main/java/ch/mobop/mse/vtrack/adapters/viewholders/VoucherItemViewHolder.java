@@ -5,6 +5,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.TextView;
+import android.widget.ImageView;
 
 import ch.mobop.mse.vtrack.R;
 import ch.mobop.mse.vtrack.adapters.VoucherRecyclerViewAdapter;
@@ -26,6 +27,10 @@ public class VoucherItemViewHolder extends RecyclerView.ViewHolder implements Vi
     /** Placeholder for validity status icon */
     private FrameLayout flValidityStatus;
 
+    /** Placeholder for archive status icon */
+    private ImageView ivArchiveStatusTrue;
+    private ImageView ivArchiveStatusFalse;
+
     private VoucherRecyclerViewAdapter mAdapter;
 
     public VoucherItemViewHolder(View itemView, VoucherRecyclerViewAdapter adapter) {
@@ -38,12 +43,13 @@ public class VoucherItemViewHolder extends RecyclerView.ViewHolder implements Vi
         txtPerson = (TextView) itemView.findViewById(R.id.txtPerson);
         txtDate = (TextView) itemView.findViewById(R.id.txtDate);
         flValidityStatus = (FrameLayout) itemView.findViewById(R.id.flValidityStatus);
+        ivArchiveStatusTrue = (ImageView) itemView.findViewById(R.id.ivValidityArchiveStatusTrue);
+        ivArchiveStatusFalse = (ImageView) itemView.findViewById(R.id.ivValidityArchiveStatusFalse);
     }
 
     @Override
     public void onClick(View v) {
         mAdapter.onItemHolderClick(this);
-
     }
 
 
@@ -63,5 +69,17 @@ public class VoucherItemViewHolder extends RecyclerView.ViewHolder implements Vi
         GradientDrawable d = (GradientDrawable) flValidityStatus.getBackground().mutate();
         d.setColor(color);
         d.invalidateSelf();
+    }
+
+    public void setFlValidityStatus(int status){
+        flValidityStatus.setVisibility(status);
+    }
+
+    public void setivArchiveStatusTrue(int status){
+        ivArchiveStatusTrue.setVisibility(status);
+    }
+
+    public void setivArchiveStatusFalse(int status){
+        ivArchiveStatusFalse.setVisibility(status);
     }
 }

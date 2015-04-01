@@ -37,6 +37,8 @@ public class ForMeRecyclerViewAdapter extends VoucherRecyclerViewAdapter{
         itemHolder.setTxtPerson(item.getReceivedBy());
         DateTimeFormatter format = DateTimeFormat.forPattern("dd.MM.yy").withLocale(Locale.GERMAN);
         itemHolder.setTxtDate(format.print(item.getDateOfexpiration()));
+        itemHolder.setivArchiveStatusTrue(View.GONE);
+        itemHolder.setivArchiveStatusFalse(View.GONE);
 
         int color;
         switch (item.getValidityStatus()){

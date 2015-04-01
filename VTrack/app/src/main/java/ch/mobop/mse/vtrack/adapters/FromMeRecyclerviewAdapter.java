@@ -37,6 +37,8 @@ public class FromMeRecyclerViewAdapter extends VoucherRecyclerViewAdapter {
         itemHolder.setTxtPerson(item.getGivenTo());
         DateTimeFormatter format = DateTimeFormat.forPattern("dd.MM.yy").withLocale(Locale.GERMAN);
         itemHolder.setTxtDate(format.print(item.getDateOfexpiration()));
+        itemHolder.setivArchiveStatusTrue(View.GONE);
+        itemHolder.setivArchiveStatusFalse(View.GONE);
 
         int color;
         switch (item.getValidityStatus()){

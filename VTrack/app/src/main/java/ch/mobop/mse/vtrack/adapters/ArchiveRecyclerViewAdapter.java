@@ -39,12 +39,12 @@ public class ArchiveRecyclerViewAdapter extends VoucherRecyclerViewAdapter{
         DateTimeFormatter format = DateTimeFormat.forPattern("dd.MM.yy").withLocale(Locale.GERMAN);
         itemHolder.setTxtDate(format.print(item.getDateOfexpiration()));
 
-        int color;
+        itemHolder.setFlValidityStatus(View.GONE);
 
         if(item.isRedeemed()){
-            color = Color.parseColor("#FF96AA39"); // pastel green
+            itemHolder.setivArchiveStatusFalse(View.GONE);
         }else{
-            color = Color.parseColor("#FFC74B46"); // pastel red
+            itemHolder.setivArchiveStatusTrue(View.GONE);
         }
 
         if(mItems.get(position) instanceof VoucherForMe){
@@ -57,7 +57,6 @@ public class ArchiveRecyclerViewAdapter extends VoucherRecyclerViewAdapter{
             itemHolder.setTxtPerson(tmp);
         }
 
-        itemHolder.setFlValidityStatusColor(color);
     }
 
     public void setOnItemClickListener(AdapterView.OnItemClickListener onItemClickListener) {

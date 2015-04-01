@@ -3,6 +3,7 @@ package ch.mobop.mse.vtrack;
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.annotation.TargetApi;
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.drawable.ColorDrawable;
@@ -32,11 +33,10 @@ import ch.mobop.mse.vtrack.helpers.Config;
 import ch.mobop.mse.vtrack.helpers.Constants;
 
 /**
- * Created by Andrea Tortorella on 24/01/14.
+ * Created by Simon on 24.03.2015.
  */
 public class LoginActivity extends FragmentActivity {
     private final static String SIGNUP_TOKEN_KEY = "signup_token_key";
-    public static final String EXTRA_USERNAME = "com.baasbox.deardiary.username.EXTRA";
 
     private String mUsername;
     private String mPassword;
@@ -47,6 +47,7 @@ public class LoginActivity extends FragmentActivity {
     private View mLoginStatusView;
     private TextView mLoginStatusMessageView;
     private TextView dialogError;
+    private ProgressDialog mDialog;
 
     //Password Dialog
     final Context context = this;
@@ -57,6 +58,9 @@ public class LoginActivity extends FragmentActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
+
+        mDialog = new ProgressDialog(this);
+        mDialog.setMessage("Logging in...");
 
         // Todo remove this eventually
         getActionBar().hide();
@@ -69,9 +73,7 @@ public class LoginActivity extends FragmentActivity {
             mSignupOrLogin = savedInstanceState.getParcelable(SIGNUP_TOKEN_KEY);
         }
 
-        mUsername = getIntent().getStringExtra(EXTRA_USERNAME);
         mUserView = (EditText) findViewById(R.id.email);
-        mUserView.setText(mUsername);
         mLoginStatusView = findViewById(R.id.login_status);
         mLoginFormView = findViewById(R.id.login_form);
         mLoginStatusMessageView = (TextView)findViewById(R.id.login_status_message);
@@ -167,7 +169,10 @@ public class LoginActivity extends FragmentActivity {
     protected void onPause() {
         super.onPause();
         if (mSignupOrLogin!=null){
-            showProgress(false);
+            //showProgress(false);
+            if (mDialog.isShowing()){
+                mDialog.dismiss();
+            }
             mSignupOrLogin.suspend();
         }
     }
@@ -176,7 +181,8 @@ public class LoginActivity extends FragmentActivity {
     protected void onResume() {
         super.onResume();
         if (mSignupOrLogin!=null){
-            showProgress(true);
+            //showProgress(true);
+            if(!mDialog.isShowing())mDialog.show();
             mSignupOrLogin.resume(onComplete);
         }
     }
@@ -190,7 +196,10 @@ public class LoginActivity extends FragmentActivity {
     }
 
     private void completeLogin(boolean success){
-        showProgress(false);
+        //showProgress(false);
+        if (mDialog.isShowing()){
+            mDialog.dismiss();
+        }
         mSignupOrLogin = null;
         if (success) {
             Intent intent = new Intent(this,MainActivity.class);
@@ -248,7 +257,7 @@ public class LoginActivity extends FragmentActivity {
             // Show a progress spinner, and kick off a background task to
             // perform the user login attempt.
             mLoginStatusMessageView.setText(R.string.login_progress_signing_in);
-            showProgress(true);
+            if(!mDialog.isShowing())mDialog.show();
             signupWithBaasBox(newUser);
         }
     }
