@@ -74,31 +74,13 @@ public class LoginActivity extends FragmentActivity {
         }
 
         mUserView = (EditText) findViewById(R.id.email);
-        mLoginStatusView = findViewById(R.id.login_status);
-        mLoginFormView = findViewById(R.id.login_form);
-        mLoginStatusMessageView = (TextView)findViewById(R.id.login_status_message);
         mPasswordView = (EditText) findViewById(R.id.password);
-        mPasswordView.setOnEditorActionListener(new TextView.OnEditorActionListener() {
-            @Override
-            public boolean onEditorAction(TextView textView, int id, KeyEvent keyEvent) {
-                if (id == R.id.login || id == EditorInfo.IME_NULL) {
-                    attemptLogin(false);
-                    return true;
-                }
-                return false;
-            }
-        });
 
         findViewById(R.id.register_label).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //attemptLogin(true);
 
-
-
-
-
-                // get prompts.xml view
+                // get dailog_password.xml view
                 LayoutInflater li = LayoutInflater.from(context);
                 final View promptsView = li.inflate(R.layout.dialog_password, null);
 
@@ -153,7 +135,6 @@ public class LoginActivity extends FragmentActivity {
                     }
                 });
 
-
             }
         });
 
@@ -181,7 +162,6 @@ public class LoginActivity extends FragmentActivity {
     protected void onResume() {
         super.onResume();
         if (mSignupOrLogin!=null){
-            //showProgress(true);
             if(!mDialog.isShowing())mDialog.show();
             mSignupOrLogin.resume(onComplete);
         }
@@ -196,7 +176,6 @@ public class LoginActivity extends FragmentActivity {
     }
 
     private void completeLogin(boolean success){
-        //showProgress(false);
         if (mDialog.isShowing()){
             mDialog.dismiss();
         }
@@ -254,10 +233,6 @@ public class LoginActivity extends FragmentActivity {
             // form field with an error.
             focusView.requestFocus();
         } else {
-            // Show a progress spinner, and kick off a background task to
-            // perform the user login attempt.
-            mLoginStatusMessageView.setText(R.string.login_progress_signing_in);
-            if(!mDialog.isShowing())mDialog.show();
             signupWithBaasBox(newUser);
         }
     }
@@ -267,8 +242,12 @@ public class LoginActivity extends FragmentActivity {
         BaasUser user = BaasUser.withUserName(mUsername);
         user.setPassword(mPassword);
         if (newUser) {
+            mDialog.setMessage("Signing up...");
+            if(!mDialog.isShowing())mDialog.show();
             mSignupOrLogin=user.signup(onComplete);
         } else {
+            mDialog.setMessage("Logging in...");
+            if(!mDialog.isShowing())mDialog.show();
             mSignupOrLogin=user.login(onComplete);
         }
     }
@@ -286,43 +265,6 @@ public class LoginActivity extends FragmentActivity {
                     completeLogin(result.isSuccess());
                 }
             };
-
-    @TargetApi(Build.VERSION_CODES.HONEYCOMB_MR2)
-    private void showProgress(final boolean show) {
-        // On Honeycomb MR2 we have the ViewPropertyAnimator APIs, which allow
-        // for very easy animations. If available, use these APIs to fade-in
-        // the progress spinner.
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB_MR2) {
-            int shortAnimTime = getResources().getInteger(android.R.integer.config_shortAnimTime);
-
-            mLoginStatusView.setVisibility(View.VISIBLE);
-            mLoginStatusView.animate()
-                    .setDuration(shortAnimTime)
-                    .alpha(show ? 1 : 0)
-                    .setListener(new AnimatorListenerAdapter() {
-                        @Override
-                        public void onAnimationEnd(Animator animation) {
-                            mLoginStatusView.setVisibility(show ? View.VISIBLE : View.GONE);
-                        }
-                    });
-
-            mLoginFormView.setVisibility(View.VISIBLE);
-            mLoginFormView.animate()
-                    .setDuration(shortAnimTime)
-                    .alpha(show ? 0 : 1)
-                    .setListener(new AnimatorListenerAdapter() {
-                        @Override
-                        public void onAnimationEnd(Animator animation) {
-                            mLoginFormView.setVisibility(show ? View.GONE : View.VISIBLE);
-                        }
-                    });
-        } else {
-            // The ViewPropertyAnimator APIs are not available, so simply show
-            // and hide the relevant UI components.
-            mLoginStatusView.setVisibility(show ? View.VISIBLE : View.GONE);
-            mLoginFormView.setVisibility(show ? View.GONE : View.VISIBLE);
-        }
-    }
 
 
 }
