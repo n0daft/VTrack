@@ -37,7 +37,7 @@ public class ArchiveRecyclerViewAdapter extends VoucherRecyclerViewAdapter{
         Voucher item = mItems.get(position);
         itemHolder.setTxtVoucherName(item.getName());
         DateTimeFormatter format = DateTimeFormat.forPattern("dd.MM.yy").withLocale(Locale.GERMAN);
-        itemHolder.setTxtDate(format.print(item.getDateOfexpiration()));
+        itemHolder.setTxtDate(format.print(item.getRedeemedAt()));
 
         itemHolder.setFlValidityStatus(View.GONE);
 

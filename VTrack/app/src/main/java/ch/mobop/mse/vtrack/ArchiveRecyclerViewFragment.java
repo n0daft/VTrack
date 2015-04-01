@@ -84,7 +84,7 @@ public class ArchiveRecyclerViewFragment extends Fragment implements AdapterView
         mDialog.setMessage("Refreshing...");
 
         //Load all Items from Server
-        filter = BaasQuery.builder().orderBy("redeemedAt").where("archive='true'").criteria();
+        filter = BaasQuery.builder().orderBy("redeemedAt desc").where("archive='true'").criteria();
         if(voucherList == null) {
             voucherList = new ArrayList<>();
             refreshDocuments(true);
