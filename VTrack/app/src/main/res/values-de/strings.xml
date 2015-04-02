@@ -69,6 +69,7 @@
     <string name="dialog_uploading">Lade hoch...</string>
     <string name="dialog_signup">Registrieren...</string>
     <string name="dialog_login">Anmelden...</string>
+    <string name="dialog_refreshing">Aktualisiere...</string>
 
     <!-- Feedback -->
     <string name="toast_voucherAdded">Gutschein hinzugefügt</string>

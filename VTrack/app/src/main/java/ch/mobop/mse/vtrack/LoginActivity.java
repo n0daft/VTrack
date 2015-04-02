@@ -26,6 +26,7 @@ import ch.mobop.mse.vtrack.helpers.Config;
 import ch.mobop.mse.vtrack.helpers.Constants;
 
 /**
+ * Provides methods for the login process.
  * Created by Simon on 24.03.2015.
  */
 public class LoginActivity extends FragmentActivity {
@@ -36,13 +37,10 @@ public class LoginActivity extends FragmentActivity {
 
     private EditText mUserView;
     private EditText mPasswordView;
-    private View mLoginFormView;
-    private View mLoginStatusView;
-    private TextView mLoginStatusMessageView;
     private TextView dialogError;
     private ProgressDialog mDialog;
 
-    //Password Dialog
+    // Password Dialog
     final Context context = this;
 
     private RequestToken mSignupOrLogin;
@@ -163,9 +161,18 @@ public class LoginActivity extends FragmentActivity {
     @Override
     protected void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
-        if (mSignupOrLogin!=null){
-            outState.putParcelable(SIGNUP_TOKEN_KEY,mSignupOrLogin);
+        if (mSignupOrLogin!=null) {
+            outState.putParcelable(SIGNUP_TOKEN_KEY, mSignupOrLogin);
         }
+    }
+
+
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        super.onCreateOptionsMenu(menu);
+        getMenuInflater().inflate(R.menu.login, menu);
+        return true;
     }
 
     private void completeLogin(boolean success){
@@ -184,14 +191,7 @@ public class LoginActivity extends FragmentActivity {
         }
     }
 
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        super.onCreateOptionsMenu(menu);
-        getMenuInflater().inflate(R.menu.login, menu);
-        return true;
-    }
-
-    public void attemptLogin(boolean newUser) {
+    private void attemptLogin(boolean newUser) {
         // Reset errors.
         mUserView.setError(null);
         mPasswordView.setError(null);
@@ -245,7 +245,6 @@ public class LoginActivity extends FragmentActivity {
         }
     }
 
-    //todo 3.2
     private final BaasHandler<BaasUser> onComplete =
             new BaasHandler<BaasUser>() {
                 @Override
@@ -258,8 +257,6 @@ public class LoginActivity extends FragmentActivity {
                     completeLogin(result.isSuccess());
                 }
             };
-
-
 }
 
 

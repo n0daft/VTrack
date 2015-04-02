@@ -71,6 +71,7 @@
     <string name="dialog_uploading">Uploading...</string>
     <string name="dialog_signup">Signing up...</string>
     <string name="dialog_login">Logging in...</string>
+    <string name="dialog_refreshing">Refreshing...</string>
 
     <!-- Feedback -->
     <string name="toast_voucherAdded">Voucher added</string>
@@ -80,6 +81,7 @@
     <!-- General String -->
     <string name="general_from">from</string>
     <string name="general_for">for</string>
+
 
 
     <string-array name="language_array">

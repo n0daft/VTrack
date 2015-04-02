@@ -85,8 +85,6 @@ public class VoucherForMe extends Voucher implements Parcelable{
         dest.writeString(receivedBy);
     }
 
-
-
     public static final Parcelable.Creator<VoucherForMe> CREATOR = new Creator<VoucherForMe>() {
         public VoucherForMe createFromParcel(Parcel source) {
             VoucherForMe voucherForMe = new VoucherForMe();

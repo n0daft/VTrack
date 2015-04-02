@@ -81,7 +81,7 @@ public class ArchiveRecyclerViewFragment extends Fragment implements AdapterView
         recyclerView.setAdapter(adapter);
 
         mDialog = new ProgressDialog(this.getActivity());
-        mDialog.setMessage("Refreshing...");
+        mDialog.setMessage(getString(R.string.dialog_refreshing));
 
         //Load all Items from Server
         filter = BaasQuery.builder().orderBy("redeemedAt desc").where("archive='true'").criteria();
@@ -107,7 +107,7 @@ public class ArchiveRecyclerViewFragment extends Fragment implements AdapterView
     @Override
     public void onResume() {
         super.onResume();
-        //Due to anonymous tab fragments we reload the data not here
+        // Due to anonymous tab fragments we reload the data not here.
     }
 
     @Override
