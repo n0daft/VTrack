@@ -9,6 +9,7 @@ import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.app.FragmentActivity;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -26,7 +27,9 @@ import com.baasbox.android.SaveMode;
 
 import org.joda.time.DateTime;
 
+import java.text.DateFormat;
 import java.util.Date;
+import java.util.GregorianCalendar;
 
 import ch.mobop.mse.vtrack.helpers.Config;
 import ch.mobop.mse.vtrack.helpers.Constants;
@@ -91,6 +94,25 @@ public class NewVoucherActivity extends FragmentActivity  implements DatePickerF
         txtNotes = (EditText) findViewById(R.id.txtNotes);
         txtLocation = (EditText) findViewById(R.id.txtLocation);
 
+        lblValidUntil.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View v, boolean hasFocus) {
+                if(hasFocus){
+                    handleValidUntil(v);
+                }
+            }
+        });
+
+        lblReceivedAt.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View v, boolean hasFocus) {
+                if(hasFocus){
+                    handleReceivedAt(v);
+                }
+
+            }
+        });
+
         //Add content if it's an edit request
         if("edit".equals(intent.getStringExtra("intentType"))){
             voucher = getIntent().getParcelableExtra("voucherParcelable");
@@ -141,21 +163,70 @@ public class NewVoucherActivity extends FragmentActivity  implements DatePickerF
 
             case R.id.action_new_voucher_save:
 
-                //Create new BassDocument
+                // Create new BassDocument
                 receivedDoc = new BaasDocument("vtrack");
 
                 if("edit".equals(intent.getStringExtra("intentType"))){
-                    //Fetch the old voucher with its id and save it after changes
+                    // Fetch the old voucher with its id and save it after changes
                     retrieveOnBaasBox();
                 }else{
-                    //Create new voucher
-                    addContentToDocument();
-                    saveOnBaasBox(receivedDoc);
+                    // Only create new voucher id form is valid.
+                    if(validateForm()){
+                        // Create new voucher.
+                        addContentToDocument();
+                        saveOnBaasBox(receivedDoc);
+                    }
                 }
 
                 break;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    private boolean validateForm() {
+
+        // Reset errors.
+        txtVoucherName.setError(null);
+        lblValidUntil.setError(null);
+        txtReceivedFrom.setError(null);
+
+        // Store values at the time of the login attempt.
+        String voucherName = txtVoucherName.getText().toString();
+        String validUntil = lblValidUntil.getText().toString();
+        String receivedFrom = txtReceivedFrom.getText().toString();
+
+        boolean cancel = false;
+        View focusView = null;
+
+        // Check for a valid person entry.
+        if (TextUtils.isEmpty(receivedFrom)) {
+            txtReceivedFrom.setError(getString(R.string.error_field_required));
+            focusView = txtReceivedFrom;
+            cancel = true;
+        }
+
+        // Check for a valid validity date.
+        if (TextUtils.isEmpty(validUntil)) {
+            lblValidUntil.setError(getString(R.string.error_field_required));
+            focusView = lblValidUntil;
+            cancel = true;
+        }
+
+        // Check for a valid name.
+        if (TextUtils.isEmpty(voucherName)) {
+            txtVoucherName.setError(getString(R.string.error_field_required));
+            focusView = txtVoucherName;
+            cancel = true;
+        }
+
+        if (cancel) {
+            // There was an error; don't attempt login and focus the first
+            // form field with an error.
+            focusView.requestFocus();
+            return false;
+        } else {
+            return true;
+        }
     }
 
 
@@ -338,12 +409,15 @@ public class NewVoucherActivity extends FragmentActivity  implements DatePickerF
 
     @Override
     public void onFinishEditDialog(int year, int month, int day, int callerId) {
+        GregorianCalendar cal = new GregorianCalendar();
+        cal.set(year,month,day);
+
         switch (callerId){
             case 1:
-                lblReceivedAt.setText(String.valueOf(day) + "." + String.valueOf(month + 1) + "." + String.valueOf(year));
+                lblReceivedAt.setText(DateFormat.getDateInstance().format(cal.getTime()));
                 break;
             case 2:
-                lblValidUntil.setText(String.valueOf(day) + "." + String.valueOf(month + 1) + "." + String.valueOf(year));
+                lblValidUntil.setText(DateFormat.getDateInstance().format(cal.getTime()));
                 break;
             default:
                 Toast.makeText(getBaseContext(),"Something went wrong with the DatePicker", Toast.LENGTH_SHORT).show();

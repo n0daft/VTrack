@@ -30,6 +30,7 @@ android:layout_height="wrap_content">
             android:layout_weight="20"
             android:layout_height="wrap_content"
             android:singleLine="true"
+            android:imeOptions="actionDone"
             android:hint="@string/activity_new_voucher_edittext_name_hint" />
 
 
@@ -55,6 +56,8 @@ android:layout_height="wrap_content">
             android:layout_weight="20"
             android:layout_height="wrap_content"
             android:singleLine="true"
+            android:editable="false"
+            android:imeOptions="actionDone"
             android:hint="@string/activity_new_voucher_edittext_receivedAt_hint"
             android:onClick="handleReceivedAt" />
     </TableRow>
@@ -78,6 +81,8 @@ android:layout_height="wrap_content">
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:singleLine="true"
+            android:editable="false"
+            android:imeOptions="actionDone"
             android:hint="@string/activity_new_voucher_edittext_validUntil_hint"
             android:onClick="handleValidUntil"
             android:layout_weight="20" />
@@ -102,9 +107,9 @@ android:layout_height="wrap_content">
             android:layout_weight="20"
             android:layout_height="wrap_content"
             android:singleLine="true"
+            android:imeOptions="actionDone"
             android:hint="@string/activity_new_voucher_edittext_receivedFrom_hint"
-            android:inputType="text"
-            android:layout_gravity="center_vertical" />
+            android:inputType="text" />
     </TableRow>
 
 
@@ -128,6 +133,7 @@ android:layout_height="wrap_content">
             android:layout_height="wrap_content"
             android:singleLine="true"
             android:hint="@string/activity_new_voucher_edittext_location_hint"
+            android:imeOptions="actionDone"
             android:inputType="text"
             android:layout_gravity="center_vertical" />
     </TableRow>
@@ -149,6 +155,7 @@ android:layout_height="wrap_content">
             android:layout_weight="20"
             android:inputType="textMultiLine"
             android:hint="@string/activity_new_voucher_edittext_notes_hint"
+            android:imeOptions="actionDone"
             android:layout_column="12"
             android:gravity="top" />
     </TableRow>
