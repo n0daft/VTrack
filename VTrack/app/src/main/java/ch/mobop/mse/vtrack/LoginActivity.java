@@ -53,7 +53,7 @@ public class LoginActivity extends FragmentActivity {
         setContentView(R.layout.activity_login);
 
         mDialog = new ProgressDialog(this);
-        mDialog.setMessage("Logging in...");
+        mDialog.setMessage(getString(R.string.dialog_login));
 
         // Todo remove this eventually
         getActionBar().hide();
