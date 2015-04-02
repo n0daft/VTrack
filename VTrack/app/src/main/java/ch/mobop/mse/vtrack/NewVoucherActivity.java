@@ -27,7 +27,6 @@ import com.baasbox.android.SaveMode;
 
 import org.joda.time.DateTime;
 
-import java.text.DateFormat;
 import java.util.Date;
 import java.util.GregorianCalendar;
 
@@ -414,10 +413,10 @@ public class NewVoucherActivity extends FragmentActivity  implements DatePickerF
 
         switch (callerId){
             case 1:
-                lblReceivedAt.setText(DateFormat.getDateInstance().format(cal.getTime()));
+                lblReceivedAt.setText(Config.dateTimeFormatter.print(cal.getTimeInMillis()));
                 break;
             case 2:
-                lblValidUntil.setText(DateFormat.getDateInstance().format(cal.getTime()));
+                lblValidUntil.setText(Config.dateTimeFormatter.print(cal.getTimeInMillis()));
                 break;
             default:
                 Toast.makeText(getBaseContext(),"Something went wrong with the DatePicker", Toast.LENGTH_SHORT).show();

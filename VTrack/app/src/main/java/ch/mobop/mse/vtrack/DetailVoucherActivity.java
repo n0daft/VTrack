@@ -25,7 +25,6 @@ import com.baasbox.android.RequestToken;
 import com.baasbox.android.SaveMode;
 
 import org.joda.time.DateTime;
-import org.joda.time.format.DateTimeFormat;
 import org.joda.time.format.DateTimeFormatter;
 
 import java.util.Date;
@@ -95,7 +94,7 @@ public class DetailVoucherActivity extends FragmentActivity{
         txtVoucherName.setText(voucher.getName());
         txtNotes.setText(voucher.getNotes());
         txtLocation.setText(voucher.getRedeemWhere());
-        DateTimeFormatter formatterVoucher = DateTimeFormat.forPattern("dd.MM.yy");
+        DateTimeFormatter formatterVoucher = Config.dateTimeFormatter;
         txtValidUntil.setText(formatterVoucher.print(voucher.getDateOfexpiration()));
 
         if("for_me".equals(intent.getStringExtra("type"))){

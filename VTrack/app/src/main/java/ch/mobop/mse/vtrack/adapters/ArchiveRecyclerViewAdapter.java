@@ -1,22 +1,17 @@
 package ch.mobop.mse.vtrack.adapters;
 
-import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 
-import org.joda.time.format.DateTimeFormat;
-import org.joda.time.format.DateTimeFormatter;
-
-import java.util.Locale;
-
 import ch.mobop.mse.vtrack.R;
 import ch.mobop.mse.vtrack.adapters.viewholders.ArchiveItemViewHolder;
 import ch.mobop.mse.vtrack.adapters.viewholders.VoucherItemViewHolder;
+import ch.mobop.mse.vtrack.helpers.Config;
+import ch.mobop.mse.vtrack.model.Voucher;
 import ch.mobop.mse.vtrack.model.VoucherForMe;
 import ch.mobop.mse.vtrack.model.VoucherFromMe;
-import ch.mobop.mse.vtrack.model.Voucher;
 
 /**
  * Created by Simon on 24.03.2015.
@@ -36,8 +31,7 @@ public class ArchiveRecyclerViewAdapter extends VoucherRecyclerViewAdapter{
         //General Information
         Voucher item = mItems.get(position);
         itemHolder.setTxtVoucherName(item.getName());
-        DateTimeFormatter format = DateTimeFormat.forPattern("dd.MM.yy").withLocale(Locale.GERMAN);
-        itemHolder.setTxtDate(format.print(item.getRedeemedAt()));
+        itemHolder.setTxtDate(Config.dateTimeFormatter.print(item.getRedeemedAt()));
 
         itemHolder.setFlValidityStatus(View.GONE);
 

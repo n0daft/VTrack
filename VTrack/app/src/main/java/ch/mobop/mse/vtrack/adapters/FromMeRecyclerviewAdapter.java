@@ -6,14 +6,10 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 
-import org.joda.time.format.DateTimeFormat;
-import org.joda.time.format.DateTimeFormatter;
-
-import java.util.Locale;
-
 import ch.mobop.mse.vtrack.R;
 import ch.mobop.mse.vtrack.adapters.viewholders.FromMeItemViewHolder;
 import ch.mobop.mse.vtrack.adapters.viewholders.VoucherItemViewHolder;
+import ch.mobop.mse.vtrack.helpers.Config;
 import ch.mobop.mse.vtrack.model.VoucherFromMe;
 
 /**
@@ -35,8 +31,7 @@ public class FromMeRecyclerViewAdapter extends VoucherRecyclerViewAdapter {
 
         itemHolder.setTxtVoucherName(item.getName());
         itemHolder.setTxtPerson(item.getGivenTo());
-        DateTimeFormatter format = DateTimeFormat.forPattern("dd.MM.yy").withLocale(Locale.GERMAN);
-        itemHolder.setTxtDate(format.print(item.getDateOfexpiration()));
+        itemHolder.setTxtDate(Config.dateTimeFormatter.print(item.getDateOfexpiration()));
         itemHolder.setivArchiveStatusTrue(View.GONE);
         itemHolder.setivArchiveStatusFalse(View.GONE);
 
