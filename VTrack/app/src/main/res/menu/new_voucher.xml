@@ -4,14 +4,14 @@
 
     <item
         android:id="@+id/action_new_voucher_cancel"
+        android:icon="@drawable/ic_action_cancel"
         android:showAsAction="ifRoom"
-        android:title="Cancel"/>
+        android:title="@string/menu_new_voucher_item_cancel"/>
 
     <item
     android:id="@+id/action_new_voucher_save"
+    android:icon="@drawable/ic_action_save"
     android:showAsAction="ifRoom"
-    android:title="Save"/>
-
-
+    android:title="@string/menu_new_voucher_item_save"/>
 
 </menu>

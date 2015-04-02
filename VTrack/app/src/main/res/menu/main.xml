@@ -5,7 +5,7 @@
         android:id="@+id/action_new_voucher"
         android:icon="@drawable/ic_action_new"
         android:showAsAction="ifRoom"
-        android:title="New Voucher"/>
+        android:title="@string/menu_main_new_popup_item_newVoucher"/>
 
     <item
         android:id="@+id/action_overflow"

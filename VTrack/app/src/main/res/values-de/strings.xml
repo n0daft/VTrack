@@ -4,9 +4,18 @@
     <string name="app_name">VTrack</string>
     <string name="action_contact">Contact</string>
 
+    <!-- Activity titles -->
+    <string name="activity_login_title">Anmleden</string>
+    <string name="activity_newVoucher_title">Neuer Gutschein</string>
+    <string name="activity_voucherDetails_title">Details</string>
+    <string name="activity_settings_title">Einstellungen</string>
+
     <!-- Strings related to login -->
     <string name="prompt_username">Benutzername</string>
     <string name="prompt_password">Passwort</string>
+
+    <string name="activity_login_button_login">Einloggen</string>
+    <string name="activity_login_button_register">Registrieren</string>
 
     <string name="action_sign_in_register"><b>Sign in</b> or register</string>
     <string name="action_sign_in_short">Anmelden</string>
@@ -40,12 +49,37 @@
     <string name="activity_new_voucher_edittext_receivedFrom_hint">Beschenker hinzufügen</string>
     <string name="activity_new_voucher_edittext_location_hint">Ort hinzufügen</string>
     <string name="activity_new_voucher_edittext_notes_hint">Kommentar hinzufügen</string>
+    <string name="activity_new_voucher_edittext_givento_hint">Empfänger hinzufügen</string>
+    <string name="activity_new_voucher_edittext_dataOfDelivery_hint">verschenkt am</string>
     <string name="activity_settings_textview_language">Sprache</string>
     <string name="activity_settings_textview_colors">Menüfarbe</string>
 
     <string name="menu_voucher_detail_delete_item_delete">Löschen</string>
     <string name="menu_voucher_detail_popup_item_redeemed">Eingelöst</string>
     <string name="menu_voucher_detail_popup_item_expired">Nicht eingelöst</string>
+
+    <string name="menu_main_new_popup_item_newVoucher">Gutschein erfassen</string>
+    <string name="menu_main_popup_item_settings">Einstellungen</string>
+    <string name="menu_main_popup_item_logout">Abmelden</string>
+
+    <string name="menu_new_voucher_item_cancel">Abbrechen</string>
+    <string name="menu_new_voucher_item_save">Speichern</string>
+
+    <!-- Dialogs -->
+    <string name="dialog_uploading">Lade hoch...</string>
+    <string name="dialog_signup">Registrieren...</string>
+    <string name="dialog_login">Anmelden...</string>
+
+    <!-- Feedback -->
+    <string name="toast_voucherAdded">Gutschein hinzugefügt</string>
+    <string name="toast_addVoucherFailure">Hinzufügen fehgeschlagen</string>
+    <string name="toast_addVoucherCanceled">Hinzufügen abgebrochen</string>
+
+    <!-- General String -->
+    <string name="general_from">von</string>
+    <string name="general_for">für</string>
+
+
 
     <string-array name="language_array">
         <item>Deutsch</item>

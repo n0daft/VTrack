@@ -112,13 +112,13 @@ public class NewVoucherActivity extends FragmentActivity  implements DatePickerF
         }
 
         if("from_me".equals(intent.getStringExtra("type"))){
-            txtReceivedFrom.setHint("add given to");
-            lblReceivedAt.setHint("add date of delivery'");
+            txtReceivedFrom.setHint(getString(R.string.activity_new_voucher_edittext_givento_hint));
+            lblReceivedAt.setHint(getString(R.string.activity_new_voucher_edittext_dataOfDelivery_hint));
         }
 
 
         mDialog = new ProgressDialog(this);
-        mDialog.setMessage("Uploading...");
+        mDialog.setMessage(getString(R.string.dialog_uploading));
 
     }
 

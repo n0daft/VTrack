@@ -20,19 +20,19 @@
             </intent-filter>
         </activity>
         <activity android:name=".LoginActivity"
-            android:label="Log in"
+            android:label="@string/activity_login_title"
             android:windowSoftInputMode="adjustResize|stateVisible" >
         </activity>
         <activity android:name=".NewVoucherActivity"
-            android:label="New Voucher"
+            android:label="@string/activity_newVoucher_title"
             android:windowSoftInputMode="adjustResize|stateVisible" >
             </activity>
         <activity android:name=".DetailVoucherActivity"
-            android:label="Voucher Details"
+            android:label="@string/activity_voucherDetails_title"
             android:windowSoftInputMode="stateHidden">
         </activity>
         <activity android:name=".SettingsActivity"
-            android:label="Settings"
+            android:label="@string/activity_settings_title"
             android:windowSoftInputMode="stateHidden">
         </activity>
     </application>

@@ -1,28 +1,21 @@
 package ch.mobop.mse.vtrack;
 
-import android.animation.Animator;
-import android.animation.AnimatorListenerAdapter;
-import android.annotation.TargetApi;
+import android.app.AlertDialog;
 import android.app.ProgressDialog;
+import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.drawable.ColorDrawable;
-import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 import android.text.TextUtils;
 import android.util.Log;
-import android.view.KeyEvent;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.View;
-import android.view.inputmethod.EditorInfo;
 import android.widget.EditText;
 import android.widget.TextView;
-
-import android.app.AlertDialog;
-import android.view.LayoutInflater;
-import android.content.Context;
-import android.content.DialogInterface;
 
 import com.baasbox.android.BaasHandler;
 import com.baasbox.android.BaasResult;
@@ -242,11 +235,11 @@ public class LoginActivity extends FragmentActivity {
         BaasUser user = BaasUser.withUserName(mUsername);
         user.setPassword(mPassword);
         if (newUser) {
-            mDialog.setMessage("Signing up...");
+            mDialog.setMessage(getString(R.string.dialog_signup));
             if(!mDialog.isShowing())mDialog.show();
             mSignupOrLogin=user.signup(onComplete);
         } else {
-            mDialog.setMessage("Logging in...");
+            mDialog.setMessage(getString(R.string.dialog_login));
             if(!mDialog.isShowing())mDialog.show();
             mSignupOrLogin=user.login(onComplete);
         }

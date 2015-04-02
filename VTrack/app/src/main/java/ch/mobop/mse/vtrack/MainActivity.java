@@ -17,10 +17,9 @@
 package ch.mobop.mse.vtrack;
 
 import android.app.ActionBar;
-import android.content.Intent;
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
-import android.content.SharedPreferences.Editor;
 import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
 import android.graphics.drawable.LayerDrawable;
@@ -38,7 +37,6 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.PopupMenu;
 import android.widget.Toast;
-
 
 import com.astuetz.PagerSlidingTabStrip;
 import com.baasbox.android.BaasBox;
@@ -218,15 +216,15 @@ public class MainActivity extends FragmentActivity {
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (requestCode==NEW_CODE){
             if (resultCode==RESULT_OK){
-                Toast.makeText(this, "Added Voucher", Toast.LENGTH_LONG).show();
+                Toast.makeText(this, getString(R.string.toast_voucherAdded), Toast.LENGTH_LONG).show();
                 if(ForMeFragment != null){ForMeFragment.refreshDocuments(true);}
                 if(FromMeFragment != null){FromMeFragment.refreshDocuments(true);}
             } else if(resultCode==NewVoucherActivity.RESULT_SESSION_EXPIRED){
                 startLoginScreen();
             } else if (resultCode==NewVoucherActivity.RESULT_FAILED){
-                Toast.makeText(this, "Failed to add voucher", Toast.LENGTH_LONG).show();
+                Toast.makeText(this, getString(R.string.toast_addVoucherFailure), Toast.LENGTH_LONG).show();
             } else if (resultCode==NewVoucherActivity.RESULT_CANCELED){
-                Toast.makeText(this, "Canceled new voucher", Toast.LENGTH_LONG).show();
+                Toast.makeText(this, getString(R.string.toast_addVoucherCanceled), Toast.LENGTH_LONG).show();
             }
         }else {
             super.onActivityResult(requestCode, resultCode, data);
