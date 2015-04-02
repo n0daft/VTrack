@@ -43,7 +43,7 @@ public class ArchiveRecyclerViewAdapter extends VoucherRecyclerViewAdapter{
 
         if(mItems.get(position) instanceof VoucherForMe){
             VoucherForMe itemForMe = (VoucherForMe) mItems.get(position);
-            String tmp = "from "+itemForMe.getReceivedBy();
+            String tmp =  "from "+itemForMe.getReceivedBy();
             itemHolder.setTxtPerson(tmp);
         }else{
             VoucherFromMe itemFromMe = (VoucherFromMe) mItems.get(position);

@@ -63,13 +63,13 @@
             android:id="@+id/ivValidityArchiveStatusTrue"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:src="@drawable/btn_check_buttonless_on"/>
+            android:src="@drawable/ic_action_accept_green"/>
 
         <ImageView
             android:id="@+id/ivValidityArchiveStatusFalse"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:src="@drawable/ic_delete"/>
+            android:src="@drawable/ic_action_cancel_red"/>
 
     </LinearLayout>
 
