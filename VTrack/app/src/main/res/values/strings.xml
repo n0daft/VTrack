@@ -77,11 +77,11 @@
     <string name="toast_voucherAdded">Voucher added</string>
     <string name="toast_addVoucherFailure">Failed to add voucher</string>
     <string name="toast_addVoucherCanceled">Canceled new voucher</string>
+    <string name="toast_no_connection">Error while talking to the server</string>
 
     <!-- General String -->
     <string name="general_from">from</string>
     <string name="general_for">for</string>
-
 
 
     <string-array name="language_array">

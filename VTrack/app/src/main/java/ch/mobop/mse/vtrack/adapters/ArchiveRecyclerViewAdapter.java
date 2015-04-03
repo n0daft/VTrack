@@ -37,8 +37,10 @@ public class ArchiveRecyclerViewAdapter extends VoucherRecyclerViewAdapter{
 
         if(item.isRedeemed()){
             itemHolder.setivArchiveStatusFalse(View.GONE);
+            itemHolder.setivArchiveStatusTrue(View.VISIBLE);
         }else{
             itemHolder.setivArchiveStatusTrue(View.GONE);
+            itemHolder.setivArchiveStatusFalse(View.VISIBLE);
         }
 
         if(mItems.get(position) instanceof VoucherForMe){

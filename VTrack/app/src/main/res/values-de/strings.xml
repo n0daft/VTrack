@@ -75,6 +75,7 @@
     <string name="toast_voucherAdded">Gutschein hinzugefügt</string>
     <string name="toast_addVoucherFailure">Hinzufügen fehgeschlagen</string>
     <string name="toast_addVoucherCanceled">Hinzufügen abgebrochen</string>
+    <string name="toast_no_connection">Keine Verbindung zum Server</string>
 
     <!-- General String -->
     <string name="general_from">von</string>

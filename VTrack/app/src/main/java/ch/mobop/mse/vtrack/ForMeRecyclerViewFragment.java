@@ -91,7 +91,7 @@ public class ForMeRecyclerViewFragment extends Fragment implements AdapterView.O
         recyclerView.setAdapter(adapter);
 
         mDialog = new ProgressDialog(this.getActivity());
-        mDialog.setMessage("Refreshing...");
+        mDialog.setMessage(getString(R.string.dialog_refreshing));
 
         //Load all Items from Server
         filter = BaasQuery.builder().orderBy("dateOfexpiration").where("type='for_me' and archive='false'").criteria();
@@ -167,11 +167,15 @@ public class ForMeRecyclerViewFragment extends Fragment implements AdapterView.O
         }
     }
 
+    /*
+     *  Download all vouchers with ForMe filter and refresh the archive list.
+     *  Use onRefresh Handler as Callback method.
+     */
     public void refreshDocuments(boolean setSpinner){
         if (getUserVisibleHint() && setSpinner){
             if(!mDialog.isShowing())mDialog.show();
         }
-        mRefresh = BaasDocument.fetchAll("vtrack", filter, onRefresh);
+        mRefresh = BaasDocument.fetchAll(Constants.COLLECTION_NAME, filter, onRefresh);
     }
 
     private final BaasHandler<List<BaasDocument>>
@@ -183,7 +187,7 @@ public class ForMeRecyclerViewFragment extends Fragment implements AdapterView.O
             if(mDialog.isShowing())mDialog.dismiss();
 
             try {
-                //Clear list and add new objects
+
                 Iterator it = result.get().iterator();
                 voucherForMeList.clear();
 
@@ -201,7 +205,6 @@ public class ForMeRecyclerViewFragment extends Fragment implements AdapterView.O
                     voucherForMeList.add(new VoucherForMe(name,receivedBy,dateOfReceipt,dateOfExpiration,redeemedWhere,notes,redeemedAt,id));
                 }
 
-                //onRefresh is asynchron and updates the display here
                 mSwipeRefreshLayout.setRefreshing(false);
                 adapter.setItemList(voucherForMeList);
 
@@ -209,7 +212,7 @@ public class ForMeRecyclerViewFragment extends Fragment implements AdapterView.O
                 startLoginScreen();
             }catch (BaasException e){
                 Log.e("LOGERR", "Error " + e.getMessage(), e);
-                Toast.makeText(getActivity(),"Error while talking to the server",Toast.LENGTH_LONG).show();
+                Toast.makeText(getActivity(),getString(R.string.toast_no_connection),Toast.LENGTH_LONG).show();
             }
         }
     };

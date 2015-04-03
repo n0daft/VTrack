@@ -24,8 +24,6 @@ import com.baasbox.android.BaasResult;
 import com.baasbox.android.RequestToken;
 
 import org.joda.time.DateTime;
-import org.joda.time.format.DateTimeFormat;
-import org.joda.time.format.DateTimeFormatter;
 
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -52,14 +50,16 @@ public class FromMeRecyclerViewFragment extends Fragment implements AdapterView.
     private RequestToken mRefresh;
     private ArchiveListenerFromMe listener;
 
-    //Listener to communicate with Archive Fragment
+    // Listener to communicate with Archive Fragment.
     public interface ArchiveListenerFromMe {
         public void voucherArchived();
     }
 
+
     public void setArchiveListener(ArchiveListenerFromMe listener) {
         this.listener = listener;
     }
+
 
     public static FromMeRecyclerViewFragment newInstance() {
         FromMeRecyclerViewFragment fragment = new FromMeRecyclerViewFragment();
@@ -68,15 +68,15 @@ public class FromMeRecyclerViewFragment extends Fragment implements AdapterView.
         return fragment;
     }
 
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
     }
 
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-
-        System.out.println("FromMe Create");
         View rootView = inflater.inflate(R.layout.fragment_received, container, false);
 
         recyclerView = (RecyclerView) rootView.findViewById(R.id.section_list);
@@ -93,9 +93,9 @@ public class FromMeRecyclerViewFragment extends Fragment implements AdapterView.
         recyclerView.setAdapter(adapter);
 
         mDialog = new ProgressDialog(this.getActivity());
-        mDialog.setMessage("Refreshing...");
+        mDialog.setMessage(getString(R.string.dialog_refreshing));
 
-        //Load all Items from Server
+        // Load all Items from Server with a filter and set list.
         filter = BaasQuery.builder().orderBy("dateOfexpiration").where("type='from_me' and archive='false'").criteria();
         if(voucherFromMeList == null) {
             voucherFromMeList = new ArrayList<>();
@@ -116,12 +116,14 @@ public class FromMeRecyclerViewFragment extends Fragment implements AdapterView.
         return rootView;
     }
 
+
     @Override
     public void onResume() {
         super.onResume();
         System.out.println("FromMe Resume");
         //Due to anonymous tab fragments we reload the data not here
     }
+
 
     @Override
     public void onPause() {
@@ -131,6 +133,7 @@ public class FromMeRecyclerViewFragment extends Fragment implements AdapterView.
         }
     }
 
+
     @Override
     public void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
@@ -139,16 +142,14 @@ public class FromMeRecyclerViewFragment extends Fragment implements AdapterView.
         }
     }
 
+    
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-
-        // Implement Intent to edit a voucher
         Intent intent = new Intent(getActivity(),DetailVoucherActivity.class);
         Bundle bundle = new Bundle();
         bundle.putParcelable("voucherParcelable", voucherFromMeList.get(position));
         intent.putExtras(bundle);
         intent.putExtra("type","from_me");
-
         startActivityForResult(intent, Constants.DETAIL_CODE);
     }
 
@@ -156,12 +157,11 @@ public class FromMeRecyclerViewFragment extends Fragment implements AdapterView.
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (requestCode== Constants.DETAIL_CODE){
             if (resultCode==DetailVoucherActivity.RESULT_OK){
-                //A voucher was edited, do a refresh
                 if(!mDialog.isShowing())mDialog.show();
                 refreshDocuments(true);
             }
             if (resultCode==Constants.RESULT_ARCHIVED){
-                //Refresh Archive Fragment and this
+                // Refresh Archive Fragment and this.
                 refreshDocuments(true);
                 if (null != listener) {listener.voucherArchived();}
             }
@@ -174,7 +174,7 @@ public class FromMeRecyclerViewFragment extends Fragment implements AdapterView.
         if (getUserVisibleHint() && setSpinner){
             if(!mDialog.isShowing())mDialog.show();
         }
-        mRefresh = BaasDocument.fetchAll("vtrack", filter, onRefresh);
+        mRefresh = BaasDocument.fetchAll(Constants.COLLECTION_NAME, filter, onRefresh);
     }
 
     private final BaasHandler<List<BaasDocument>>
@@ -187,7 +187,6 @@ public class FromMeRecyclerViewFragment extends Fragment implements AdapterView.
 
             try {
 
-                //Clear list and add new objects
                 Iterator it = result.get().iterator();
                 voucherFromMeList.clear();
 
@@ -205,7 +204,6 @@ public class FromMeRecyclerViewFragment extends Fragment implements AdapterView.
                     voucherFromMeList.add(new VoucherFromMe(name,givenTo,dateOfDelivery,dateOfExpiration,redeemedWhere,notes,redeemedAt,id));
                 }
 
-                //onRefresh is asynchron and updates the display here
                 mSwipeRefreshLayout.setRefreshing(false);
                 adapter.setItemList(voucherFromMeList);
 
@@ -213,7 +211,7 @@ public class FromMeRecyclerViewFragment extends Fragment implements AdapterView.
                 startLoginScreen();
             }catch (BaasException e){
                 Log.e("LOGERR", "Error " + e.getMessage(), e);
-                Toast.makeText(getActivity(),"Error while talking to the server",Toast.LENGTH_LONG).show();
+                Toast.makeText(getActivity(),getString(R.string.toast_no_connection),Toast.LENGTH_LONG).show();
             }
         }
     };

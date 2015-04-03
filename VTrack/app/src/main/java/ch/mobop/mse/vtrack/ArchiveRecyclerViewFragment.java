@@ -23,8 +23,6 @@ import com.baasbox.android.BaasResult;
 import com.baasbox.android.RequestToken;
 
 import org.joda.time.DateTime;
-import org.joda.time.format.DateTimeFormat;
-import org.joda.time.format.DateTimeFormatter;
 
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -32,13 +30,14 @@ import java.util.List;
 
 import ch.mobop.mse.vtrack.adapters.ArchiveRecyclerViewAdapter;
 import ch.mobop.mse.vtrack.decorators.DividerDecoration;
+import ch.mobop.mse.vtrack.helpers.Config;
 import ch.mobop.mse.vtrack.helpers.Constants;
 import ch.mobop.mse.vtrack.model.Voucher;
 import ch.mobop.mse.vtrack.model.VoucherForMe;
 import ch.mobop.mse.vtrack.model.VoucherFromMe;
 
 /**
- * Created by Simon on 24.03.2015.
+ * Methods for the Archive Fragment.
  */
 public class ArchiveRecyclerViewFragment extends Fragment implements AdapterView.OnItemClickListener{
 
@@ -83,7 +82,7 @@ public class ArchiveRecyclerViewFragment extends Fragment implements AdapterView
         mDialog = new ProgressDialog(this.getActivity());
         mDialog.setMessage(getString(R.string.dialog_refreshing));
 
-        //Load all Items from Server
+        // Load all Items from Server only if there are no Objects saved.
         filter = BaasQuery.builder().orderBy("redeemedAt desc").where("archive='true'").criteria();
         if(voucherList == null) {
             voucherList = new ArrayList<>();
@@ -104,16 +103,21 @@ public class ArchiveRecyclerViewFragment extends Fragment implements AdapterView
         return rootView;
     }
 
+
     @Override
     public void onResume() {
         super.onResume();
         // Due to anonymous tab fragments we reload the data not here.
     }
 
+
+    /*
+     *  Create an intent to start the detail view of a voucher.
+     *  Passing data via parcable voucher object.
+     */
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 
-        // Implement Intent to edit a voucher
         Intent intent = new Intent(getActivity(),DetailVoucherActivity.class);
         Bundle bundle = new Bundle();
         bundle.putParcelable("voucherParcelable", voucherList.get(position));
@@ -128,11 +132,12 @@ public class ArchiveRecyclerViewFragment extends Fragment implements AdapterView
         startActivityForResult(intent, Constants.DETAIL_CODE);
     }
 
+
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (requestCode== Constants.DETAIL_CODE){
             if (resultCode==DetailVoucherActivity.RESULT_OK){
-                //If voucher gets deleted
+                // If voucher gets deleted reload the data.
                 if(!mDialog.isShowing())mDialog.show();
                 refreshDocuments(true);
             }
@@ -141,13 +146,15 @@ public class ArchiveRecyclerViewFragment extends Fragment implements AdapterView
         }
     }
 
-
-
+    /*                                                          
+     *  Download all vouchers with archive filter and refresh the archive list.    
+     *  Use onRefresh Handler as Callback method.
+     */                                                           
     public void refreshDocuments(boolean setSpinner){
         if (getUserVisibleHint() && setSpinner){
             if(!mDialog.isShowing())mDialog.show();
         }
-        mRefresh = BaasDocument.fetchAll("vtrack", filter, onRefresh);
+        mRefresh = BaasDocument.fetchAll(Constants.COLLECTION_NAME, filter, onRefresh);
     }
 
     private final BaasHandler<List<BaasDocument>>
@@ -160,42 +167,37 @@ public class ArchiveRecyclerViewFragment extends Fragment implements AdapterView
 
             try {
                 Iterator it = result.get().iterator();
-                DateTimeFormatter formatter = DateTimeFormat.forPattern("yyyy.MM.dd");
 
-                //Clear Lists
                 voucherList.clear();
 
                 while(it.hasNext()){
                     BaasDocument doc = (BaasDocument) it.next();
                     DateTime redeemedAt = null;
                     if(!doc.getString("redeemedAt").equals("")){
-                        redeemedAt = formatter.parseDateTime(doc.getString("redeemedAt"));
+                        redeemedAt = Config.dateTimeFormatterBaas.parseDateTime(doc.getString("redeemedAt"));
                     }
 
-                    DateTime  dateOfexpiration = formatter.parseDateTime(doc.getString("dateOfexpiration"));
+                    DateTime  dateOfexpiration = Config.dateTimeFormatterBaas.parseDateTime(doc.getString("dateOfexpiration"));
                     String name = doc.getString("name");
                     String notes = doc.getString("notes");
                     String redeemedWhere = doc.getString("redeemedWhere");
                     String id = doc.getId();
 
                     if(doc.getString("type").equals("for_me")){
-                        DateTime dateOfReceipt = formatter.parseDateTime(doc.getString("dateOfReceipt"));
+                        DateTime dateOfReceipt = Config.dateTimeFormatterBaas.parseDateTime(doc.getString("dateOfReceipt"));
                         String receivedBy = doc.getString("receivedBy");
                         VoucherForMe voucher = new VoucherForMe(name,receivedBy,dateOfReceipt,dateOfexpiration,redeemedWhere,notes,redeemedAt,id);
                         voucher.setRedeemed(Boolean.valueOf(doc.getString("redeemed")));
                         voucherList.add(voucher);
                     }else{
-                        DateTime dateOfDelivery = formatter.parseDateTime(doc.getString("dateOfDelivery"));
+                        DateTime dateOfDelivery = Config.dateTimeFormatterBaas.parseDateTime(doc.getString("dateOfDelivery"));
                         String givenTo = doc.getString("givenTo");
                         VoucherFromMe voucher = new VoucherFromMe(name,givenTo,dateOfDelivery,dateOfexpiration,redeemedWhere,notes,redeemedAt,id);
                         voucher.setRedeemed(Boolean.valueOf(doc.getString("redeemed")));
                         voucherList.add(voucher);
                     }
-
-
                 }
 
-                //onRefresh is asynchron
                 mSwipeRefreshLayout.setRefreshing(false);
                 adapter.setItemList(voucherList);
 
@@ -203,10 +205,11 @@ public class ArchiveRecyclerViewFragment extends Fragment implements AdapterView
                 startLoginScreen();
             }catch (BaasException e){
                 Log.e("LOGERR", "Error " + e.getMessage(), e);
-                Toast.makeText(getActivity(),"Error while talking to the server",Toast.LENGTH_LONG).show();
+                Toast.makeText(getActivity(),getString(R.string.toast_no_connection),Toast.LENGTH_LONG).show();
             }
         }
     };
+
 
     private void startLoginScreen(){
         Intent intent = new Intent(this.getActivity(),LoginActivity.class);
