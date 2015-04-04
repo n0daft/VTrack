@@ -142,7 +142,11 @@ public class FromMeRecyclerViewFragment extends Fragment implements AdapterView.
         }
     }
 
-    
+
+    /*
+     *  Create an intent to start the detail view of a voucher.
+     *  Passing data via parcable voucher object.
+     */
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
         Intent intent = new Intent(getActivity(),DetailVoucherActivity.class);
@@ -152,6 +156,7 @@ public class FromMeRecyclerViewFragment extends Fragment implements AdapterView.
         intent.putExtra("type","from_me");
         startActivityForResult(intent, Constants.DETAIL_CODE);
     }
+
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -170,6 +175,11 @@ public class FromMeRecyclerViewFragment extends Fragment implements AdapterView.
         }
     }
 
+
+    /*
+     *  Download all vouchers with FromMe filter and refresh the archive list.
+     *  Use onRefresh Handler as Callback method.
+     */
     public void refreshDocuments(boolean setSpinner){
         if (getUserVisibleHint() && setSpinner){
             if(!mDialog.isShowing())mDialog.show();

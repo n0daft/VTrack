@@ -136,10 +136,13 @@ public class ForMeRecyclerViewFragment extends Fragment implements AdapterView.O
         }
     }
 
+
+    /*
+     *  Create an intent to start the detail view of a voucher.
+     *  Passing data via parcable voucher object.
+     */
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-
-        // Implement Intent to edit a voucher
         Intent intent = new Intent(getActivity(),DetailVoucherActivity.class);
         Bundle bundle = new Bundle();
         bundle.putParcelable("voucherParcelable", voucherForMeList.get(position));
@@ -148,6 +151,7 @@ public class ForMeRecyclerViewFragment extends Fragment implements AdapterView.O
 
         startActivityForResult(intent, Constants.DETAIL_CODE);
     }
+
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {

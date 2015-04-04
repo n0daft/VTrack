@@ -6,6 +6,7 @@
 
     <!-- Activity titles -->
     <string name="activity_login_title">Anmleden</string>
+    <string name="activity_signup_title">Registrieren</string>
     <string name="activity_newVoucher_title">Neuer Gutschein</string>
     <string name="activity_voucherDetails_title">Details</string>
     <string name="activity_settings_title">Einstellungen</string>
@@ -13,11 +14,13 @@
     <!-- Strings related to login -->
     <string name="prompt_username">Benutzername</string>
     <string name="prompt_password">Passwort</string>
+    <string name="prompt_password2">Passwort wiederholen</string>
 
     <string name="activity_login_button_login">Einloggen</string>
     <string name="activity_login_button_register">Registrieren</string>
+    <string name="activity_login_button_signup">Anmelden</string>
 
-    <string name="action_sign_in_register"><b>Sign in</b> or register</string>
+    <string name="action_sign_in_register"><b>Einloggen</b> or register</string>
     <string name="action_sign_in_short">Anmelden</string>
 
     <string name="action_forgot_password">Passwort zurücksetzen</string>
@@ -28,6 +31,7 @@
     <string name="error_invalid_password">Das Passwort ist zu kurz</string>
     <string name="error_incorrect_password">Das Passwort ist falsch</string>
     <string name="error_field_required">Dieses Feld wird benötigt</string>
+    <string name="error_user_exists">Dieser Benutzer existiert bereits</string>
 
     <string name="activity_main_actionbaritem_received">Erhalten</string>
     <string name="activity_main_actionbaritem_givenAway">Verschenkt</string>

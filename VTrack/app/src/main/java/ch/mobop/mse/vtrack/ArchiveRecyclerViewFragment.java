@@ -111,6 +111,24 @@ public class ArchiveRecyclerViewFragment extends Fragment implements AdapterView
     }
 
 
+    @Override
+    public void onPause() {
+        super.onPause();
+        if (mDialog.isShowing()){
+            mDialog.dismiss();
+        }
+    }
+
+
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        if (mRefresh!=null){
+            mRefresh.suspendAndSave(outState,Constants.REFRESH_TOKEN_KEY);
+        }
+    }
+
+
     /*
      *  Create an intent to start the detail view of a voucher.
      *  Passing data via parcable voucher object.

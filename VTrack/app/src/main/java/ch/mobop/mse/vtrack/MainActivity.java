@@ -232,7 +232,6 @@ public class MainActivity extends FragmentActivity {
     }
 
     private void startLoginScreen(){
-        //mDoRefresh = false;
         Intent intent = new Intent(this,LoginActivity.class);
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         startActivity(intent);

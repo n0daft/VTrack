@@ -7,15 +7,18 @@
     <!-- Strings related to login -->
     <string name="prompt_username">Username</string>
     <string name="prompt_password">Password</string>
+    <string name="prompt_password2">Retype password</string>
 
     <!-- Activity titles -->
     <string name="activity_login_title">Log in</string>
+    <string name="activity_signup_title">Sign up</string>
     <string name="activity_newVoucher_title">New Voucher</string>
     <string name="activity_voucherDetails_title">Details</string>
     <string name="activity_settings_title">Settings</string>
 
     <string name="activity_login_button_login">Sign in</string>
     <string name="activity_login_button_register">Register</string>
+    <string name="activity_login_button_signup">Sign up</string>
 
     <string name="action_sign_in_register"><b>Sign in</b> or register</string>
     <string name="action_sign_in_short">Sign in</string>
@@ -28,7 +31,7 @@
     <string name="error_invalid_password">This password is too short</string>
     <string name="error_incorrect_password">This password is incorrect</string>
     <string name="error_field_required">This field is required</string>
-
+    <string name="error_user_exists">This user already exists</string>
 
     <string name="activity_main_actionbaritem_received">Received</string>
     <string name="activity_main_actionbaritem_givenAway">Given away</string>
