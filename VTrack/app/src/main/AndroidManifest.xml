@@ -23,6 +23,10 @@
             android:label="@string/activity_login_title"
             android:windowSoftInputMode="adjustResize|stateVisible" >
         </activity>
+        <activity android:name=".SignupActivity"
+            android:label="@string/activity_signup_title"
+            android:windowSoftInputMode="adjustResize|stateVisible" >
+        </activity>
         <activity android:name=".NewVoucherActivity"
             android:label="@string/activity_newVoucher_title"
             android:windowSoftInputMode="adjustResize|stateVisible" >

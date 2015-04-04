@@ -37,7 +37,6 @@
     <string name="activity_main_actionbaritem_givenAway">Given away</string>
     <string name="activity_main_actionbaritem_archive">Archive</string>
 
-
     <string name="activity_detail_voucher_textview_name">Name</string>
     <string name="activity_detail_voucher_textview_defaultHint">-</string>
     <string name="activity_detail_voucher_textview_receivedAt">Received at</string>

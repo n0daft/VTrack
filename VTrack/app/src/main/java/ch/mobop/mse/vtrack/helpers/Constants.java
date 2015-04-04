@@ -7,6 +7,7 @@ package ch.mobop.mse.vtrack.helpers;
 public class Constants {
 
     public final static String REFRESH_TOKEN_KEY = "refresh";
+    public final static String SIGNUP_TOKEN_KEY = "signup_token_key";
     public final static int DETAIL_CODE = 2;
     public final static int RESULT_ARCHIVED = 5;
     public final static String MyPREFERENCES = "VTrackPrefs";

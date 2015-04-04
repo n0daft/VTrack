@@ -1,9 +1,7 @@
 package ch.mobop.mse.vtrack;
 
-import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.drawable.ColorDrawable;
@@ -11,11 +9,9 @@ import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 import android.text.TextUtils;
 import android.util.Log;
-import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.View;
 import android.widget.EditText;
-import android.widget.TextView;
 
 import com.baasbox.android.BaasHandler;
 import com.baasbox.android.BaasResult;
@@ -30,18 +26,12 @@ import ch.mobop.mse.vtrack.helpers.Constants;
  * Created by Simon on 24.03.2015.
  */
 public class LoginActivity extends FragmentActivity {
-    private final static String SIGNUP_TOKEN_KEY = "signup_token_key";
 
     private String mUsername;
     private String mPassword;
-
     private EditText mUserView;
     private EditText mPasswordView;
-    private TextView dialogError;
     private ProgressDialog mDialog;
-
-    // Password Dialog
-    final Context context = this;
 
     private RequestToken mSignupOrLogin;
 
@@ -61,7 +51,7 @@ public class LoginActivity extends FragmentActivity {
         getActionBar().setBackgroundDrawable(color);
 
         if (savedInstanceState!=null){
-            mSignupOrLogin = savedInstanceState.getParcelable(SIGNUP_TOKEN_KEY);
+            mSignupOrLogin = savedInstanceState.getParcelable(Constants.SIGNUP_TOKEN_KEY);
         }
 
         mUserView = (EditText) findViewById(R.id.email);
@@ -70,69 +60,17 @@ public class LoginActivity extends FragmentActivity {
         findViewById(R.id.register_label).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
-                // get dailog_password.xml view
-                LayoutInflater li = LayoutInflater.from(context);
-                final View promptsView = li.inflate(R.layout.dialog_password, null);
-
-                AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(
-                        context);
-
-                // set prompts.xml to alertdialog builder
-                alertDialogBuilder.setView(promptsView);
-
-                final EditText passwordCheck = (EditText) promptsView
-                        .findViewById(R.id.editTextDialogUserInput);
-
-                // set dialog message
-                alertDialogBuilder
-                        .setCancelable(false)
-                        .setPositiveButton("OK",
-                                new DialogInterface.OnClickListener() {
-                                    public void onClick(DialogInterface dialog,
-                                                        int id) {
-                                        //Do nothing here because we override this button later to change the close behaviour.
-                                        //However, we still need this because on older versions of Android unless we
-                                        //pass a handler the button doesn't get instantiated
-                                        //result.setText(userInput.getText());
-                                    }
-                                })
-                        .setNegativeButton("Cancel",
-                                new DialogInterface.OnClickListener() {
-                                    public void onClick(DialogInterface dialog,
-                                                        int id) {
-                                        dialog.cancel();
-                                    }
-                                });
-
-                // create alert dialog
-                final AlertDialog alertDialog = alertDialogBuilder.create();
-
-                // show it
-                alertDialog.show();
-
-                //Overwrite the OK button
-                alertDialog.getButton(AlertDialog.BUTTON_POSITIVE).setOnClickListener(new View.OnClickListener(){
-                    @Override
-                    public void onClick(View v)
-                    {
-                        if(passwordCheck.getText().toString().equals(mPasswordView.getText().toString())){
-                            alertDialog.dismiss();
-                            attemptLogin(true);
-                        }else{
-                            dialogError = (TextView) promptsView.findViewById(R.id.txtError);
-                            dialogError.setText("Password doesn't match");
-                        }
-                    }
-                });
-
+                Intent intent = new Intent(getApplicationContext(),SignupActivity.class);
+                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                startActivity(intent);
+                finish();
             }
         });
 
         findViewById(R.id.sign_in_button).setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v) {
-                attemptLogin(false);
+                attemptLogin();
             }
         });
     }
@@ -141,7 +79,6 @@ public class LoginActivity extends FragmentActivity {
     protected void onPause() {
         super.onPause();
         if (mSignupOrLogin!=null){
-            //showProgress(false);
             if (mDialog.isShowing()){
                 mDialog.dismiss();
             }
@@ -162,10 +99,9 @@ public class LoginActivity extends FragmentActivity {
     protected void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
         if (mSignupOrLogin!=null) {
-            outState.putParcelable(SIGNUP_TOKEN_KEY, mSignupOrLogin);
+            outState.putParcelable(Constants.SIGNUP_TOKEN_KEY, mSignupOrLogin);
         }
     }
-
 
 
     @Override
@@ -191,7 +127,7 @@ public class LoginActivity extends FragmentActivity {
         }
     }
 
-    private void attemptLogin(boolean newUser) {
+    private void attemptLogin() {
         // Reset errors.
         mUserView.setError(null);
         mPasswordView.setError(null);
@@ -214,7 +150,7 @@ public class LoginActivity extends FragmentActivity {
             cancel = true;
         }
 
-        // Check for a valid email address.
+        // Check for a valid username.
         if (TextUtils.isEmpty(mUsername)) {
             mUserView.setError(getString(R.string.error_field_required));
             focusView = mUserView;
@@ -226,30 +162,22 @@ public class LoginActivity extends FragmentActivity {
             // form field with an error.
             focusView.requestFocus();
         } else {
-            signupWithBaasBox(newUser);
+            signupWithBaasBox();
         }
     }
 
-    private void signupWithBaasBox(boolean newUser){
-        //todo 3.1
+    private void signupWithBaasBox(){
         BaasUser user = BaasUser.withUserName(mUsername);
         user.setPassword(mPassword);
-        if (newUser) {
-            mDialog.setMessage(getString(R.string.dialog_signup));
-            if(!mDialog.isShowing())mDialog.show();
-            mSignupOrLogin=user.signup(onComplete);
-        } else {
-            mDialog.setMessage(getString(R.string.dialog_login));
-            if(!mDialog.isShowing())mDialog.show();
-            mSignupOrLogin=user.login(onComplete);
-        }
+        mDialog.setMessage(getString(R.string.dialog_login));
+        if(!mDialog.isShowing())mDialog.show();
+        mSignupOrLogin=user.login(onComplete);
     }
 
     private final BaasHandler<BaasUser> onComplete =
             new BaasHandler<BaasUser>() {
                 @Override
                 public void handle(BaasResult<BaasUser> result) {
-
                     mSignupOrLogin = null;
                     if (result.isFailed()){
                         Log.d("ERROR","ERROR",result.error());
