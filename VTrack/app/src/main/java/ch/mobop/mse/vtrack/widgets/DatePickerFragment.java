@@ -9,6 +9,7 @@ import android.widget.DatePicker;
 import java.util.Calendar;
 
 /**
+ * Custom dialog fragment which represents a date picker popup.
  * Created by n0daft on 02.03.2015.
  */
 public class DatePickerFragment extends DialogFragment
@@ -41,7 +42,6 @@ public class DatePickerFragment extends DialogFragment
     }
 
     public void onDateSet(DatePicker view, int year, int month, int day) {
-
         EditDateDialogListener activity = (EditDateDialogListener) getActivity();
         activity.onFinishEditDialog(year, month, day, callerId);
         this.dismiss();

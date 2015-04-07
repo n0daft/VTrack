@@ -11,25 +11,27 @@ import ch.mobop.mse.vtrack.R;
 import ch.mobop.mse.vtrack.adapters.VoucherRecyclerViewAdapter;
 
 /**
+ * Custom item view holder which servers as a super class for
+ * the specific recycler view view holders.
  * Created by n0daft on 12.03.2015.
  */
 public class VoucherItemViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
     /** Placeholder for voucher name */
-    private TextView txtVoucherName;
+    private TextView mTxtVoucherName;
 
     /** Placeholder for person info */
-    protected TextView txtPerson;
+    protected TextView mTxtPerson;
 
     /** Placeholder for date */
-    private TextView txtDate;
+    private TextView mTxtDate;
 
     /** Placeholder for validity status icon */
-    private FrameLayout flValidityStatus;
+    private FrameLayout mFlValidityStatus;
 
     /** Placeholder for archive status icon */
-    private ImageView ivArchiveStatusTrue;
-    private ImageView ivArchiveStatusFalse;
+    private ImageView mIvArchiveStatusTrue;
+    private ImageView mIvArchiveStatusFalse;
 
     private VoucherRecyclerViewAdapter mAdapter;
 
@@ -39,12 +41,12 @@ public class VoucherItemViewHolder extends RecyclerView.ViewHolder implements Vi
 
         mAdapter = adapter;
 
-        txtVoucherName = (TextView) itemView.findViewById(R.id.txtVoucherName);
-        txtPerson = (TextView) itemView.findViewById(R.id.txtPerson);
-        txtDate = (TextView) itemView.findViewById(R.id.txtDate);
-        flValidityStatus = (FrameLayout) itemView.findViewById(R.id.flValidityStatus);
-        ivArchiveStatusTrue = (ImageView) itemView.findViewById(R.id.ivValidityArchiveStatusTrue);
-        ivArchiveStatusFalse = (ImageView) itemView.findViewById(R.id.ivValidityArchiveStatusFalse);
+        mTxtVoucherName = (TextView) itemView.findViewById(R.id.txtVoucherName);
+        mTxtPerson = (TextView) itemView.findViewById(R.id.txtPerson);
+        mTxtDate = (TextView) itemView.findViewById(R.id.txtDate);
+        mFlValidityStatus = (FrameLayout) itemView.findViewById(R.id.flValidityStatus);
+        mIvArchiveStatusTrue = (ImageView) itemView.findViewById(R.id.ivValidityArchiveStatusTrue);
+        mIvArchiveStatusFalse = (ImageView) itemView.findViewById(R.id.ivValidityArchiveStatusFalse);
     }
 
     @Override
@@ -53,33 +55,33 @@ public class VoucherItemViewHolder extends RecyclerView.ViewHolder implements Vi
     }
 
 
-    public void setTxtDate(CharSequence date) {
-        txtDate.setText(date);
+    public void setmTxtDate(CharSequence date) {
+        mTxtDate.setText(date);
     }
 
-    public void setTxtPerson(CharSequence person) {
-        txtPerson.setText(person);
+    public void setmTxtPerson(CharSequence person) {
+        mTxtPerson.setText(person);
     }
 
-    public void setTxtVoucherName(CharSequence name) {
-        txtVoucherName.setText(name);
+    public void setmTxtVoucherName(CharSequence name) {
+        mTxtVoucherName.setText(name);
     }
 
     public void setFlValidityStatusColor(int color){
-        GradientDrawable d = (GradientDrawable) flValidityStatus.getBackground().mutate();
+        GradientDrawable d = (GradientDrawable) mFlValidityStatus.getBackground().mutate();
         d.setColor(color);
         d.invalidateSelf();
     }
 
-    public void setFlValidityStatus(int status){
-        flValidityStatus.setVisibility(status);
+    public void setmFlValidityStatus(int status){
+        mFlValidityStatus.setVisibility(status);
     }
 
     public void setivArchiveStatusTrue(int status){
-        ivArchiveStatusTrue.setVisibility(status);
+        mIvArchiveStatusTrue.setVisibility(status);
     }
 
     public void setivArchiveStatusFalse(int status){
-        ivArchiveStatusFalse.setVisibility(status);
+        mIvArchiveStatusFalse.setVisibility(status);
     }
 }

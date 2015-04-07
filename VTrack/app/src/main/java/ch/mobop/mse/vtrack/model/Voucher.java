@@ -10,7 +10,7 @@ import org.joda.time.DateTime;
  * every type of voucher shares.
  * Created by n0daft on 09.03.2015.
  */
-public class Voucher implements Parcelable{
+public class Voucher implements Parcelable {
 
     /***************************************************************************
      *                                                                         *
@@ -36,7 +36,7 @@ public class Voucher implements Parcelable{
     /** BaasBox ID */
     private String id;
 
-    /** Reedemed */
+    /** Determines if the voucher was already reedemed or not */
     private boolean redeemed;
 
     /***************************************************************************
@@ -120,7 +120,7 @@ public class Voucher implements Parcelable{
         this.redeemed = redeemed;
     }
 
-/***************************************************************************
+    /***************************************************************************
      *                                                                         *
      * Public API                                                              *
      *                                                                         *

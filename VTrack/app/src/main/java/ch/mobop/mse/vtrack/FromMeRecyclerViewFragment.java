@@ -37,30 +37,39 @@ import ch.mobop.mse.vtrack.model.Voucher;
 import ch.mobop.mse.vtrack.model.VoucherFromMe;
 
 /**
+ * Fragment for the "voucher from me" view. Contains fragment logic and functionality.
  * Created by n0daft on 12.03.2015.
  */
 public class FromMeRecyclerViewFragment extends Fragment implements AdapterView.OnItemClickListener {
 
-    private RecyclerView recyclerView;
-    private FromMeRecyclerViewAdapter adapter;
-    private ArrayList<Voucher> voucherFromMeList;
-    private Criteria filter;
+    private RecyclerView mRecyclerView;
+    private FromMeRecyclerViewAdapter mAdapter;
+    private ArrayList<Voucher> mVoucherFromMeList;
+    private Criteria mFilter;
     private ProgressDialog mDialog;
     private SwipeRefreshLayout mSwipeRefreshLayout;
     private RequestToken mRefresh;
-    private ArchiveListenerFromMe listener;
+    private ArchiveListenerFromMe mListener;
 
-    // Listener to communicate with Archive Fragment.
+    /**
+     * Listener interface for communicating with Archive Fragment.
+     */
     public interface ArchiveListenerFromMe {
         public void voucherArchived();
     }
 
-
+    /**
+     * Sets the reference to the archive fragment.
+     * @param listener
+     */
     public void setArchiveListener(ArchiveListenerFromMe listener) {
-        this.listener = listener;
+        this.mListener = listener;
     }
 
-
+    /**
+     * Initiates a new FromMeRecyclerViewFragment object.
+     * @return The created FromMeRecyclerViewFragment object.
+     */
     public static FromMeRecyclerViewFragment newInstance() {
         FromMeRecyclerViewFragment fragment = new FromMeRecyclerViewFragment();
         Bundle args = new Bundle();
@@ -79,29 +88,29 @@ public class FromMeRecyclerViewFragment extends Fragment implements AdapterView.
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_received, container, false);
 
-        recyclerView = (RecyclerView) rootView.findViewById(R.id.section_list);
-        recyclerView.setLayoutManager(new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false));
-        recyclerView.addItemDecoration(new DividerDecoration(getActivity()));
+        mRecyclerView = (RecyclerView) rootView.findViewById(R.id.section_list);
+        mRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false));
+        mRecyclerView.addItemDecoration(new DividerDecoration(getActivity()));
 
-        recyclerView.getItemAnimator().setAddDuration(1000);
-        recyclerView.getItemAnimator().setChangeDuration(1000);
-        recyclerView.getItemAnimator().setMoveDuration(1000);
-        recyclerView.getItemAnimator().setRemoveDuration(1000);
+        mRecyclerView.getItemAnimator().setAddDuration(1000);
+        mRecyclerView.getItemAnimator().setChangeDuration(1000);
+        mRecyclerView.getItemAnimator().setMoveDuration(1000);
+        mRecyclerView.getItemAnimator().setRemoveDuration(1000);
 
-        adapter = new FromMeRecyclerViewAdapter();
-        adapter.setOnItemClickListener(this);
-        recyclerView.setAdapter(adapter);
+        mAdapter = new FromMeRecyclerViewAdapter();
+        mAdapter.setOnItemClickListener(this);
+        mRecyclerView.setAdapter(mAdapter);
 
         mDialog = new ProgressDialog(this.getActivity());
         mDialog.setMessage(getString(R.string.dialog_refreshing));
 
         // Load all Items from Server with a filter and set list.
-        filter = BaasQuery.builder().orderBy("dateOfexpiration").where("type='from_me' and archive='false'").criteria();
-        if(voucherFromMeList == null) {
-            voucherFromMeList = new ArrayList<>();
+        mFilter = BaasQuery.builder().orderBy("dateOfexpiration").where("type='from_me' and archive='false'").criteria();
+        if(mVoucherFromMeList == null) {
+            mVoucherFromMeList = new ArrayList<>();
             refreshDocuments(true);
         }else{
-            adapter.setItemList(voucherFromMeList);
+            mAdapter.setItemList(mVoucherFromMeList);
         }
 
         mSwipeRefreshLayout = (SwipeRefreshLayout) rootView.findViewById(R.id.activity_main_swipe_refresh_layout);
@@ -143,7 +152,7 @@ public class FromMeRecyclerViewFragment extends Fragment implements AdapterView.
     }
 
 
-    /*
+    /**
      *  Create an intent to start the detail view of a voucher.
      *  Passing data via parcable voucher object.
      */
@@ -151,9 +160,9 @@ public class FromMeRecyclerViewFragment extends Fragment implements AdapterView.
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
         Intent intent = new Intent(getActivity(),DetailVoucherActivity.class);
         Bundle bundle = new Bundle();
-        bundle.putParcelable("voucherParcelable", voucherFromMeList.get(position));
+        bundle.putParcelable("voucherParcelable", mVoucherFromMeList.get(position));
         intent.putExtras(bundle);
-        intent.putExtra("type","from_me");
+        intent.putExtra("type", "from_me");
         startActivityForResult(intent, Constants.DETAIL_CODE);
     }
 
@@ -168,7 +177,8 @@ public class FromMeRecyclerViewFragment extends Fragment implements AdapterView.
             if (resultCode==Constants.RESULT_ARCHIVED){
                 // Refresh Archive Fragment and this.
                 refreshDocuments(true);
-                if (null != listener) {listener.voucherArchived();}
+                if (null != mListener) {
+                    mListener.voucherArchived();}
             }
         }else {
             super.onActivityResult(requestCode, resultCode, data);
@@ -176,7 +186,7 @@ public class FromMeRecyclerViewFragment extends Fragment implements AdapterView.
     }
 
 
-    /*
+    /**
      *  Download all vouchers with FromMe filter and refresh the archive list.
      *  Use onRefresh Handler as Callback method.
      */
@@ -184,7 +194,7 @@ public class FromMeRecyclerViewFragment extends Fragment implements AdapterView.
         if (getUserVisibleHint() && setSpinner){
             if(!mDialog.isShowing())mDialog.show();
         }
-        mRefresh = BaasDocument.fetchAll(Constants.COLLECTION_NAME, filter, onRefresh);
+        mRefresh = BaasDocument.fetchAll(Constants.COLLECTION_NAME, mFilter, onRefresh);
     }
 
     private final BaasHandler<List<BaasDocument>>
@@ -198,7 +208,7 @@ public class FromMeRecyclerViewFragment extends Fragment implements AdapterView.
             try {
 
                 Iterator it = result.get().iterator();
-                voucherFromMeList.clear();
+                mVoucherFromMeList.clear();
 
                 while(it.hasNext()){
                     BaasDocument doc = (BaasDocument) it.next();
@@ -211,11 +221,11 @@ public class FromMeRecyclerViewFragment extends Fragment implements AdapterView.
                     String redeemedWhere = doc.getString("redeemedWhere");
                     String id = doc.getId();
 
-                    voucherFromMeList.add(new VoucherFromMe(name,givenTo,dateOfDelivery,dateOfExpiration,redeemedWhere,notes,redeemedAt,id));
+                    mVoucherFromMeList.add(new VoucherFromMe(name, givenTo, dateOfDelivery, dateOfExpiration, redeemedWhere, notes, redeemedAt, id));
                 }
 
                 mSwipeRefreshLayout.setRefreshing(false);
-                adapter.setItemList(voucherFromMeList);
+                mAdapter.setItemList(mVoucherFromMeList);
 
             }catch (BaasInvalidSessionException e){
                 startLoginScreen();

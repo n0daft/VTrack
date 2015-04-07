@@ -14,6 +14,7 @@ import ch.mobop.mse.vtrack.model.VoucherForMe;
 import ch.mobop.mse.vtrack.model.VoucherFromMe;
 
 /**
+ * Adapter for the recycler view of the "archive" activity.
  * Created by Simon on 24.03.2015.
  */
 public class ArchiveRecyclerViewAdapter extends VoucherRecyclerViewAdapter{
@@ -30,10 +31,10 @@ public class ArchiveRecyclerViewAdapter extends VoucherRecyclerViewAdapter{
     public void onBindViewHolder(VoucherItemViewHolder itemHolder, int position) {
         //General Information
         Voucher item = mItems.get(position);
-        itemHolder.setTxtVoucherName(item.getName());
-        itemHolder.setTxtDate(Config.dateTimeFormatter.print(item.getRedeemedAt()));
+        itemHolder.setmTxtVoucherName(item.getName());
+        itemHolder.setmTxtDate(Config.dateTimeFormatter.print(item.getRedeemedAt()));
 
-        itemHolder.setFlValidityStatus(View.GONE);
+        itemHolder.setmFlValidityStatus(View.GONE);
 
         if(item.isRedeemed()){
             itemHolder.setivArchiveStatusFalse(View.GONE);
@@ -46,11 +47,11 @@ public class ArchiveRecyclerViewAdapter extends VoucherRecyclerViewAdapter{
         if(mItems.get(position) instanceof VoucherForMe){
             VoucherForMe itemForMe = (VoucherForMe) mItems.get(position);
             String tmp =  "from "+itemForMe.getReceivedBy();
-            itemHolder.setTxtPerson(tmp);
+            itemHolder.setmTxtPerson(tmp);
         }else{
             VoucherFromMe itemFromMe = (VoucherFromMe) mItems.get(position);
             String tmp = "to "+itemFromMe.getGivenTo();
-            itemHolder.setTxtPerson(tmp);
+            itemHolder.setmTxtPerson(tmp);
         }
 
     }

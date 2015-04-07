@@ -17,22 +17,23 @@ import ch.mobop.mse.vtrack.helpers.Config;
 import ch.mobop.mse.vtrack.helpers.Constants;
 
 /**
+ * Provides methods for the application settings functionality.
  * Created by n0daft on 28.03.2015.
  */
 public class SettingsActivity extends FragmentActivity {
 
     private final Handler handler = new Handler();
-    private SharedPreferences sharedpreferences;
-    private Editor editor;
+    private SharedPreferences mSharedpreferences;
+    private Editor mEditor;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_settings);
 
-        sharedpreferences = getSharedPreferences(Constants.MyPREFERENCES, Context.MODE_PRIVATE);
-        editor = sharedpreferences.edit();
-        ColorDrawable color = new ColorDrawable(sharedpreferences.getInt(Constants.actionBarColor,Config.defaultActionBarColor.getColor()));
+        mSharedpreferences = getSharedPreferences(Constants.MyPREFERENCES, Context.MODE_PRIVATE);
+        mEditor = mSharedpreferences.edit();
+        ColorDrawable color = new ColorDrawable(mSharedpreferences.getInt(Constants.actionBarColor,Config.defaultActionBarColor.getColor()));
         getActionBar().setBackgroundDrawable(color);
 
     }
@@ -40,11 +41,11 @@ public class SettingsActivity extends FragmentActivity {
 
     public void onColorClicked(View v) {
         int color = Color.parseColor(v.getTag().toString());
-        ColorDrawable oldColor = new ColorDrawable(sharedpreferences.getInt(Constants.actionBarColor,Config.defaultActionBarColor.getColor()));
+        ColorDrawable oldColor = new ColorDrawable(mSharedpreferences.getInt(Constants.actionBarColor,Config.defaultActionBarColor.getColor()));
         ColorDrawable newColor = new ColorDrawable(color);
 
-        editor.putInt(Constants.actionBarColor,color);
-        editor.commit();
+        mEditor.putInt(Constants.actionBarColor, color);
+        mEditor.commit();
 
         changeColor(oldColor, newColor);
     }

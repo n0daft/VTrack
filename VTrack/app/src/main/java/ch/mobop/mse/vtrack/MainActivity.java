@@ -1,19 +1,3 @@
-/*
- * Copyright (C) 2013 Andreas Stuetz <andreas.stuetz@gmail.com>
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *      http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
-
 package ch.mobop.mse.vtrack;
 
 import android.app.ActionBar;
@@ -50,33 +34,38 @@ import ch.mobop.mse.vtrack.FromMeRecyclerViewFragment.ArchiveListenerFromMe;
 import ch.mobop.mse.vtrack.helpers.Config;
 import ch.mobop.mse.vtrack.helpers.Constants;
 
+/**
+ * Main activity of the application.
+ * Initializes the recycler view fragments and sets up the layout.
+ * Credits for the sliding tab strip goes to Andreas Stuetz.
+ * https://github.com/astuetz/PagerSlidingTabStrip
+ */
 public class MainActivity extends FragmentActivity {
 
     private final Handler handler = new Handler();
-    private BaasBox client;
+    private BaasBox mClient;
 
-    private PagerSlidingTabStrip tabs;
-    private ViewPager pager;
-    private MyPagerAdapter adapter;
+    private PagerSlidingTabStrip mTabs;
+    private ViewPager mPager;
+    private MyPagerAdapter mAdapter;
 
     private final static int NEW_CODE = 1;
     private final static int SETTINGS_CODE = 2;
-    private final static int EDIT_CODE = 3;
-    private ForMeRecyclerViewFragment ForMeFragment;
-    private FromMeRecyclerViewFragment FromMeFragment;
-    private ArchiveRecyclerViewFragment ArchiveFragment;
+    private ForMeRecyclerViewFragment mForMeFragment;
+    private FromMeRecyclerViewFragment mFromMeFragment;
+    private ArchiveRecyclerViewFragment mArchiveFragment;
 
-    private SharedPreferences sharedpreferences;
+    private SharedPreferences mSharedpreferences;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        // Initialize the BaasBox client library
+        // Initialize the BaasBox client library.
         BaasBox.Builder b = new BaasBox.Builder(this);
-        client = b.setApiDomain("vmbackend.bfh.ch").setAppCode("2501").init();
+        mClient = b.setApiDomain("vmbackend.bfh.ch").setAppCode("2501").init();
 
-        // Check if the current user is logged in
+        // Check if the current user is logged in.
         if (BaasUser.current() == null){
             startLoginScreen();
             return;
@@ -84,20 +73,20 @@ public class MainActivity extends FragmentActivity {
 
         setContentView(R.layout.activity_main);
 
-        tabs = (PagerSlidingTabStrip) findViewById(R.id.tabs);
-        pager = (ViewPager) findViewById(R.id.pager);
-        adapter = new MyPagerAdapter(getSupportFragmentManager());
+        mTabs = (PagerSlidingTabStrip) findViewById(R.id.tabs);
+        mPager = (ViewPager) findViewById(R.id.pager);
+        mAdapter = new MyPagerAdapter(getSupportFragmentManager());
 
-        sharedpreferences = getSharedPreferences(Constants.MyPREFERENCES, Context.MODE_PRIVATE);
-        changeColor(sharedpreferences.getInt(Constants.actionBarColor,Config.defaultActionBarColor.getColor()));
+        mSharedpreferences = getSharedPreferences(Constants.MyPREFERENCES, Context.MODE_PRIVATE);
+        changeColor(mSharedpreferences.getInt(Constants.actionBarColor, Config.defaultActionBarColor.getColor()));
 
-        pager.setAdapter(adapter);
+        mPager.setAdapter(mAdapter);
 
         final int pageMargin = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 4, getResources()
                 .getDisplayMetrics());
-        pager.setPageMargin(pageMargin);
-        tabs.setShouldExpand(true); //Works
-        tabs.setViewPager(pager);
+        mPager.setPageMargin(pageMargin);
+        mTabs.setShouldExpand(true); // Expand the tabs equally in width.
+        mTabs.setViewPager(mPager);
 
 
     }
@@ -105,7 +94,7 @@ public class MainActivity extends FragmentActivity {
     @Override
     public void onResume(){
         super.onResume();
-        changeColor(sharedpreferences.getInt(Constants.actionBarColor,Config.defaultActionBarColor.getColor()));
+        changeColor(mSharedpreferences.getInt(Constants.actionBarColor, Config.defaultActionBarColor.getColor()));
     }
 
     @Override
@@ -115,7 +104,7 @@ public class MainActivity extends FragmentActivity {
     }
 
     /**
-     * Option Item Handler.
+     * Option Item Handler. Handles the interaction with the menu items.
      * @param item
      * @return
      */
@@ -133,7 +122,7 @@ public class MainActivity extends FragmentActivity {
 
                 // Adding menu items to the popup menu.
                 popup.getMenuInflater().inflate(R.menu.main_popup, popup.getMenu());
-                //Intent intent = new Intent(this,NewVoucherActivity.class);
+
                 // Defining menu item click listener for the popup menu.
                 popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
 
@@ -153,12 +142,12 @@ public class MainActivity extends FragmentActivity {
                                 break;
                             default: break;
                         }
-                        //Toast.makeText(getBaseContext(), "You selected the action : " + item.getTitle(), Toast.LENGTH_SHORT).show();
+
                         return true;
                     }
                 });
 
-                /** Showing the popup menu */
+                // Showing the popup menu.
                 popup.show();
 
                 break;
@@ -169,7 +158,7 @@ public class MainActivity extends FragmentActivity {
 
                 // Adding menu items to the popup menu.
                 popup.getMenuInflater().inflate(R.menu.main_new_popup, popup.getMenu());
-                //Intent intent = new Intent(this,NewVoucherActivity.class);
+
                 // Defining menu item click listener for the popup menu.
                 popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
 
@@ -196,16 +185,14 @@ public class MainActivity extends FragmentActivity {
                                 break;
                             default: break;
                         }
-                        //Toast.makeText(getBaseContext(), "You selected the action : " + item.getTitle(), Toast.LENGTH_SHORT).show();
+
                         return true;
                     }
                 });
 
-                /** Showing the popup menu */
+                // Showing the popup menu
                 popup.show();
 
-                //QuickContactFragment dialog = new QuickContactFragment();
-                //dialog.show(getSupportFragmentManager(), "QuickContactFragment");
                 return true;
         }
 
@@ -217,8 +204,10 @@ public class MainActivity extends FragmentActivity {
         if (requestCode==NEW_CODE){
             if (resultCode==RESULT_OK){
                 Toast.makeText(this, getString(R.string.toast_voucherAdded), Toast.LENGTH_LONG).show();
-                if(ForMeFragment != null){ForMeFragment.refreshDocuments(true);}
-                if(FromMeFragment != null){FromMeFragment.refreshDocuments(true);}
+                if(mForMeFragment != null){
+                    mForMeFragment.refreshDocuments(true);}
+                if(mFromMeFragment != null){
+                    mFromMeFragment.refreshDocuments(true);}
             } else if(resultCode==NewVoucherActivity.RESULT_SESSION_EXPIRED){
                 startLoginScreen();
             } else if (resultCode==NewVoucherActivity.RESULT_FAILED){
@@ -240,13 +229,12 @@ public class MainActivity extends FragmentActivity {
 
     private void changeColor(int newColor) {
 
-        tabs.setIndicatorColor(newColor);
+        mTabs.setIndicatorColor(newColor);
 
         ActionBar actionBar = getActionBar();
         if(actionBar != null){
 
-
-        // change ActionBar color just if an ActionBar is available
+        // Change ActionBar color only if an ActionBar is available.
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
 
             Drawable colorDrawable = new ColorDrawable(newColor);
@@ -264,7 +252,6 @@ public class MainActivity extends FragmentActivity {
             // http://stackoverflow.com/questions/11002691/actionbar-setbackgrounddrawable-nulling-background-from-thread-handler
             getActionBar().setDisplayShowTitleEnabled(false);
             getActionBar().setDisplayShowTitleEnabled(true);
-
         }
     }
 
@@ -272,12 +259,12 @@ public class MainActivity extends FragmentActivity {
         startLoginScreen();
     }
 
-    private RequestToken logoutToken;
+    private RequestToken mLogoutToken;
     private final BaasHandler<Void> logoutHandler =
             new BaasHandler<Void>() {
                 @Override
                 public void handle(BaasResult<Void> voidBaasResult) {
-                    logoutToken=null;
+                    mLogoutToken =null;
                     onLogout();
                 }
             };
@@ -299,6 +286,9 @@ public class MainActivity extends FragmentActivity {
         }
     };
 
+    /**
+     * Custom pager adapter class for view pager.
+     */
     public class MyPagerAdapter extends FragmentPagerAdapter {
 
         private final String[] TITLES = {getResources().getString(R.string.activity_main_actionbaritem_received), getResources().getString(R.string.activity_main_actionbaritem_givenAway), getResources().getString(R.string.activity_main_actionbaritem_archive) };
@@ -322,35 +312,31 @@ public class MainActivity extends FragmentActivity {
 
             switch(position) {
                 case 0:
-                    ForMeFragment = ForMeRecyclerViewFragment.newInstance();
-                    ForMeFragment.setArchiveListener(new ArchiveListenerForMe() {
+                    mForMeFragment = ForMeRecyclerViewFragment.newInstance();
+                    mForMeFragment.setArchiveListener(new ArchiveListenerForMe() {
                         @Override
                         public void voucherArchived() {
-                            if(ArchiveFragment != null){
-                                ArchiveFragment.refreshDocuments(false);
+                            if (mArchiveFragment != null) {
+                                mArchiveFragment.refreshDocuments(false);
                             }
                         }
                     });
-                    return ForMeFragment;
+                    return mForMeFragment;
                 case 1:
-                    FromMeFragment = FromMeRecyclerViewFragment.newInstance();
-                    FromMeFragment.setArchiveListener(new ArchiveListenerFromMe() {
+                    mFromMeFragment = FromMeRecyclerViewFragment.newInstance();
+                    mFromMeFragment.setArchiveListener(new ArchiveListenerFromMe() {
                         @Override
                         public void voucherArchived() {
-                            if(ArchiveFragment != null){
-                                ArchiveFragment.refreshDocuments(false);
+                            if (mArchiveFragment != null) {
+                                mArchiveFragment.refreshDocuments(false);
                             }
                         }
                     });
-                    return FromMeFragment;
+                    return mFromMeFragment;
                 default:
-                    ArchiveFragment = ArchiveRecyclerViewFragment.newInstance();
-                    return ArchiveFragment;
+                    mArchiveFragment = ArchiveRecyclerViewFragment.newInstance();
+                    return mArchiveFragment;
             }
         }
-
     }
-
-
-
 }

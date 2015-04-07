@@ -39,35 +39,23 @@ import ch.mobop.mse.vtrack.model.VoucherFromMe;
 import ch.mobop.mse.vtrack.widgets.DatePickerFragment;
 
 /**
+ * Provides the logic for the new voucher view.
  * Created by n0daft on 01.03.2015.
  */
 public class NewVoucherActivity extends FragmentActivity  implements DatePickerFragment.EditDateDialogListener {
 
-    private EditText txtVoucherName;
-    private TextView lblReceivedAt;
-    private TextView lblValidUntil;
-    private EditText txtReceivedFrom;
-    private EditText txtNotes;
-    private EditText txtLocation;
-    private Intent intent;
-    private BaasDocument receivedDoc;
-    private Voucher voucher;
-    private VoucherForMe voucherForMe;
-    private VoucherFromMe voucherFromMe;
+    private EditText mTxtVoucherName;
+    private TextView mLblReceivedAt;
+    private TextView mLblValidUntil;
+    private EditText mTxtReceivedFrom;
+    private EditText mTxtNotes;
+    private EditText mTxtLocation;
+    private Intent mIntent;
+    private BaasDocument mReceivedDoc;
+    private Voucher mVoucher;
+    private VoucherForMe mVoucherForMe;
+    private VoucherFromMe mVoucherFromMe;
 
-    private String type;
-    private String name;
-    private String dateOfReceipt;
-    private String dateOfDelivery;
-    private String dateOfexpiration;
-    private String receivedBy;
-    private String givenTo;
-    private String archive;
-    private String redeemedAt;
-    private String redeemedWhere;
-    private String notes;
-
-    private static final String PENDING_SAVE = "PENDING_SAVE";
     public static final int RESULT_SESSION_EXPIRED = Activity.RESULT_FIRST_USER+1;
     public static final int RESULT_FAILED = RESULT_SESSION_EXPIRED+1;
 
@@ -84,59 +72,59 @@ public class NewVoucherActivity extends FragmentActivity  implements DatePickerF
         getActionBar().setBackgroundDrawable(color);
         getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN);
 
-        intent = getIntent();
-        voucher = getIntent().getParcelableExtra("voucherParcelable");
+        mIntent = getIntent();
+        mVoucher = getIntent().getParcelableExtra("voucherParcelable");
 
-        // Get UI component references
-        txtVoucherName = (EditText) findViewById(R.id.txtVoucherName);
-        lblReceivedAt = (TextView) findViewById(R.id.lblReceivedAt);
-        lblValidUntil = (TextView) findViewById(R.id.lblValidUntil);
-        txtReceivedFrom = (EditText) findViewById(R.id.txtReceivedFrom);
-        txtNotes = (EditText) findViewById(R.id.txtNotes);
-        txtLocation = (EditText) findViewById(R.id.txtLocation);
+        // Get UI component references.
+        mTxtVoucherName = (EditText) findViewById(R.id.txtVoucherName);
+        mLblReceivedAt = (TextView) findViewById(R.id.lblReceivedAt);
+        mLblValidUntil = (TextView) findViewById(R.id.lblValidUntil);
+        mTxtReceivedFrom = (EditText) findViewById(R.id.txtReceivedFrom);
+        mTxtNotes = (EditText) findViewById(R.id.txtNotes);
+        mTxtLocation = (EditText) findViewById(R.id.txtLocation);
 
-        lblValidUntil.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+        mLblValidUntil.setOnFocusChangeListener(new View.OnFocusChangeListener() {
             @Override
             public void onFocusChange(View v, boolean hasFocus) {
-                if(hasFocus){
+                if (hasFocus) {
                     handleValidUntil(v);
                 }
             }
         });
 
-        lblReceivedAt.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+        mLblReceivedAt.setOnFocusChangeListener(new View.OnFocusChangeListener() {
             @Override
             public void onFocusChange(View v, boolean hasFocus) {
-                if(hasFocus){
+                if (hasFocus) {
                     handleReceivedAt(v);
                 }
 
             }
         });
 
-        //Add content if it's an edit request
-        if("edit".equals(intent.getStringExtra("intentType"))){
-            voucher = getIntent().getParcelableExtra("voucherParcelable");
-            txtVoucherName.setText(voucher.getName());
-            txtNotes.setText(voucher.getNotes());
-            txtLocation.setText(voucher.getRedeemWhere());
-            lblValidUntil.setText(Config.dateTimeFormatter.print(voucher.getDateOfexpiration()));
-            if("for_me".equals(intent.getStringExtra("type"))){
-                VoucherForMe voucherForMe = (VoucherForMe) voucher;
-                txtReceivedFrom.setText(voucherForMe.getReceivedBy());
-                lblReceivedAt.setText(Config.dateTimeFormatter.print(voucherForMe.getDateOfReceipt()));
-            }else if("from_me".equals(intent.getStringExtra("type"))){
-                VoucherFromMe voucherFromMe = (VoucherFromMe) voucher;
-                txtReceivedFrom.setText(voucherFromMe.getGivenTo());
-                lblReceivedAt.setText(Config.dateTimeFormatter.print(voucherFromMe.getDateOfDelivery()));
+        // Add content if it's an edit request.
+        if("edit".equals(mIntent.getStringExtra("intentType"))){
+            mVoucher = getIntent().getParcelableExtra("voucherParcelable");
+            mTxtVoucherName.setText(mVoucher.getName());
+            mTxtNotes.setText(mVoucher.getNotes());
+            mTxtLocation.setText(mVoucher.getRedeemWhere());
+            mLblValidUntil.setText(Config.dateTimeFormatter.print(mVoucher.getDateOfexpiration()));
+            if("for_me".equals(mIntent.getStringExtra("type"))){
+                VoucherForMe voucherForMe = (VoucherForMe) mVoucher;
+                mTxtReceivedFrom.setText(voucherForMe.getReceivedBy());
+                mLblReceivedAt.setText(Config.dateTimeFormatter.print(voucherForMe.getDateOfReceipt()));
+            }else if("from_me".equals(mIntent.getStringExtra("type"))){
+                VoucherFromMe voucherFromMe = (VoucherFromMe) mVoucher;
+                mTxtReceivedFrom.setText(voucherFromMe.getGivenTo());
+                mLblReceivedAt.setText(Config.dateTimeFormatter.print(voucherFromMe.getDateOfDelivery()));
             }
         }else{
-            voucher = new Voucher("",null,"","",null,"");
+            mVoucher = new Voucher("",null,"","",null,"");
         }
 
-        if("from_me".equals(intent.getStringExtra("type"))){
-            txtReceivedFrom.setHint(getString(R.string.activity_new_voucher_edittext_givento_hint));
-            lblReceivedAt.setHint(getString(R.string.activity_new_voucher_edittext_dataOfDelivery_hint));
+        if("from_me".equals(mIntent.getStringExtra("type"))){
+            mTxtReceivedFrom.setHint(getString(R.string.activity_new_voucher_edittext_givento_hint));
+            mLblReceivedAt.setHint(getString(R.string.activity_new_voucher_edittext_dataOfDelivery_hint));
         }
 
 
@@ -165,17 +153,17 @@ public class NewVoucherActivity extends FragmentActivity  implements DatePickerF
             case R.id.action_new_voucher_save:
 
                 // Create new BassDocument
-                receivedDoc = new BaasDocument("vtrack");
+                mReceivedDoc = new BaasDocument("vtrack");
 
-                if("edit".equals(intent.getStringExtra("intentType"))){
-                    // Fetch the old voucher with its id and save it after changes
+                if("edit".equals(mIntent.getStringExtra("intentType"))){
+                    // Fetch the old mVoucher with its id and save it after changes
                     retrieveOnBaasBox();
                 }else{
-                    // Only create new voucher id form is valid.
+                    // Only create new mVoucher id form is valid.
                     if(validateForm()){
-                        // Create new voucher.
+                        // Create new mVoucher.
                         addContentToDocument();
-                        saveOnBaasBox(receivedDoc);
+                        saveOnBaasBox(mReceivedDoc);
                     }
                 }
 
@@ -184,39 +172,98 @@ public class NewVoucherActivity extends FragmentActivity  implements DatePickerF
         return super.onOptionsItemSelected(item);
     }
 
+    /**
+     * Implementation of DatePickerFragment onFinishEditDialog event.
+     * Gets fired when DatePickerFragment calls onDateSet method.
+     * @param year
+     * @param month
+     * @param day
+     * @param callerId
+     */
+    @Override
+    public void onFinishEditDialog(int year, int month, int day, int callerId) {
+        GregorianCalendar cal = new GregorianCalendar();
+        cal.set(year,month,day);
+
+        switch (callerId){
+            case 1:
+                mLblReceivedAt.setText(Config.dateTimeFormatter.print(cal.getTimeInMillis()));
+                break;
+            case 2:
+                mLblValidUntil.setText(Config.dateTimeFormatter.print(cal.getTimeInMillis()));
+                break;
+            default:
+                Toast.makeText(getBaseContext(),"Something went wrong with the DatePicker", Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    /**
+     * Handle click on the received at edit text, by initiating
+     * the DatePickerFragment.
+     * @param v
+     */
+    public void handleReceivedAt(View v){
+
+        System.out.println("11");
+        DialogFragment newFragment = new DatePickerFragment();
+
+        Bundle args = new Bundle();
+        args.putInt("callerId", 1);
+        newFragment.setArguments(args);
+
+        newFragment.show(getSupportFragmentManager(), "datePicker");
+        System.out.println("22");
+    }
+
+    /**
+     * Handle click on the valid until edit text, by initiating
+     * the DatePickerFragment.
+     * @param v
+     */
+    public void handleValidUntil(View v){
+
+        DialogFragment newFragment = new DatePickerFragment();
+
+        Bundle args = new Bundle();
+        args.putInt("callerId", 2);
+        newFragment.setArguments(args);
+
+        newFragment.show(getSupportFragmentManager(), "datePicker");
+    }
+
     private boolean validateForm() {
 
         // Reset errors.
-        txtVoucherName.setError(null);
-        lblValidUntil.setError(null);
-        txtReceivedFrom.setError(null);
+        mTxtVoucherName.setError(null);
+        mLblValidUntil.setError(null);
+        mTxtReceivedFrom.setError(null);
 
         // Store values at the time of the login attempt.
-        String voucherName = txtVoucherName.getText().toString();
-        String validUntil = lblValidUntil.getText().toString();
-        String receivedFrom = txtReceivedFrom.getText().toString();
+        String voucherName = mTxtVoucherName.getText().toString();
+        String validUntil = mLblValidUntil.getText().toString();
+        String receivedFrom = mTxtReceivedFrom.getText().toString();
 
         boolean cancel = false;
         View focusView = null;
 
         // Check for a valid person entry.
         if (TextUtils.isEmpty(receivedFrom)) {
-            txtReceivedFrom.setError(getString(R.string.error_field_required));
-            focusView = txtReceivedFrom;
+            mTxtReceivedFrom.setError(getString(R.string.error_field_required));
+            focusView = mTxtReceivedFrom;
             cancel = true;
         }
 
         // Check for a valid validity date.
         if (TextUtils.isEmpty(validUntil)) {
-            lblValidUntil.setError(getString(R.string.error_field_required));
-            focusView = lblValidUntil;
+            mLblValidUntil.setError(getString(R.string.error_field_required));
+            focusView = mLblValidUntil;
             cancel = true;
         }
 
         // Check for a valid name.
         if (TextUtils.isEmpty(voucherName)) {
-            txtVoucherName.setError(getString(R.string.error_field_required));
-            focusView = txtVoucherName;
+            mTxtVoucherName.setError(getString(R.string.error_field_required));
+            focusView = mTxtVoucherName;
             cancel = true;
         }
 
@@ -230,38 +277,37 @@ public class NewVoucherActivity extends FragmentActivity  implements DatePickerF
         }
     }
 
-
     private void addContentToDocument(){
 
         DateTime date_validUntil = new DateTime(new Date());
-        if(!lblValidUntil.getText().toString().isEmpty()) {
-            date_validUntil = Config.dateTimeFormatter.parseDateTime(lblValidUntil.getText().toString());
+        if(!mLblValidUntil.getText().toString().isEmpty()) {
+            date_validUntil = Config.dateTimeFormatter.parseDateTime(mLblValidUntil.getText().toString());
         }
 
         DateTime date_receivedAt = new DateTime(new Date());
-        if(!lblReceivedAt.getText().toString().isEmpty()) {
-             date_receivedAt = Config.dateTimeFormatter.parseDateTime(lblReceivedAt.getText().toString());
+        if(!mLblReceivedAt.getText().toString().isEmpty()) {
+             date_receivedAt = Config.dateTimeFormatter.parseDateTime(mLblReceivedAt.getText().toString());
         }
 
         //Update BaasDoc
-        receivedDoc.put("name",txtVoucherName.getText().toString());
-        receivedDoc.put("dateOfexpiration", Config.dateTimeFormatterBaas.print(date_validUntil));
-        receivedDoc.put("notes", txtNotes.getText().toString());
-        receivedDoc.put("archive", "false");
-        receivedDoc.put("redeemedAt", "");
-        receivedDoc.put("redeemedWhere", txtLocation.getText().toString());
+        mReceivedDoc.put("name", mTxtVoucherName.getText().toString());
+        mReceivedDoc.put("dateOfexpiration", Config.dateTimeFormatterBaas.print(date_validUntil));
+        mReceivedDoc.put("notes", mTxtNotes.getText().toString());
+        mReceivedDoc.put("archive", "false");
+        mReceivedDoc.put("redeemedAt", "");
+        mReceivedDoc.put("redeemedWhere", mTxtLocation.getText().toString());
 
 
-        if("for_me".equals(intent.getStringExtra("type"))){
+        if("for_me".equals(mIntent.getStringExtra("type"))){
             //Content for_me voucher
-            receivedDoc.put("type", "for_me");
-            receivedDoc.put("dateOfReceipt", Config.dateTimeFormatterBaas.print(date_receivedAt));
-            receivedDoc.put("receivedBy", txtReceivedFrom.getText().toString());
+            mReceivedDoc.put("type", "for_me");
+            mReceivedDoc.put("dateOfReceipt", Config.dateTimeFormatterBaas.print(date_receivedAt));
+            mReceivedDoc.put("receivedBy", mTxtReceivedFrom.getText().toString());
         }else{
             //Content from_me voucher
-            receivedDoc.put("type", "from_me");
-            receivedDoc.put("dateOfDelivery", Config.dateTimeFormatterBaas.print(date_receivedAt));
-            receivedDoc.put("givenTo", txtReceivedFrom.getText().toString());
+            mReceivedDoc.put("type", "from_me");
+            mReceivedDoc.put("dateOfDelivery", Config.dateTimeFormatterBaas.print(date_receivedAt));
+            mReceivedDoc.put("givenTo", mTxtReceivedFrom.getText().toString());
         }
     }
 
@@ -269,56 +315,54 @@ public class NewVoucherActivity extends FragmentActivity  implements DatePickerF
     private void addContentToVoucher(){
 
         DateTime date_validUntil = new DateTime(new Date());
-        if(!lblValidUntil.getText().toString().isEmpty()) {
-            date_validUntil = Config.dateTimeFormatter.parseDateTime(lblValidUntil.getText().toString());
+        if(!mLblValidUntil.getText().toString().isEmpty()) {
+            date_validUntil = Config.dateTimeFormatter.parseDateTime(mLblValidUntil.getText().toString());
         }
 
         DateTime date_receivedAt = new DateTime(new Date());
-        if(!lblReceivedAt.getText().toString().isEmpty()) {
-            date_receivedAt = Config.dateTimeFormatter.parseDateTime(lblReceivedAt.getText().toString());
+        if(!mLblReceivedAt.getText().toString().isEmpty()) {
+            date_receivedAt = Config.dateTimeFormatter.parseDateTime(mLblReceivedAt.getText().toString());
         }
 
         //Update voucher object
-        voucher.setName(txtVoucherName.getText().toString());
-        voucher.setDateOfexpiration(date_validUntil);
-        voucher.setNotes(txtNotes.getText().toString());
-        voucher.setRedeemWhere(txtLocation.getText().toString());
+        mVoucher.setName(mTxtVoucherName.getText().toString());
+        mVoucher.setDateOfexpiration(date_validUntil);
+        mVoucher.setNotes(mTxtNotes.getText().toString());
+        mVoucher.setRedeemWhere(mTxtLocation.getText().toString());
 
-        if("for_me".equals(intent.getStringExtra("type"))){
-            voucherForMe = (VoucherForMe) voucher;
-            voucherForMe.setDateOfReceipt(date_receivedAt);
-            voucherForMe.setReceivedBy(txtReceivedFrom.getText().toString());
+        if("for_me".equals(mIntent.getStringExtra("type"))){
+            mVoucherForMe = (VoucherForMe) mVoucher;
+            mVoucherForMe.setDateOfReceipt(date_receivedAt);
+            mVoucherForMe.setReceivedBy(mTxtReceivedFrom.getText().toString());
         }else{
-            voucherFromMe = (VoucherFromMe) voucher;
-            voucherFromMe.setDateOfDelivery(date_receivedAt);
-            voucherFromMe.setGivenTo(txtReceivedFrom.getText().toString());
+            mVoucherFromMe = (VoucherFromMe) mVoucher;
+            mVoucherFromMe.setDateOfDelivery(date_receivedAt);
+            mVoucherFromMe.setGivenTo(mTxtReceivedFrom.getText().toString());
         }
     }
-
-
 
     private void editOnBaasBox(){
         //Set new content
         addContentToDocument();
         addContentToVoucher();
-        receivedDoc.save(SaveMode.IGNORE_VERSION,new BaasHandler<BaasDocument>(){
+        mReceivedDoc.save(SaveMode.IGNORE_VERSION, new BaasHandler<BaasDocument>() {
             @Override
             public void handle(BaasResult<BaasDocument> res) {
                 mDialog.dismiss();
 
-                if(res.isSuccess()){
-                    Log.d("LOG","Document saved "+res.value().getId());
+                if (res.isSuccess()) {
+                    Log.d("LOG", "Document saved " + res.value().getId());
                     System.out.println("Save OK");
-                    Intent  resultIntent = new Intent();
+                    Intent resultIntent = new Intent();
 
                     Bundle bundle = new Bundle();
-                    if("from_me".equals(intent.getStringExtra("type"))){
-                        bundle.putParcelable("voucherParcelableEdited", voucherFromMe);
-                    }else{
-                        bundle.putParcelable("voucherParcelableEdited", voucherForMe);
+                    if ("from_me".equals(mIntent.getStringExtra("type"))) {
+                        bundle.putParcelable("voucherParcelableEdited", mVoucherFromMe);
+                    } else {
+                        bundle.putParcelable("voucherParcelableEdited", mVoucherForMe);
                     }
                     resultIntent.putExtras(bundle);
-                    resultIntent.putExtra("type", intent.getStringExtra("type"));
+                    resultIntent.putExtra("type", mIntent.getStringExtra("type"));
                     setResult(RESULT_OK, resultIntent);
                     finish();
                 } else {
@@ -333,7 +377,7 @@ public class NewVoucherActivity extends FragmentActivity  implements DatePickerF
 
     private void retrieveOnBaasBox(){
         mDialog.show();
-        mAddToken=BaasDocument.fetch("vtrack",voucher.getId(),receiveHandler);
+        mAddToken=BaasDocument.fetch("vtrack", mVoucher.getId(),receiveHandler);
     }
 
 
@@ -342,7 +386,7 @@ public class NewVoucherActivity extends FragmentActivity  implements DatePickerF
         public void handle(BaasResult<BaasDocument> res) {
             mAddToken=null;
             if(res.isSuccess()) {
-                receivedDoc = res.value();
+                mReceivedDoc = res.value();
                 editOnBaasBox();
             } else {
                 setResult(RESULT_FAILED);
@@ -380,48 +424,4 @@ public class NewVoucherActivity extends FragmentActivity  implements DatePickerF
         }
     };
 
-
-
-
-    public void handleReceivedAt(View v){
-
-        System.out.println("11");
-        DialogFragment newFragment = new DatePickerFragment();
-
-        Bundle args = new Bundle();
-        args.putInt("callerId", 1);
-        newFragment.setArguments(args);
-
-        newFragment.show(getSupportFragmentManager(), "datePicker");
-        System.out.println("22");
-    }
-
-    public void handleValidUntil(View v){
-
-        DialogFragment newFragment = new DatePickerFragment();
-
-        Bundle args = new Bundle();
-        args.putInt("callerId", 2);
-        newFragment.setArguments(args);
-
-        newFragment.show(getSupportFragmentManager(), "datePicker");
-    }
-
-
-    @Override
-    public void onFinishEditDialog(int year, int month, int day, int callerId) {
-        GregorianCalendar cal = new GregorianCalendar();
-        cal.set(year,month,day);
-
-        switch (callerId){
-            case 1:
-                lblReceivedAt.setText(Config.dateTimeFormatter.print(cal.getTimeInMillis()));
-                break;
-            case 2:
-                lblValidUntil.setText(Config.dateTimeFormatter.print(cal.getTimeInMillis()));
-                break;
-            default:
-                Toast.makeText(getBaseContext(),"Something went wrong with the DatePicker", Toast.LENGTH_SHORT).show();
-        }
-    }
 }

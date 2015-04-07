@@ -29,8 +29,8 @@ public class LoginActivity extends FragmentActivity {
 
     private String mUsername;
     private String mPassword;
-    private EditText mUserView;
-    private EditText mPasswordView;
+    private EditText mTxtUser;
+    private EditText mTxtPassword;
     private ProgressDialog mDialog;
 
     private RequestToken mSignupOrLogin;
@@ -43,7 +43,7 @@ public class LoginActivity extends FragmentActivity {
         mDialog = new ProgressDialog(this);
         mDialog.setMessage(getString(R.string.dialog_login));
 
-        // Todo remove this eventually
+        // Hide the action bar for stylistic reasons.
         getActionBar().hide();
 
         SharedPreferences sharedpreferences = getSharedPreferences(Constants.MyPREFERENCES, Context.MODE_PRIVATE);
@@ -54,8 +54,8 @@ public class LoginActivity extends FragmentActivity {
             mSignupOrLogin = savedInstanceState.getParcelable(Constants.SIGNUP_TOKEN_KEY);
         }
 
-        mUserView = (EditText) findViewById(R.id.email);
-        mPasswordView = (EditText) findViewById(R.id.password);
+        mTxtUser = (EditText) findViewById(R.id.email);
+        mTxtPassword = (EditText) findViewById(R.id.password);
 
         findViewById(R.id.register_label).setOnClickListener(new View.OnClickListener() {
             @Override
@@ -103,7 +103,6 @@ public class LoginActivity extends FragmentActivity {
         }
     }
 
-
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         super.onCreateOptionsMenu(menu);
@@ -122,38 +121,38 @@ public class LoginActivity extends FragmentActivity {
             startActivity(intent);
             finish();
         } else {
-            mPasswordView.setError(getString(R.string.error_incorrect_password));
-            mPasswordView.requestFocus();
+            mTxtPassword.setError(getString(R.string.error_incorrect_password));
+            mTxtPassword.requestFocus();
         }
     }
 
     private void attemptLogin() {
         // Reset errors.
-        mUserView.setError(null);
-        mPasswordView.setError(null);
+        mTxtUser.setError(null);
+        mTxtPassword.setError(null);
 
         // Store values at the time of the login attempt.
-        mUsername = mUserView.getText().toString();
-        mPassword = mPasswordView.getText().toString();
+        mUsername = mTxtUser.getText().toString();
+        mPassword = mTxtPassword.getText().toString();
 
         boolean cancel = false;
         View focusView = null;
 
         // Check for a valid password.
         if (TextUtils.isEmpty(mPassword)) {
-            mPasswordView.setError(getString(R.string.error_field_required));
-            focusView = mPasswordView;
+            mTxtPassword.setError(getString(R.string.error_field_required));
+            focusView = mTxtPassword;
             cancel = true;
         } else if (mPassword.length() < 4) {
-            mPasswordView.setError(getString(R.string.error_invalid_password));
-            focusView = mPasswordView;
+            mTxtPassword.setError(getString(R.string.error_invalid_password));
+            focusView = mTxtPassword;
             cancel = true;
         }
 
         // Check for a valid username.
         if (TextUtils.isEmpty(mUsername)) {
-            mUserView.setError(getString(R.string.error_field_required));
-            focusView = mUserView;
+            mTxtUser.setError(getString(R.string.error_field_required));
+            focusView = mTxtUser;
             cancel = true;
         }
 

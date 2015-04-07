@@ -13,6 +13,7 @@ import ch.mobop.mse.vtrack.helpers.Config;
 import ch.mobop.mse.vtrack.model.VoucherForMe;
 
 /**
+ * Adapter for the recycler view of the "voucher for me" activity.
  * Created by n0daft on 05.03.2015.
  */
 public class ForMeRecyclerViewAdapter extends VoucherRecyclerViewAdapter{
@@ -29,9 +30,9 @@ public class ForMeRecyclerViewAdapter extends VoucherRecyclerViewAdapter{
     public void onBindViewHolder(VoucherItemViewHolder itemHolder, int position) {
         VoucherForMe item = (VoucherForMe) mItems.get(position);
 
-        itemHolder.setTxtVoucherName(item.getName());
-        itemHolder.setTxtPerson(item.getReceivedBy());
-        itemHolder.setTxtDate(Config.dateTimeFormatter.print(item.getDateOfexpiration()));
+        itemHolder.setmTxtVoucherName(item.getName());
+        itemHolder.setmTxtPerson(item.getReceivedBy());
+        itemHolder.setmTxtDate(Config.dateTimeFormatter.print(item.getDateOfexpiration()));
         itemHolder.setivArchiveStatusTrue(View.GONE);
         itemHolder.setivArchiveStatusFalse(View.GONE);
 

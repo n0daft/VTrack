@@ -10,6 +10,7 @@ import ch.mobop.mse.vtrack.adapters.viewholders.VoucherItemViewHolder;
 import ch.mobop.mse.vtrack.model.Voucher;
 
 /**
+ * Custom adapter which serves as a super class for the specific recycler view adapters.
  * Created by n0daft on 12.03.2015.
  */
 public abstract class VoucherRecyclerViewAdapter extends RecyclerView.Adapter<VoucherItemViewHolder> {
@@ -31,7 +32,7 @@ public abstract class VoucherRecyclerViewAdapter extends RecyclerView.Adapter<Vo
         notifyDataSetChanged();
     }
 
-    /*
+    /**
      * Inserting a new item at the head of the list. This uses a specialized
      * RecyclerView method, notifyItemInserted(), to trigger any enabled item
      * animations in addition to updating the view.
@@ -43,8 +44,8 @@ public abstract class VoucherRecyclerViewAdapter extends RecyclerView.Adapter<Vo
         notifyItemInserted(position);
     }
 
-    /*
-     * Inserting a new item at the head of the list. This uses a specialized
+    /**
+     * Removing the given item from the list. This uses a specialized
      * RecyclerView method, notifyItemRemoved(), to trigger any enabled item
      * animations in addition to updating the view.
      */
@@ -59,7 +60,4 @@ public abstract class VoucherRecyclerViewAdapter extends RecyclerView.Adapter<Vo
     public int getItemCount() {
         return mItems.size();
     }
-
-
-
 }

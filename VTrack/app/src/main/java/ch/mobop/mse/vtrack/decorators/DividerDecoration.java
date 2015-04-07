@@ -11,6 +11,7 @@ import android.view.View;
 import ch.mobop.mse.vtrack.R;
 
 /**
+ * Custom recycler view item decorator.
  * Created by n0daft on 05.03.2015.
  */
 public class DividerDecoration extends RecyclerView.ItemDecoration {
@@ -52,7 +53,7 @@ public class DividerDecoration extends RecyclerView.ItemDecoration {
 
     @Override
     public void getItemOffsets(Rect outRect, View view, RecyclerView parent, RecyclerView.State state) {
-        //We can supply forced insets for each item view here in the Rect
+        // We can supply forced insets for each item view here in the Rect.
         outRect.set(mInsets, mInsets, mInsets, mInsets);
     }
 }

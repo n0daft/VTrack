@@ -36,29 +36,27 @@ import ch.mobop.mse.vtrack.model.VoucherForMe;
 import ch.mobop.mse.vtrack.model.VoucherFromMe;
 
 /**
+ * Provides the logic for the detail mVoucher view.
  * Created by Simon on 16.03.2015.
  */
 public class DetailVoucherActivity extends FragmentActivity{
 
     private final static int EDIT_CODE = 3;
 
-    private TextView txtVoucherName;
-    private TextView txtReceivedAt;
-    private TextView txtValidUntil;
-    private TextView txtPerson;
-    private TextView txtNotes;
-    private EditText txtLocation;
-    private TextView desc_txtPerson;
-    private TextView desc_txtReceivedAt;
-    private Intent intent;
-    private Voucher voucher;
-    private VoucherForMe voucherForMe;
-    private VoucherFromMe voucherFromMe;
-    private BaasDocument receivedDoc;
-    private boolean redeemed;
-    private boolean isEdited;
+    private TextView mTxtVoucherName;
+    private TextView mTxtReceivedAt;
+    private TextView mTxtValidUntil;
+    private TextView mTxtPerson;
+    private TextView mTxtNotes;
+    private EditText mTxtLocation;
+    private TextView mDesc_txtPerson;
+    private TextView mDesc_txtReceivedAt;
+    private Intent mIntent;
+    private Voucher mVoucher;
+    private BaasDocument mReceivedDoc;
+    private boolean mRedeemed;
+    private boolean mIsEdited;
 
-    private static final String PENDING_SAVE = "PENDING_SAVE";
     public static final int RESULT_SESSION_EXPIRED = Activity.RESULT_FIRST_USER+1;
     public static final int RESULT_FAILED = RESULT_SESSION_EXPIRED+1;
 
@@ -75,40 +73,40 @@ public class DetailVoucherActivity extends FragmentActivity{
         ColorDrawable color = new ColorDrawable(sharedpreferences.getInt(Constants.actionBarColor,Config.defaultActionBarColor.getColor()));
         getActionBar().setBackgroundDrawable(color);
 
-        intent = getIntent();
-        isEdited = false;
+        mIntent = getIntent();
+        mIsEdited = false;
 
-        // Get UI component references
-        txtVoucherName = (TextView) findViewById(R.id.detail_txtVoucherName);
-        txtReceivedAt = (TextView) findViewById(R.id.detail_txtReceivedAt);
-        txtValidUntil = (TextView) findViewById(R.id.detail_txtValidUntil);
-        txtPerson = (TextView) findViewById(R.id.detail_txtPerson);
-        txtNotes = (TextView) findViewById(R.id.detail_txtNotes);
-        txtLocation = (EditText) findViewById(R.id.detail_txtLocation);
-        desc_txtPerson = (TextView) findViewById(R.id.detail_desc_txtPerson);
-        desc_txtReceivedAt = (TextView) findViewById(R.id.detail_desc_txtReceivedAt);
+        // Get UI component references.
+        mTxtVoucherName = (TextView) findViewById(R.id.detail_txtVoucherName);
+        mTxtReceivedAt = (TextView) findViewById(R.id.detail_txtReceivedAt);
+        mTxtValidUntil = (TextView) findViewById(R.id.detail_txtValidUntil);
+        mTxtPerson = (TextView) findViewById(R.id.detail_txtPerson);
+        mTxtNotes = (TextView) findViewById(R.id.detail_txtNotes);
+        mTxtLocation = (EditText) findViewById(R.id.detail_txtLocation);
+        mDesc_txtPerson = (TextView) findViewById(R.id.detail_desc_txtPerson);
+        mDesc_txtReceivedAt = (TextView) findViewById(R.id.detail_desc_txtReceivedAt);
 
-        // Set Intent Data
-        voucher = getIntent().getParcelableExtra("voucherParcelable");
+        // Set Intent Data.
+        mVoucher = getIntent().getParcelableExtra("voucherParcelable");
 
-        txtVoucherName.setText(voucher.getName());
-        txtNotes.setText(voucher.getNotes());
-        txtLocation.setText(voucher.getRedeemWhere());
+        mTxtVoucherName.setText(mVoucher.getName());
+        mTxtNotes.setText(mVoucher.getNotes());
+        mTxtLocation.setText(mVoucher.getRedeemWhere());
         DateTimeFormatter formatterVoucher = Config.dateTimeFormatter;
-        txtValidUntil.setText(formatterVoucher.print(voucher.getDateOfexpiration()));
+        mTxtValidUntil.setText(formatterVoucher.print(mVoucher.getDateOfexpiration()));
 
-        if("for_me".equals(intent.getStringExtra("type"))){
-            VoucherForMe voucherForMe = (VoucherForMe) voucher;
-            txtPerson.setText(voucherForMe.getReceivedBy());
-            txtReceivedAt.setText(formatterVoucher.print(voucherForMe.getDateOfReceipt()));
+        if("for_me".equals(mIntent.getStringExtra("type"))){
+            VoucherForMe voucherForMe = (VoucherForMe) mVoucher;
+            mTxtPerson.setText(voucherForMe.getReceivedBy());
+            mTxtReceivedAt.setText(formatterVoucher.print(voucherForMe.getDateOfReceipt()));
         }
 
-        if("from_me".equals(intent.getStringExtra("type"))){
-            VoucherFromMe voucherFromMe = (VoucherFromMe) voucher;
-            txtPerson.setText(voucherFromMe.getGivenTo());
-            txtReceivedAt.setText(formatterVoucher.print(voucherFromMe.getDateOfDelivery()));
-            desc_txtPerson.setText("Given to");
-            desc_txtReceivedAt.setText("Delivered at");
+        if("from_me".equals(mIntent.getStringExtra("type"))){
+            VoucherFromMe voucherFromMe = (VoucherFromMe) mVoucher;
+            mTxtPerson.setText(voucherFromMe.getGivenTo());
+            mTxtReceivedAt.setText(formatterVoucher.print(voucherFromMe.getDateOfDelivery()));
+            mDesc_txtPerson.setText("Given to");
+            mDesc_txtReceivedAt.setText("Delivered at");
         }
 
         mDialog = new ProgressDialog(this);
@@ -116,7 +114,7 @@ public class DetailVoucherActivity extends FragmentActivity{
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        if(Boolean.valueOf(intent.getStringExtra("archive"))){
+        if(Boolean.valueOf(mIntent.getStringExtra("archive"))){
             getMenuInflater().inflate(R.menu.voucher_detail_archive, menu);
         }else{
             getMenuInflater().inflate(R.menu.voucher_detail, menu);
@@ -145,34 +143,33 @@ public class DetailVoucherActivity extends FragmentActivity{
                     public boolean onMenuItemClick(MenuItem item) {
                         switch (item.getItemId()){
                             case R.id.action_redeemed:
-                                redeemed = true;
+                                mRedeemed = true;
                                 archiveOnBaasBox();
                                 break;
                             case R.id.action_expired:
-                                redeemed = false;
+                                mRedeemed = false;
                                 archiveOnBaasBox();
                                 break;
                             default: break;
                         }
-                        //Toast.makeText(getBaseContext(), "You selected the action : " + item.getTitle(), Toast.LENGTH_SHORT).show();
                         return true;
                     }
                 });
 
-                /** Showing the popup menu */
+                // Showing the popup menu.
                 popup.show();
                 break;
 
             case R.id.action_edit:
-                // Intent to edit the voucher
+                // Intent to edit the mVoucher
                 Intent edit = new Intent(DetailVoucherActivity.this,NewVoucherActivity.class);
 
-                // Add current voucher object to intent and reuse intent object type.
+                // Add current mVoucher object to intent and reuse intent object type.
                 Bundle bundle = new Bundle();
-                bundle.putParcelable("voucherParcelable", voucher);
+                bundle.putParcelable("voucherParcelable", mVoucher);
                 edit.putExtras(bundle);
                 edit.putExtra("intentType","edit");
-                edit.putExtra("type", intent.getStringExtra("type"));
+                edit.putExtra("type", mIntent.getStringExtra("type"));
 
                 startActivityForResult(edit,EDIT_CODE);
                 break;
@@ -194,12 +191,11 @@ public class DetailVoucherActivity extends FragmentActivity{
                                 break;
                             default: break;
                         }
-                        //Toast.makeText(getBaseContext(), "You selected the action : " + item.getTitle(), Toast.LENGTH_SHORT).show();
                         return true;
                     }
                 });
 
-                /** Showing the popup menu */
+                // Showing the popup menu.
                 popup.show();
 
                 break;
@@ -208,10 +204,51 @@ public class DetailVoucherActivity extends FragmentActivity{
         return super.onOptionsItemSelected(item);
     }
 
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (requestCode==EDIT_CODE){
+            if (resultCode==RESULT_OK){
+                //Update text elements
+                mIsEdited = true;
+                Toast.makeText(this, "Edited voucher successfully", Toast.LENGTH_LONG).show();
+
+                //Update text fields
+                if("from_me".equals(data.getStringExtra("type"))){
+                    VoucherFromMe voucherEdit = data.getParcelableExtra("voucherParcelableEdited");
+                    mTxtPerson.setText(voucherEdit.getGivenTo());
+                    mTxtReceivedAt.setText(Config.dateTimeFormatter.print(voucherEdit.getDateOfDelivery()));
+                }else{
+                    VoucherForMe voucherEdit = data.getParcelableExtra("voucherParcelableEdited");
+                    mTxtPerson.setText(voucherEdit.getReceivedBy());
+                    mTxtReceivedAt.setText(Config.dateTimeFormatter.print(voucherEdit.getDateOfReceipt()));
+                }
+                mVoucher = data.getParcelableExtra("voucherParcelableEdited");
+                mTxtVoucherName.setText(mVoucher.getName());
+                mTxtNotes.setText(mVoucher.getNotes());
+                mTxtLocation.setText(mVoucher.getRedeemWhere());
+                mTxtValidUntil.setText(Config.dateTimeFormatter.print(mVoucher.getDateOfexpiration()));
+
+            } else if(resultCode==NewVoucherActivity.RESULT_SESSION_EXPIRED){
+                startLoginScreen();
+            } else if (resultCode==NewVoucherActivity.RESULT_FAILED){
+                Toast.makeText(this, "Failed to add voucher.", Toast.LENGTH_LONG).show();
+            }
+        }else {
+            super.onActivityResult(requestCode, resultCode, data);
+        }
+    }
+
+    @Override
+    public void onBackPressed() {
+        // If the mVoucher was edited, refresh the list automaticly.
+        if(mIsEdited){setResult(RESULT_OK);}
+        super.onBackPressed();
+    }
+
     private void deleteVoucher(){
         mDialog.setMessage("Deleting...");
         if(!mDialog.isShowing())mDialog.show();
-        mAddToken= BaasDocument.fetch("vtrack", voucher.getId(), deleteHandler);
+        mAddToken= BaasDocument.fetch("vtrack", mVoucher.getId(), deleteHandler);
     }
 
     private final BaasHandler<BaasDocument> deleteHandler= new BaasHandler<BaasDocument>() {
@@ -222,8 +259,8 @@ public class DetailVoucherActivity extends FragmentActivity{
             if(mDialog.isShowing())mDialog.dismiss();
 
             if(res.isSuccess()) {
-                receivedDoc = res.value();
-                receivedDoc.delete(new BaasHandler<Void>() {
+                mReceivedDoc = res.value();
+                mReceivedDoc.delete(new BaasHandler<Void>() {
                     @Override
                     public void handle(BaasResult<Void> res) {
                         if (res.isSuccess()) {
@@ -247,7 +284,7 @@ public class DetailVoucherActivity extends FragmentActivity{
     private void archiveOnBaasBox(){
         mDialog.setMessage("Archiving...");
         if(!mDialog.isShowing())mDialog.show();
-        mAddToken= BaasDocument.fetch("vtrack", voucher.getId(), receiveHandler);
+        mAddToken= BaasDocument.fetch("vtrack", mVoucher.getId(), receiveHandler);
     }
 
 
@@ -256,7 +293,7 @@ public class DetailVoucherActivity extends FragmentActivity{
         public void handle(BaasResult<BaasDocument> res) {
             mAddToken=null;
             if(res.isSuccess()) {
-                receivedDoc = res.value();
+                mReceivedDoc = res.value();
                 editOnBaasBox();
             } else {
                 setResult(RESULT_FAILED);
@@ -268,22 +305,22 @@ public class DetailVoucherActivity extends FragmentActivity{
 
     private void editOnBaasBox(){
 
-        if(redeemed){
-            receivedDoc.put("redeemed", "true");
+        if(mRedeemed){
+            mReceivedDoc.put("redeemed", "true");
         }else{
-            receivedDoc.put("redeemed", "false");
+            mReceivedDoc.put("redeemed", "false");
         }
-        receivedDoc.put("archive", "true");
+        mReceivedDoc.put("archive", "true");
         DateTime date_redeemedAt = new DateTime(new Date());
-        receivedDoc.put("redeemedAt", Config.dateTimeFormatterBaas.print(date_redeemedAt));
+        mReceivedDoc.put("redeemedAt", Config.dateTimeFormatterBaas.print(date_redeemedAt));
 
-        receivedDoc.save(SaveMode.IGNORE_VERSION,new BaasHandler<BaasDocument>(){
+        mReceivedDoc.save(SaveMode.IGNORE_VERSION, new BaasHandler<BaasDocument>() {
             @Override
             public void handle(BaasResult<BaasDocument> res) {
 
-                if(mDialog.isShowing())mDialog.dismiss();
+                if (mDialog.isShowing()) mDialog.dismiss();
 
-                if(res.isSuccess()){
+                if (res.isSuccess()) {
                     setResult(Constants.RESULT_ARCHIVED);
                     finish();
                 } else {
@@ -293,47 +330,6 @@ public class DetailVoucherActivity extends FragmentActivity{
                 }
             }
         });
-    }
-
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (requestCode==EDIT_CODE){
-            if (resultCode==RESULT_OK){
-                //Update text elements
-                isEdited = true;
-                Toast.makeText(this, "Edited voucher successfully", Toast.LENGTH_LONG).show();
-
-                //Update text fields
-                if("from_me".equals(data.getStringExtra("type"))){
-                    VoucherFromMe voucherEdit = data.getParcelableExtra("voucherParcelableEdited");
-                    txtPerson.setText(voucherEdit.getGivenTo());
-                    txtReceivedAt.setText(Config.dateTimeFormatter.print(voucherEdit.getDateOfDelivery()));
-                }else{
-                    VoucherForMe voucherEdit = data.getParcelableExtra("voucherParcelableEdited");
-                    txtPerson.setText(voucherEdit.getReceivedBy());
-                    txtReceivedAt.setText(Config.dateTimeFormatter.print(voucherEdit.getDateOfReceipt()));
-                }
-                voucher = data.getParcelableExtra("voucherParcelableEdited");
-                txtVoucherName.setText(voucher.getName());
-                txtNotes.setText(voucher.getNotes());
-                txtLocation.setText(voucher.getRedeemWhere());
-                txtValidUntil.setText(Config.dateTimeFormatter.print(voucher.getDateOfexpiration()));
-
-            } else if(resultCode==NewVoucherActivity.RESULT_SESSION_EXPIRED){
-               startLoginScreen();
-            } else if (resultCode==NewVoucherActivity.RESULT_FAILED){
-                Toast.makeText(this, "Failed to add voucher.", Toast.LENGTH_LONG).show();
-            }
-        }else {
-            super.onActivityResult(requestCode, resultCode, data);
-        }
-    }
-
-    @Override
-    public void onBackPressed() {
-        //If the voucher was edited, refresh the list automaticly
-        if(isEdited){setResult(RESULT_OK);}
-        super.onBackPressed();
     }
 
     private void startLoginScreen(){

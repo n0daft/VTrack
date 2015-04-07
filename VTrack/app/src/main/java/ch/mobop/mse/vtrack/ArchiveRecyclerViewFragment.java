@@ -41,14 +41,18 @@ import ch.mobop.mse.vtrack.model.VoucherFromMe;
  */
 public class ArchiveRecyclerViewFragment extends Fragment implements AdapterView.OnItemClickListener{
 
-    private RecyclerView recyclerView;
-    private ArchiveRecyclerViewAdapter adapter;
-    private ArrayList<Voucher> voucherList;
-    private BaasQuery.Criteria filter;
+    private RecyclerView mRecyclerView;
+    private ArchiveRecyclerViewAdapter mAdapter;
+    private ArrayList<Voucher> mVoucherList;
+    private BaasQuery.Criteria mFilter;
     private ProgressDialog mDialog;
     private SwipeRefreshLayout mSwipeRefreshLayout;
     private RequestToken mRefresh;
 
+    /**
+     * Initiates a new ArchiveRecyclerViewFragment object.
+     * @return The created ArchiveRecyclerViewFragment object.
+     */
     public static ArchiveRecyclerViewFragment newInstance() {
         ArchiveRecyclerViewFragment fragment = new ArchiveRecyclerViewFragment();
         Bundle args = new Bundle();
@@ -66,29 +70,29 @@ public class ArchiveRecyclerViewFragment extends Fragment implements AdapterView
 
         View rootView = inflater.inflate(R.layout.fragment_received, container, false);
 
-        recyclerView = (RecyclerView) rootView.findViewById(R.id.section_list);
-        recyclerView.setLayoutManager(new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false));
-        recyclerView.addItemDecoration(new DividerDecoration(getActivity()));
+        mRecyclerView = (RecyclerView) rootView.findViewById(R.id.section_list);
+        mRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false));
+        mRecyclerView.addItemDecoration(new DividerDecoration(getActivity()));
 
-        recyclerView.getItemAnimator().setAddDuration(1000);
-        recyclerView.getItemAnimator().setChangeDuration(1000);
-        recyclerView.getItemAnimator().setMoveDuration(1000);
-        recyclerView.getItemAnimator().setRemoveDuration(1000);
+        mRecyclerView.getItemAnimator().setAddDuration(1000);
+        mRecyclerView.getItemAnimator().setChangeDuration(1000);
+        mRecyclerView.getItemAnimator().setMoveDuration(1000);
+        mRecyclerView.getItemAnimator().setRemoveDuration(1000);
 
-        adapter = new ArchiveRecyclerViewAdapter();
-        adapter.setOnItemClickListener(this);
-        recyclerView.setAdapter(adapter);
+        mAdapter = new ArchiveRecyclerViewAdapter();
+        mAdapter.setOnItemClickListener(this);
+        mRecyclerView.setAdapter(mAdapter);
 
         mDialog = new ProgressDialog(this.getActivity());
         mDialog.setMessage(getString(R.string.dialog_refreshing));
 
         // Load all Items from Server only if there are no Objects saved.
-        filter = BaasQuery.builder().orderBy("redeemedAt desc").where("archive='true'").criteria();
-        if(voucherList == null) {
-            voucherList = new ArrayList<>();
+        mFilter = BaasQuery.builder().orderBy("redeemedAt desc").where("archive='true'").criteria();
+        if(mVoucherList == null) {
+            mVoucherList = new ArrayList<>();
             refreshDocuments(true);
         }else{
-            adapter.setItemList(voucherList);
+            mAdapter.setItemList(mVoucherList);
         }
 
         mSwipeRefreshLayout = (SwipeRefreshLayout) rootView.findViewById(R.id.activity_main_swipe_refresh_layout);
@@ -124,12 +128,12 @@ public class ArchiveRecyclerViewFragment extends Fragment implements AdapterView
     public void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
         if (mRefresh!=null){
-            mRefresh.suspendAndSave(outState,Constants.REFRESH_TOKEN_KEY);
+            mRefresh.suspendAndSave(outState, Constants.REFRESH_TOKEN_KEY);
         }
     }
 
 
-    /*
+    /**
      *  Create an intent to start the detail view of a voucher.
      *  Passing data via parcable voucher object.
      */
@@ -138,10 +142,10 @@ public class ArchiveRecyclerViewFragment extends Fragment implements AdapterView
 
         Intent intent = new Intent(getActivity(),DetailVoucherActivity.class);
         Bundle bundle = new Bundle();
-        bundle.putParcelable("voucherParcelable", voucherList.get(position));
+        bundle.putParcelable("voucherParcelable", mVoucherList.get(position));
         intent.putExtras(bundle);
 
-        if (voucherList.get(position) instanceof VoucherForMe){
+        if (mVoucherList.get(position) instanceof VoucherForMe){
             intent.putExtra("type","for_me");
         }else{
             intent.putExtra("type","from_me");
@@ -164,7 +168,7 @@ public class ArchiveRecyclerViewFragment extends Fragment implements AdapterView
         }
     }
 
-    /*                                                          
+    /**
      *  Download all vouchers with archive filter and refresh the archive list.    
      *  Use onRefresh Handler as Callback method.
      */                                                           
@@ -172,7 +176,7 @@ public class ArchiveRecyclerViewFragment extends Fragment implements AdapterView
         if (getUserVisibleHint() && setSpinner){
             if(!mDialog.isShowing())mDialog.show();
         }
-        mRefresh = BaasDocument.fetchAll(Constants.COLLECTION_NAME, filter, onRefresh);
+        mRefresh = BaasDocument.fetchAll(Constants.COLLECTION_NAME, mFilter, onRefresh);
     }
 
     private final BaasHandler<List<BaasDocument>>
@@ -186,7 +190,7 @@ public class ArchiveRecyclerViewFragment extends Fragment implements AdapterView
             try {
                 Iterator it = result.get().iterator();
 
-                voucherList.clear();
+                mVoucherList.clear();
 
                 while(it.hasNext()){
                     BaasDocument doc = (BaasDocument) it.next();
@@ -206,18 +210,18 @@ public class ArchiveRecyclerViewFragment extends Fragment implements AdapterView
                         String receivedBy = doc.getString("receivedBy");
                         VoucherForMe voucher = new VoucherForMe(name,receivedBy,dateOfReceipt,dateOfexpiration,redeemedWhere,notes,redeemedAt,id);
                         voucher.setRedeemed(Boolean.valueOf(doc.getString("redeemed")));
-                        voucherList.add(voucher);
+                        mVoucherList.add(voucher);
                     }else{
                         DateTime dateOfDelivery = Config.dateTimeFormatterBaas.parseDateTime(doc.getString("dateOfDelivery"));
                         String givenTo = doc.getString("givenTo");
                         VoucherFromMe voucher = new VoucherFromMe(name,givenTo,dateOfDelivery,dateOfexpiration,redeemedWhere,notes,redeemedAt,id);
                         voucher.setRedeemed(Boolean.valueOf(doc.getString("redeemed")));
-                        voucherList.add(voucher);
+                        mVoucherList.add(voucher);
                     }
                 }
 
                 mSwipeRefreshLayout.setRefreshing(false);
-                adapter.setItemList(voucherList);
+                mAdapter.setItemList(mVoucherList);
 
             }catch (BaasInvalidSessionException e){
                 startLoginScreen();

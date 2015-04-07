@@ -13,6 +13,7 @@ import ch.mobop.mse.vtrack.helpers.Config;
 import ch.mobop.mse.vtrack.model.VoucherFromMe;
 
 /**
+ * Adapter for the recycler view of the "voucher from me" activity.
  * Created by n0daft on 12.03.2015.
  */
 public class FromMeRecyclerViewAdapter extends VoucherRecyclerViewAdapter {
@@ -29,9 +30,9 @@ public class FromMeRecyclerViewAdapter extends VoucherRecyclerViewAdapter {
     public void onBindViewHolder(VoucherItemViewHolder itemHolder, int position) {
         VoucherFromMe item = (VoucherFromMe) mItems.get(position);
 
-        itemHolder.setTxtVoucherName(item.getName());
-        itemHolder.setTxtPerson(item.getGivenTo());
-        itemHolder.setTxtDate(Config.dateTimeFormatter.print(item.getDateOfexpiration()));
+        itemHolder.setmTxtVoucherName(item.getName());
+        itemHolder.setmTxtPerson(item.getGivenTo());
+        itemHolder.setmTxtDate(Config.dateTimeFormatter.print(item.getDateOfexpiration()));
         itemHolder.setivArchiveStatusTrue(View.GONE);
         itemHolder.setivArchiveStatusFalse(View.GONE);
 

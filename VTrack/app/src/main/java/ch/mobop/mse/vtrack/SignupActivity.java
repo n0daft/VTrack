@@ -22,18 +22,19 @@ import ch.mobop.mse.vtrack.helpers.Config;
 import ch.mobop.mse.vtrack.helpers.Constants;
 
 /**
- * Provides methods for the signup process.
+ * Provides methods for the sign up process.
  * Created by Simon on 03.04.2015.
  */
 public class SignupActivity extends FragmentActivity {
+
     private final static String SIGNUP_TOKEN_KEY = "signup_token_key";
 
     private String mUsername;
     private String mPassword;
     private String mPassword2;
-    private EditText mUserView;
-    private EditText mPasswordView;
-    private EditText mPasswordView2;
+    private EditText mTxtUser;
+    private EditText mTxtPassword;
+    private EditText mTxtPassword2;
     private ProgressDialog mDialog;
     private RequestToken mSignupOrLogin;
 
@@ -55,9 +56,9 @@ public class SignupActivity extends FragmentActivity {
             mSignupOrLogin = savedInstanceState.getParcelable(SIGNUP_TOKEN_KEY);
         }
 
-        mUserView = (EditText) findViewById(R.id.email);
-        mPasswordView = (EditText) findViewById(R.id.password);
-        mPasswordView2 = (EditText) findViewById(R.id.password2);
+        mTxtUser = (EditText) findViewById(R.id.email);
+        mTxtPassword = (EditText) findViewById(R.id.password);
+        mTxtPassword2 = (EditText) findViewById(R.id.password2);
 
         // Start intent for login activity.
         findViewById(R.id.register_label).setOnClickListener(new View.OnClickListener() {
@@ -73,7 +74,7 @@ public class SignupActivity extends FragmentActivity {
         findViewById(R.id.sign_in_button).setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v) {
-                attemptLogin();
+                attemptSignup();
             }
         });
     }
@@ -125,47 +126,47 @@ public class SignupActivity extends FragmentActivity {
             startActivity(intent);
             finish();
         } else {
-            mUserView.setError(getString(R.string.error_incorrect_password));
-            mUserView.requestFocus();
+            mTxtUser.setError(getString(R.string.error_incorrect_password));
+            mTxtUser.requestFocus();
         }
     }
 
-    private void attemptLogin() {
+    private void attemptSignup() {
         // Reset errors.
-        mUserView.setError(null);
-        mPasswordView.setError(null);
-        mPasswordView2.setError(null);
+        mTxtUser.setError(null);
+        mTxtPassword.setError(null);
+        mTxtPassword2.setError(null);
 
         // Store values at the time of the login attempt.
-        mUsername = mUserView.getText().toString();
-        mPassword = mPasswordView.getText().toString();
-        mPassword2 = mPasswordView2.getText().toString();
+        mUsername = mTxtUser.getText().toString();
+        mPassword = mTxtPassword.getText().toString();
+        mPassword2 = mTxtPassword2.getText().toString();
 
         boolean cancel = false;
         View focusView = null;
 
         // Check for a valid password.
         if (TextUtils.isEmpty(mPassword)) {
-            mPasswordView.setError(getString(R.string.error_field_required));
-            focusView = mPasswordView;
+            mTxtPassword.setError(getString(R.string.error_field_required));
+            focusView = mTxtPassword;
             cancel = true;
         } else if (mPassword.length() < 4) {
-            mPasswordView.setError(getString(R.string.error_invalid_password));
-            focusView = mPasswordView;
+            mTxtPassword.setError(getString(R.string.error_invalid_password));
+            focusView = mTxtPassword;
             cancel = true;
         }
 
         // Check for a valid email address.
         if (TextUtils.isEmpty(mUsername)) {
-            mUserView.setError(getString(R.string.error_field_required));
-            focusView = mUserView;
+            mTxtUser.setError(getString(R.string.error_field_required));
+            focusView = mTxtUser;
             cancel = true;
         }
 
         // Check passwords.
         if (!mPassword.equals(mPassword2)){
-            mPasswordView2.setError(getString(R.string.error_incorrect_password));
-            focusView = mPasswordView2;
+            mTxtPassword2.setError(getString(R.string.error_incorrect_password));
+            focusView = mTxtPassword2;
             cancel = true;
         }
 
