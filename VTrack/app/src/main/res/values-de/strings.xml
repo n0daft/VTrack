@@ -77,6 +77,8 @@
     <string name="dialog_signup">Registrieren...</string>
     <string name="dialog_login">Anmelden...</string>
     <string name="dialog_refreshing">Aktualisiere...</string>
+    <string name="dialog_help_actionbar_msg">Mit dieser Eintellung können Sie die Farbe des Menüs verändern.</string>
+    <string name="dialog_help_threshold_msg">Dieser Wert definiert wie viele Monate vor dem Ablaufdatum eines Gutscheines, dieser als \"läuft bald ab\" zu markieren (oranger Kreis in der Übersicht).</string>
 
     <!-- Feedback -->
     <string name="toast_voucherAdded">Gutschein hinzugefügt</string>
@@ -89,7 +91,7 @@
     <string name="general_for">für</string>
     <string name="general_empty_from_me_or_for_me_recycler_view">Keine Gutscheine vorhanden. Klicken Sie auf das \"Plus\"  Zeichen oben rechts um neue Gutscheine zu erstellen.</string>
     <string name="general_empty_archive_recycler_view">Keine archivierten Gutscheine vorhanden. Klicken Sie auf das \"Archivieren\" Zeichen in der Detailansicht eines Gutscheines, um ihn zu archiveren.</string>
-
+    <string name="general_help">Hilfe</string>
 
 
     <string-array name="language_array">

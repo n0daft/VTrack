@@ -66,7 +66,7 @@
                 android:layout_alignParentLeft="true"
                 android:textSize="18dp"
                 android:paddingTop="5dp"
-                android:textColor="#ff005d66"
+                android:textColor="@color/stress_color"
                 android:id="@+id/register_label" />
 
             <Button

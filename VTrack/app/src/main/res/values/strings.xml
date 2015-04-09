@@ -78,6 +78,8 @@
     <string name="dialog_signup">Signing up...</string>
     <string name="dialog_login">Logging in...</string>
     <string name="dialog_refreshing">Refreshing...</string>
+    <string name="dialog_help_actionbar_msg">With this setting you can change the look of the actionbar.</string>
+    <string name="dialog_help_threshold_msg">This value defines how many months before a voucher expires, it should be marked as \"soon to expire\" (orange circle in the overview).</string>
 
     <!-- Feedback -->
     <string name="toast_voucherAdded">Voucher added</string>
@@ -90,6 +92,7 @@
     <string name="general_for">for</string>
     <string name="general_empty_from_me_or_for_me_recycler_view">No vouchers available. Click on the \"plus\" sign on the top right to add a new voucher.</string>
     <string name="general_empty_archive_recycler_view">No vouchers archived. Click on the \"archive\" sign in the detail view of a voucher to mark it as archived.</string>
+    <string name="general_help">Help</string>
 
     <string-array name="language_array">
         <item>Deutsch</item>

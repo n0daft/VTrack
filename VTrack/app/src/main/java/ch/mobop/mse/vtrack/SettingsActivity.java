@@ -1,6 +1,8 @@
 package ch.mobop.mse.vtrack;
 
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
 import android.graphics.Color;
@@ -70,6 +72,18 @@ public class SettingsActivity extends FragmentActivity {
         updateValidityThresholdLabel();
     }
 
+    public void handleActionBarHelp(View v){
+        String title = getString(R.string.activity_settings_textview_colors);
+        String msg = getString(R.string.dialog_help_actionbar_msg);
+        showDialog(title, msg);
+    }
+
+    public void handleThresholdHelp(View v){
+        String title = getString(R.string.activity_settings_textview_thresholdForSoonToExpire);
+        String msg = getString(R.string.dialog_help_threshold_msg);
+        showDialog(title, msg);
+    }
+
     private void updateValidityThresholdLabel(){
         mLblValidityThreshold.setText("" + mThreshold);
 
@@ -77,6 +91,20 @@ public class SettingsActivity extends FragmentActivity {
         mEditor.commit();
 
         Config.currentValidityThreshold = mThreshold;
+    }
+
+    private void showDialog(String title, String msg){
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle(title)
+                .setMessage(msg)
+                .setCancelable(false)
+                .setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        // Do nothing.
+                    }
+                });
+        AlertDialog alert = builder.create();
+        alert.show();
     }
 
 
