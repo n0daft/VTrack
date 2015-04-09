@@ -30,6 +30,8 @@ public class SettingsActivity extends FragmentActivity {
     private Editor mEditor;
     private TextView mLblValidityThreshold;
 
+    private boolean mSettingsChanged = false;
+
     private int mThreshold;
 
     @Override
@@ -61,6 +63,13 @@ public class SettingsActivity extends FragmentActivity {
         });
     }
 
+    @Override
+    public void onBackPressed() {
+        // If the mVoucher was edited, refresh the list automaticly.
+        if(mSettingsChanged){setResult(RESULT_OK);}
+        super.onBackPressed();
+    }
+
 
     public void onColorClicked(View v) {
         int color = Color.parseColor(v.getTag().toString());
@@ -75,12 +84,14 @@ public class SettingsActivity extends FragmentActivity {
 
     public void handlePreviousNumber(View v){
         if(mThreshold - 1 >= 1){
+            mSettingsChanged = true;
             mThreshold--;
             updateValidityThresholdLabel();
         }
     }
 
     public void handleNextNumber(View v){
+        mSettingsChanged = true;
         mThreshold++;
         updateValidityThresholdLabel();
     }

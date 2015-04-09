@@ -216,6 +216,13 @@ public class MainActivity extends FragmentActivity {
             } else if (resultCode==NewVoucherActivity.RESULT_CANCELED){
                 Toast.makeText(this, getString(R.string.toast_addVoucherCanceled), Toast.LENGTH_LONG).show();
             }
+        }else if(requestCode==SETTINGS_CODE){
+            if (resultCode==RESULT_OK){
+                if(mForMeFragment != null){
+                    mForMeFragment.refreshDocuments(true);}
+                if(mFromMeFragment != null){
+                    mFromMeFragment.refreshDocuments(true);}
+            }
         }else {
             super.onActivityResult(requestCode, resultCode, data);
         }
