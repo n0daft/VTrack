@@ -46,6 +46,19 @@ public class SettingsActivity extends FragmentActivity {
         ColorDrawable color = new ColorDrawable(mSharedpreferences.getInt(Constants.actionBarColor,Config.defaultActionBarColor.getColor()));
         getActionBar().setBackgroundDrawable(color);
 
+        findViewById(R.id.txtThresholdHelp).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                handleThresholdHelp();
+            }
+        });
+
+        findViewById(R.id.txtActionBarHelp).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                handleActionBarHelp();
+            }
+        });
     }
 
 
@@ -72,13 +85,13 @@ public class SettingsActivity extends FragmentActivity {
         updateValidityThresholdLabel();
     }
 
-    public void handleActionBarHelp(View v){
+    private void handleActionBarHelp(){
         String title = getString(R.string.activity_settings_textview_colors);
         String msg = getString(R.string.dialog_help_actionbar_msg);
         showDialog(title, msg);
     }
 
-    public void handleThresholdHelp(View v){
+    private void handleThresholdHelp(){
         String title = getString(R.string.activity_settings_textview_thresholdForSoonToExpire);
         String msg = getString(R.string.dialog_help_threshold_msg);
         showDialog(title, msg);
