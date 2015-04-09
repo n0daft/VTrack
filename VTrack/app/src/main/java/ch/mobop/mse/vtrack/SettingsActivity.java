@@ -12,6 +12,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.support.v4.app.FragmentActivity;
 import android.view.View;
+import android.widget.TextView;
 
 import ch.mobop.mse.vtrack.helpers.Config;
 import ch.mobop.mse.vtrack.helpers.Constants;
@@ -25,14 +26,21 @@ public class SettingsActivity extends FragmentActivity {
     private final Handler handler = new Handler();
     private SharedPreferences mSharedpreferences;
     private Editor mEditor;
+    private TextView mLblValidityThreshold;
+
+    private int mThreshold;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_settings);
 
+        mLblValidityThreshold = (TextView) findViewById(R.id.lblValidityThreshold);
+
         mSharedpreferences = getSharedPreferences(Constants.MyPREFERENCES, Context.MODE_PRIVATE);
         mEditor = mSharedpreferences.edit();
+        mThreshold = mSharedpreferences.getInt(Constants.VALIDITY_THRESHOLD, Config.defaultValidityThreshold);
+        updateValidityThresholdLabel();
         ColorDrawable color = new ColorDrawable(mSharedpreferences.getInt(Constants.actionBarColor,Config.defaultActionBarColor.getColor()));
         getActionBar().setBackgroundDrawable(color);
 
@@ -48,6 +56,27 @@ public class SettingsActivity extends FragmentActivity {
         mEditor.commit();
 
         changeColor(oldColor, newColor);
+    }
+
+    public void handlePreviousNumber(View v){
+        if(mThreshold - 1 >= 1){
+            mThreshold--;
+            updateValidityThresholdLabel();
+        }
+    }
+
+    public void handleNextNumber(View v){
+        mThreshold++;
+        updateValidityThresholdLabel();
+    }
+
+    private void updateValidityThresholdLabel(){
+        mLblValidityThreshold.setText("" + mThreshold);
+
+        mEditor.putInt(Constants.VALIDITY_THRESHOLD, mThreshold);
+        mEditor.commit();
+
+        Config.currentValidityThreshold = mThreshold;
     }
 
 

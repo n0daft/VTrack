@@ -58,6 +58,8 @@
     <string name="activity_new_voucher_edittext_dataOfDelivery_hint">add date of delivery</string>
     <string name="activity_settings_textview_language">Language</string>
     <string name="activity_settings_textview_colors">Actionbar Design</string>
+    <string name="activity_settings_textview_thresholdForSoonToExpire">Threshold</string>
+
 
     <string name="menu_voucher_detail_delete_item_delete">Delete</string>
     <string name="menu_voucher_detail_popup_item_redeemed">Redeemed</string>
@@ -88,8 +90,6 @@
     <string name="general_for">for</string>
     <string name="general_empty_from_me_or_for_me_recycler_view">No vouchers available. Click on the \"plus\" sign on the top right to add a new voucher.</string>
     <string name="general_empty_archive_recycler_view">No vouchers archived. Click on the \"archive\" sign in the detail view of a voucher to mark it as archived.</string>
-
-
 
     <string-array name="language_array">
         <item>Deutsch</item>

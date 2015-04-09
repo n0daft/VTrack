@@ -17,4 +17,8 @@ public abstract class Config {
 
     public static ColorDrawable defaultActionBarColor = new ColorDrawable(0xff005d66);
 
+    /** */
+    public static int defaultValidityThreshold = 1;
+    public static int currentValidityThreshold;
+
 }

@@ -59,6 +59,7 @@
     <string name="activity_new_voucher_edittext_dataOfDelivery_hint">verschenkt am</string>
     <string name="activity_settings_textview_language">Sprache</string>
     <string name="activity_settings_textview_colors">Menüfarbe</string>
+    <string name="activity_settings_textview_thresholdForSoonToExpire">Schwellwert</string>
 
     <string name="menu_voucher_detail_delete_item_delete">Löschen</string>
     <string name="menu_voucher_detail_popup_item_redeemed">Eingelöst</string>

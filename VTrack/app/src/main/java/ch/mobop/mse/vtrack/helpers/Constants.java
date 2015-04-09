@@ -13,5 +13,6 @@ public class Constants {
     public final static String MyPREFERENCES = "VTrackPrefs";
     public final static String actionBarColor = "ColorKey";
     public final static String COLLECTION_NAME = "vtrack";
+    public final static String VALIDITY_THRESHOLD = "validity_threshold";
 
 }

@@ -78,6 +78,7 @@ public class MainActivity extends FragmentActivity {
         mAdapter = new MyPagerAdapter(getSupportFragmentManager());
 
         mSharedpreferences = getSharedPreferences(Constants.MyPREFERENCES, Context.MODE_PRIVATE);
+        Config.currentValidityThreshold = mSharedpreferences.getInt(Constants.VALIDITY_THRESHOLD, Config.defaultValidityThreshold);
         changeColor(mSharedpreferences.getInt(Constants.actionBarColor, Config.defaultActionBarColor.getColor()));
 
         mPager.setAdapter(mAdapter);

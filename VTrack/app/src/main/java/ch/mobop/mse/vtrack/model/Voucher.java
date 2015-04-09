@@ -5,6 +5,8 @@ import android.os.Parcelable;
 
 import org.joda.time.DateTime;
 
+import ch.mobop.mse.vtrack.helpers.Config;
+
 /**
  * Base class for voucher objects. Provides attributes that
  * every type of voucher shares.
@@ -131,7 +133,7 @@ public class Voucher implements Parcelable {
      * @return
      */
     public VoucherValidityStatusEnum getValidityStatus() {
-        if(DateTime.now().isBefore(dateOfexpiration.minusMonths(1))){
+        if(DateTime.now().isBefore(dateOfexpiration.minusMonths(Config.currentValidityThreshold))){
             return VoucherValidityStatusEnum.valid;
         }else if(DateTime.now().isBefore(dateOfexpiration)){
             return VoucherValidityStatusEnum.soonToExpire;
