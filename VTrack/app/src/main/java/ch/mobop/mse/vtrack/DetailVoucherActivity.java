@@ -105,7 +105,7 @@ public class DetailVoucherActivity extends FragmentActivity{
             VoucherFromMe voucherFromMe = (VoucherFromMe) mVoucher;
             mTxtPerson.setText(voucherFromMe.getGivenTo());
             mTxtReceivedAt.setText(formatterVoucher.print(voucherFromMe.getDateOfDelivery()));
-            mDesc_txtPerson.setText(getString(R.string.activity_main_actionbaritem_givenAway));
+            mDesc_txtPerson.setText(getString(R.string.activity_detail_voucher_textview_givenTo));
             mDesc_txtReceivedAt.setText(getString(R.string.activity_detail_voucher_textview_deliveredAt));
         }
 
