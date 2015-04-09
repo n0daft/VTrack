@@ -22,14 +22,14 @@
             android:layout_marginBottom="10dp" />
 
         <TextView
+            android:id="@+id/txtActionBarHelp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/general_help"
             android:layout_marginLeft="10dp"
             android:textColor="@color/stress_color"
             android:textAppearance="@android:style/TextAppearance.Small"
-            android:layout_marginBottom="10dp"
-            android:onClick="handleActionBarHelp"/>
+            android:layout_marginBottom="10dp"/>
 
         </LinearLayout>
 
@@ -114,14 +114,15 @@
             android:layout_marginBottom="10dp" />
 
         <TextView
+            android:id="@+id/txtThresholdHelp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/general_help"
             android:layout_marginLeft="10dp"
+            android:layout_marginStart="10dp"
             android:textColor="@color/stress_color"
             android:textAppearance="@android:style/TextAppearance.Small"
-            android:layout_marginBottom="10dp"
-            android:onClick="handleThresholdHelp"/>
+            android:layout_marginBottom="10dp"/>
 
     </LinearLayout>
 
