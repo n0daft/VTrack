@@ -37,13 +37,15 @@
     <string name="error_date_lies_before">Dieses Datum darf nicht vor dem Erhaltungsdatum liegen</string>
 
     <string name="activity_main_actionbaritem_received">Erhalten</string>
-    <string name="activity_main_actionbaritem_givenAway">Verschenkt</string>
+    <string name="activity_main_actionbaritem_givenTo">Verschenkt an</string>
+    <string name="activity_main_actionbaritem_givenAway">Geschenkt an</string>
     <string name="activity_main_actionbaritem_archive">Archiv</string>
 
 
     <string name="activity_detail_voucher_textview_name">Name</string>
     <string name="activity_detail_voucher_textview_defaultHint">-</string>
     <string name="activity_detail_voucher_textview_receivedAt">Erhalten am</string>
+    <string name="activity_detail_voucher_textview_deliveredAt">Verschenkt am</string>
     <string name="activity_detail_voucher_textview_validUntil">Läuft ab am</string>
     <string name="activity_detail_voucher_textview_receivedFrom">Erhalten von</string>
     <string name="activity_detail_voucher_textview_location">Ort</string>
