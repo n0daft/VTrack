@@ -48,6 +48,7 @@
     <string name="activity_detail_voucher_textview_deliveredAt">Deliverd at</string>
     <string name="activity_detail_voucher_textview_validUntil">Valid until</string>
     <string name="activity_detail_voucher_textview_receivedFrom">Received from</string>
+    <string name="activity_detail_voucher_textview_givenTo">Given to</string>
     <string name="activity_detail_voucher_textview_location">Location</string>
     <string name="activity_detail_voucher_textview_notes">Notes</string>
 

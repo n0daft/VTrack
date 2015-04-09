@@ -38,7 +38,7 @@
 
     <string name="activity_main_actionbaritem_received">Erhalten</string>
     <string name="activity_main_actionbaritem_givenTo">Verschenkt an</string>
-    <string name="activity_main_actionbaritem_givenAway">Geschenkt an</string>
+    <string name="activity_main_actionbaritem_givenAway">Geschenkt</string>
     <string name="activity_main_actionbaritem_archive">Archiv</string>
 
 
@@ -48,6 +48,7 @@
     <string name="activity_detail_voucher_textview_deliveredAt">Verschenkt am</string>
     <string name="activity_detail_voucher_textview_validUntil">Läuft ab am</string>
     <string name="activity_detail_voucher_textview_receivedFrom">Erhalten von</string>
+    <string name="activity_detail_voucher_textview_givenTo">Geschenkt an</string>
     <string name="activity_detail_voucher_textview_location">Ort</string>
     <string name="activity_detail_voucher_textview_notes">Kommentar</string>
 
@@ -59,7 +60,7 @@
     <string name="activity_new_voucher_edittext_location_hint">Ort hinzufügen</string>
     <string name="activity_new_voucher_edittext_notes_hint">Kommentar hinzufügen</string>
     <string name="activity_new_voucher_edittext_givento_hint">Empfänger hinzufügen</string>
-    <string name="activity_new_voucher_edittext_dataOfDelivery_hint">verschenkt am</string>
+    <string name="activity_new_voucher_edittext_dataOfDelivery_hint">Verschenkungsdatum hinzufügen</string>
     <string name="activity_settings_textview_language">Sprache</string>
     <string name="activity_settings_textview_colors">Menüfarbe</string>
     <string name="activity_settings_textview_thresholdForSoonToExpire">Schwellwert</string>
@@ -81,7 +82,7 @@
     <string name="dialog_login">Anmelden...</string>
     <string name="dialog_refreshing">Aktualisiere...</string>
     <string name="dialog_help_actionbar_msg">Mit dieser Eintellung können Sie die Farbe des Menüs verändern.</string>
-    <string name="dialog_help_threshold_msg">Dieser Wert definiert wie viele Monate vor dem Ablaufdatum eines Gutscheines, dieser als \"läuft bald ab\" zu markieren (oranger Kreis in der Übersicht).</string>
+    <string name="dialog_help_threshold_msg">Dieser Wert definiert wie viele Monate vor dem Ablaufdatum eines Gutscheines, dieser als \"läuft bald ab\" markiert werden soll (oranger Kreis in der Übersicht).</string>
 
     <!-- Feedback -->
     <string name="toast_voucherAdded">Gutschein hinzugefügt</string>
