@@ -12,6 +12,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.baasbox.android.BaasDocument;
@@ -48,6 +49,7 @@ public class ArchiveRecyclerViewFragment extends Fragment implements AdapterView
     private ProgressDialog mDialog;
     private SwipeRefreshLayout mSwipeRefreshLayout;
     private RequestToken mRefresh;
+    private TextView mTxtEmptyView;
 
     /**
      * Initiates a new ArchiveRecyclerViewFragment object.
@@ -69,6 +71,9 @@ public class ArchiveRecyclerViewFragment extends Fragment implements AdapterView
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
         View rootView = inflater.inflate(R.layout.fragment_received, container, false);
+
+        mTxtEmptyView = (TextView) rootView.findViewById(R.id.empty_view);
+        mTxtEmptyView.setText(getString(R.string.general_empty_archive_recycler_view));
 
         mRecyclerView = (RecyclerView) rootView.findViewById(R.id.section_list);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false));
@@ -93,6 +98,7 @@ public class ArchiveRecyclerViewFragment extends Fragment implements AdapterView
             refreshDocuments(true);
         }else{
             mAdapter.setItemList(mVoucherList);
+            checkEmptyView();
         }
 
         mSwipeRefreshLayout = (SwipeRefreshLayout) rootView.findViewById(R.id.activity_main_swipe_refresh_layout);
@@ -222,6 +228,7 @@ public class ArchiveRecyclerViewFragment extends Fragment implements AdapterView
 
                 mSwipeRefreshLayout.setRefreshing(false);
                 mAdapter.setItemList(mVoucherList);
+                checkEmptyView();
 
             }catch (BaasInvalidSessionException e){
                 startLoginScreen();
@@ -238,6 +245,18 @@ public class ArchiveRecyclerViewFragment extends Fragment implements AdapterView
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         startActivity(intent);
         getActivity().finish();
+    }
+
+    private void checkEmptyView(){
+        if(mVoucherList != null) {
+            if (mVoucherList.isEmpty()) {
+                mRecyclerView.setVisibility(View.GONE);
+                mTxtEmptyView.setVisibility(View.VISIBLE);
+            } else {
+                mRecyclerView.setVisibility(View.VISIBLE);
+                mTxtEmptyView.setVisibility(View.GONE);
+            }
+        }
     }
 
 }

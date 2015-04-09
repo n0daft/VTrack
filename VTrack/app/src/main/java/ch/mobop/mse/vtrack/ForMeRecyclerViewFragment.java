@@ -12,6 +12,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.baasbox.android.BaasDocument;
@@ -50,6 +51,7 @@ public class ForMeRecyclerViewFragment extends Fragment implements AdapterView.O
     private SwipeRefreshLayout mSwipeRefreshLayout;
     private RequestToken mRefresh;
     private ArchiveListenerForMe mListener;
+    private TextView mTxtEmptyView;
 
     /**
      * Listener interface for communicating with Archive Fragment.
@@ -88,6 +90,9 @@ public class ForMeRecyclerViewFragment extends Fragment implements AdapterView.O
 
         View rootView = inflater.inflate(R.layout.fragment_received, container, false);
 
+        mTxtEmptyView = (TextView) rootView.findViewById(R.id.empty_view);
+        mTxtEmptyView.setText(getString(R.string.general_empty_from_me_or_for_me_recycler_view));
+
         mRecyclerView = (RecyclerView) rootView.findViewById(R.id.section_list);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false));
         mRecyclerView.addItemDecoration(new DividerDecoration(getActivity()));
@@ -111,7 +116,10 @@ public class ForMeRecyclerViewFragment extends Fragment implements AdapterView.O
             refreshDocuments(true);
         }else{
             mAdapter.setItemList(mVoucherForMeList);
+            checkEmptyView();
         }
+
+
 
         mSwipeRefreshLayout = (SwipeRefreshLayout) rootView.findViewById(R.id.activity_main_swipe_refresh_layout);
         mSwipeRefreshLayout.setColorSchemeColors(R.color.orange, R.color.green, R.color.blue);
@@ -223,6 +231,7 @@ public class ForMeRecyclerViewFragment extends Fragment implements AdapterView.O
 
                 mSwipeRefreshLayout.setRefreshing(false);
                 mAdapter.setItemList(mVoucherForMeList);
+                checkEmptyView();
 
             }catch (BaasInvalidSessionException e){
                 startLoginScreen();
@@ -239,5 +248,18 @@ public class ForMeRecyclerViewFragment extends Fragment implements AdapterView.O
         startActivity(intent);
         getActivity().finish();
     }
+
+    private void checkEmptyView(){
+        if(mVoucherForMeList != null) {
+            if (mVoucherForMeList.isEmpty()) {
+                mRecyclerView.setVisibility(View.GONE);
+                mTxtEmptyView.setVisibility(View.VISIBLE);
+            } else {
+                mRecyclerView.setVisibility(View.VISIBLE);
+                mTxtEmptyView.setVisibility(View.GONE);
+            }
+        }
+    }
+
 
 }

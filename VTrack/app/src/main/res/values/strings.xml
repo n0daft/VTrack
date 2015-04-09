@@ -29,7 +29,7 @@
 
     <string name="error_invalid_email">This email address is invalid</string>
     <string name="error_invalid_password">This password is too short</string>
-    <string name="error_incorrect_password">This password is incorrect</string>
+    <string name="error_incorrect_password">This password does not match</string>
     <string name="error_field_required">This field is required</string>
     <string name="error_user_exists">This user already exists</string>
 
@@ -84,6 +84,9 @@
     <!-- General String -->
     <string name="general_from">from</string>
     <string name="general_for">for</string>
+    <string name="general_empty_from_me_or_for_me_recycler_view">No vouchers available. Click on the \"plus\" sign on the top right to add a new voucher.</string>
+    <string name="general_empty_archive_recycler_view">No vouchers archived. Click on the \"archive\" sign in the detail view of a voucher to mark it as archived.</string>
+
 
 
     <string-array name="language_array">

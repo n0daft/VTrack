@@ -29,7 +29,7 @@
 
     <string name="error_invalid_email">Ungültige Email Adresse</string>
     <string name="error_invalid_password">Das Passwort ist zu kurz</string>
-    <string name="error_incorrect_password">Das Passwort ist falsch</string>
+    <string name="error_incorrect_password">Das Passwort stimmt nicht überein</string>
     <string name="error_field_required">Dieses Feld wird benötigt</string>
     <string name="error_user_exists">Dieser Benutzer existiert bereits</string>
 
@@ -84,6 +84,8 @@
     <!-- General String -->
     <string name="general_from">von</string>
     <string name="general_for">für</string>
+    <string name="general_empty_from_me_or_for_me_recycler_view">Keine Gutscheine vorhanden. Klicken Sie auf das \"Plus\"  Zeichen oben rechts um neue Gutscheine zu erstellen.</string>
+    <string name="general_empty_archive_recycler_view">Keine archivierten Gutscheine vorhanden. Klicken Sie auf das \"Archivieren\" Zeichen in der Detailansicht eines Gutscheines, um ihn zu archiveren.</string>
 
 
 
