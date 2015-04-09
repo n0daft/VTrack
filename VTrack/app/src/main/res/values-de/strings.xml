@@ -7,6 +7,7 @@
     <!-- Activity titles -->
     <string name="activity_login_title">Anmleden</string>
     <string name="activity_signup_title">Registrieren</string>
+    <string name="activity_signup_backToLogin">Zurück zum Login</string>
     <string name="activity_newVoucher_title">Neuer Gutschein</string>
     <string name="activity_voucherDetails_title">Details</string>
     <string name="activity_settings_title">Einstellungen</string>

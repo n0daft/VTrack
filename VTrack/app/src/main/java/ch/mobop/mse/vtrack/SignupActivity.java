@@ -11,6 +11,7 @@ import android.text.TextUtils;
 import android.util.Log;
 import android.view.Menu;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.EditText;
 
 import com.baasbox.android.BaasHandler;
@@ -46,7 +47,9 @@ public class SignupActivity extends FragmentActivity {
         mDialog = new ProgressDialog(this);
         mDialog.setMessage(getString(R.string.dialog_signup));
 
+        // Hide the actionbar and keyboard for stylistic reasons.
         getActionBar().hide();
+        getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN);
 
         SharedPreferences sharedpreferences = getSharedPreferences(Constants.MyPREFERENCES, Context.MODE_PRIVATE);
         ColorDrawable color = new ColorDrawable(sharedpreferences.getInt(Constants.actionBarColor, Config.defaultActionBarColor.getColor()));

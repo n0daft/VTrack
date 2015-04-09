@@ -11,6 +11,7 @@ import android.text.TextUtils;
 import android.util.Log;
 import android.view.Menu;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.EditText;
 
 import com.baasbox.android.BaasHandler;
@@ -43,8 +44,9 @@ public class LoginActivity extends FragmentActivity {
         mDialog = new ProgressDialog(this);
         mDialog.setMessage(getString(R.string.dialog_login));
 
-        // Hide the action bar for stylistic reasons.
+        // Hide the actionbar and keyboard for stylistic reasons.
         getActionBar().hide();
+        getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN);
 
         SharedPreferences sharedpreferences = getSharedPreferences(Constants.MyPREFERENCES, Context.MODE_PRIVATE);
         ColorDrawable color = new ColorDrawable(sharedpreferences.getInt(Constants.actionBarColor,Config.defaultActionBarColor.getColor()));

@@ -62,7 +62,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textAppearance="?android:attr/textAppearanceSmall"
-                android:text="@string/activity_login_button_login"
+                android:text="@string/activity_signup_backToLogin"
                 android:layout_alignParentLeft="true"
                 android:textSize="18dp"
                 android:paddingTop="5dp"

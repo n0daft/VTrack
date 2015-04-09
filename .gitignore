@@ -33,3 +33,4 @@ proguard/
 /VTrack/.idea/workspace.xml
 /VTrack/.idea/libraries
 gradle.xml
+*.jks
