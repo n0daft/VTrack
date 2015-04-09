@@ -8,11 +8,11 @@ import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.Menu;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.EditText;
+import android.widget.Toast;
 
 import com.baasbox.android.BaasHandler;
 import com.baasbox.android.BaasResult;
@@ -118,20 +118,12 @@ public class SignupActivity extends FragmentActivity {
         return true;
     }
 
-    private void completeLogin(boolean success){
-        if (mDialog.isShowing()){
-            mDialog.dismiss();
-        }
+    private void completeLogin(){
         mSignupOrLogin = null;
-        if (success) {
-            Intent intent = new Intent(this,MainActivity.class);
-            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-            startActivity(intent);
-            finish();
-        } else {
-            mTxtUser.setError(getString(R.string.error_incorrect_password));
-            mTxtUser.requestFocus();
-        }
+        Intent intent = new Intent(this,MainActivity.class);
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        startActivity(intent);
+        finish();
     }
 
     private void attemptSignup() {
@@ -195,12 +187,23 @@ public class SignupActivity extends FragmentActivity {
             new BaasHandler<BaasUser>() {
                 @Override
                 public void handle(BaasResult<BaasUser> result) {
-
                     mSignupOrLogin = null;
-                    if (result.isFailed()){
-                        Log.d("ERROR", "ERROR", result.error());
+
+                    if (mDialog.isShowing()){
+                        mDialog.dismiss();
                     }
-                    completeLogin(result.isSuccess());
+
+                    if(result.isFailed()){
+                        String msg = result.error().getMessage();
+                        if(msg.contains("already exists")){
+                            mTxtUser.setError(getString(R.string.error_user_exists));
+                            mTxtUser.requestFocus();
+                        }else{
+                            Toast.makeText(getApplicationContext(), getString(R.string.toast_no_connection), Toast.LENGTH_LONG).show();
+                        }
+                    }else{
+                        completeLogin();
+                    }
                 }
             };
 
