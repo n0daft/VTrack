@@ -182,6 +182,7 @@ public class NewVoucherActivity extends FragmentActivity  implements DatePickerF
      */
     @Override
     public void onFinishEditDialog(int year, int month, int day, int callerId) {
+        mLblValidUntil.setError(null);
         GregorianCalendar cal = new GregorianCalendar();
         cal.set(year,month,day);
 
@@ -240,6 +241,7 @@ public class NewVoucherActivity extends FragmentActivity  implements DatePickerF
 
         // Store values at the time of the login attempt.
         String voucherName = mTxtVoucherName.getText().toString();
+        String dateOfReceipt = mLblReceivedAt.getText().toString();
         String validUntil = mLblValidUntil.getText().toString();
         String receivedFrom = mTxtReceivedFrom.getText().toString();
 
@@ -258,6 +260,15 @@ public class NewVoucherActivity extends FragmentActivity  implements DatePickerF
             mLblValidUntil.setError(getString(R.string.error_field_required));
             focusView = mLblValidUntil;
             cancel = true;
+        }
+
+        // Check if valid until lies before date of receipt.
+        if(!TextUtils.isEmpty(dateOfReceipt) && !TextUtils.isEmpty(validUntil)){
+            if (Config.dateTimeFormatter.parseDateTime(validUntil).isBefore(Config.dateTimeFormatter.parseDateTime(dateOfReceipt))) {
+                mLblValidUntil.setError(getString(R.string.error_date_lies_before));
+                focusView = mLblValidUntil;
+                cancel = true;
+            }
         }
 
         // Check for a valid name.

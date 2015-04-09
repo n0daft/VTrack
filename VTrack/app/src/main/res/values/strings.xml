@@ -33,6 +33,8 @@
     <string name="error_field_required">This field is required</string>
     <string name="error_user_exists">This user already exists</string>
 
+    <string name="error_date_lies_before">This date cannot lie before the date of receipt</string>
+
     <string name="activity_main_actionbaritem_received">Received</string>
     <string name="activity_main_actionbaritem_givenAway">Given away</string>
     <string name="activity_main_actionbaritem_archive">Archive</string>

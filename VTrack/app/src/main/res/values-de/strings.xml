@@ -33,6 +33,8 @@
     <string name="error_field_required">Dieses Feld wird benötigt</string>
     <string name="error_user_exists">Dieser Benutzer existiert bereits</string>
 
+    <string name="error_date_lies_before">Dieses Datum darf nicht vor dem Erhaltungsdatum liegen</string>
+
     <string name="activity_main_actionbaritem_received">Erhalten</string>
     <string name="activity_main_actionbaritem_givenAway">Verschenkt</string>
     <string name="activity_main_actionbaritem_archive">Archiv</string>
