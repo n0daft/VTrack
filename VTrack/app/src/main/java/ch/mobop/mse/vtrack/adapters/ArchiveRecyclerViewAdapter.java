@@ -19,10 +19,12 @@ import ch.mobop.mse.vtrack.model.VoucherFromMe;
  */
 public class ArchiveRecyclerViewAdapter extends VoucherRecyclerViewAdapter{
 
+    private View root;
+
     @Override
     public ArchiveItemViewHolder onCreateViewHolder(ViewGroup container, int viewType) {
         LayoutInflater inflater = LayoutInflater.from(container.getContext());
-        View root = inflater.inflate(R.layout.recyclerview_item, container, false);
+        root = inflater.inflate(R.layout.recyclerview_item, container, false);
 
         return new ArchiveItemViewHolder(root, this);
     }
@@ -46,11 +48,11 @@ public class ArchiveRecyclerViewAdapter extends VoucherRecyclerViewAdapter{
 
         if(mItems.get(position) instanceof VoucherForMe){
             VoucherForMe itemForMe = (VoucherForMe) mItems.get(position);
-            String tmp =  "from "+itemForMe.getReceivedBy();
+            String tmp = root.getResources().getString(R.string.general_from) + " " + itemForMe.getReceivedBy();
             itemHolder.setmTxtPerson(tmp);
         }else{
             VoucherFromMe itemFromMe = (VoucherFromMe) mItems.get(position);
-            String tmp = "to "+itemFromMe.getGivenTo();
+            String tmp = root.getResources().getString(R.string.general_for) + " " + itemFromMe.getGivenTo();
             itemHolder.setmTxtPerson(tmp);
         }
 
