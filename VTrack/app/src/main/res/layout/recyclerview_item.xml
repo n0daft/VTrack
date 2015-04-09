@@ -24,7 +24,8 @@
         xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="horizontal">
+        android:orientation="horizontal"
+        android:gravity="center_vertical">
 
         <TextView
             android:id="@+id/txtPerson"
@@ -63,13 +64,13 @@
             android:id="@+id/ivValidityArchiveStatusTrue"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:src="@drawable/ic_action_accept_green"/>
+            android:src="@drawable/ic_action_accept_green_small"/>
 
         <ImageView
             android:id="@+id/ivValidityArchiveStatusFalse"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:src="@drawable/ic_action_cancel_red"/>
+            android:src="@drawable/ic_action_cancel_red_small"/>
 
     </LinearLayout>
 
